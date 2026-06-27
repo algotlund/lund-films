@@ -1,8 +1,8 @@
 :root {
   --blue: #0046FF;
   --ink: #211d18;
-  --paper: #ece4d4;
-  --muted: #8a7f6c;
+  --paper: #f7f3ea;
+  --muted: #9a907d;
   --line: #211d18;
 }
 
@@ -65,7 +65,7 @@ nav {
   top: 0;
   left: 0;
   right: 0;
-  background: rgba(236, 228, 212, 0.82);
+  background: rgba(247, 243, 234, 0.82);
   backdrop-filter: saturate(140%) blur(14px);
   -webkit-backdrop-filter: saturate(140%) blur(14px);
   border-bottom: 1px solid rgba(33, 29, 24, 0.15);
@@ -152,13 +152,14 @@ nav {
   opacity: 0.9;
 }
 
-/* Anamorphic lens flare — wide horizontal blue streak, scroll-reactive */
+/* Anamorphic lens flare — sharp white-hot core, soft elliptical halo,
+   and a row of secondary lens orbs trailing along the horizontal axis. */
 .flare {
   position: fixed;
   left: 50%;
   top: 0;
-  width: 150vw;
-  height: 3px;
+  width: 160vw;
+  height: 1.5px;
   z-index: 3;
   pointer-events: none;
   opacity: 0;
@@ -167,35 +168,45 @@ nav {
   mix-blend-mode: screen;
   background: linear-gradient(90deg,
     transparent 0%,
-    rgba(0, 70, 255, 0) 18%,
-    rgba(90, 150, 255, 0.85) 50%,
-    rgba(0, 70, 255, 0) 82%,
+    rgba(40, 110, 255, 0) 22%,
+    rgba(150, 200, 255, 0.7) 42%,
+    rgba(255, 255, 255, 0.95) 50%,
+    rgba(150, 200, 255, 0.7) 58%,
+    rgba(40, 110, 255, 0) 78%,
     transparent 100%);
-  filter: blur(1.5px);
+  filter: blur(0.6px);
   will-change: opacity, transform;
 }
-/* central bloom + vertical glint of the flare */
+/* wide soft elliptical halo around the core */
 .flare::before {
   content: '';
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 220px;
-  height: 220px;
+  width: 46vw;
+  height: 90px;
   transform: translate(-50%, -50%);
-  background: radial-gradient(closest-side, rgba(120, 170, 255, 0.55), transparent 70%);
-  border-radius: 50%;
+  background: radial-gradient(ellipse closest-side,
+    rgba(90, 150, 255, 0.45), rgba(60, 120, 255, 0.12) 55%, transparent 75%);
+  filter: blur(4px);
 }
+/* secondary lens orbs spaced out along the streak */
 .flare::after {
   content: '';
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 2px;
-  height: 120px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
   transform: translate(-50%, -50%);
-  background: linear-gradient(180deg, transparent, rgba(150, 190, 255, 0.6), transparent);
-  filter: blur(1px);
+  background: rgba(190, 215, 255, 0.85);
+  box-shadow:
+    -16vw 0 8px 1px rgba(120, 170, 255, 0.35),
+    -9vw 0 5px 0 rgba(150, 195, 255, 0.4),
+    9vw 0 5px 0 rgba(150, 195, 255, 0.4),
+    16vw 0 8px 1px rgba(120, 170, 255, 0.35),
+    24vw 0 12px 2px rgba(90, 150, 255, 0.25);
 }
 
 /* Intro */
