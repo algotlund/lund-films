@@ -72,6 +72,19 @@ nav {
   z-index: 50;
 }
 
+/* Blue gradient dropshadow that bleeds down behind the top bar */
+nav::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  height: 80px;
+  pointer-events: none;
+  background: linear-gradient(to bottom,
+    rgba(0, 70, 255, 0.28), rgba(0, 70, 255, 0.08) 45%, rgba(0, 70, 255, 0));
+}
+
 .logo {
   font-size: 1.1rem;
   font-weight: 700;
@@ -135,7 +148,7 @@ nav {
 }
 
 .showreel-overlay h1 {
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-size: clamp(2.8rem, 8vw, 6rem);
   font-weight: 800;
   letter-spacing: -0.02em;
@@ -157,7 +170,7 @@ nav {
   z-index: 2;
   max-width: 900px;
   margin: 0 auto;
-  padding: 9rem 2rem 10rem;
+  padding: 18rem 2rem 20rem;
   text-align: center;
   will-change: opacity, transform, filter;
   filter: url(#introBlur);
@@ -282,7 +295,7 @@ nav {
 }
 
 .tile-caption h3 {
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-size: 1.2rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -307,18 +320,17 @@ nav {
 
 .cta h2,
 .cta .btn {
-  will-change: opacity, transform, filter;
+  will-change: opacity, transform;
 }
 
 .cta h2 {
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-size: clamp(2rem, 5vw, 3.8rem);
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: -0.02em;
   margin-bottom: 2rem;
   color: #ffffff;
-  filter: url(#ctaBlur);
 }
 
 .btn {
@@ -360,7 +372,7 @@ nav {
 }
 
 .contact-page h1 {
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-size: clamp(2.5rem, 6vw, 4.5rem);
   font-weight: 800;
   text-transform: uppercase;
@@ -450,7 +462,7 @@ footer {
     grid-template-columns: 1fr;
   }
   .tile-tall .tile-media { aspect-ratio: 16 / 9; }
-  .intro { padding: 5rem 1.5rem 5rem; }
+  .intro { padding: 10rem 1.5rem 11rem; }
 
   /* Full-bleed showreel on phones — reaches the screen edges */
   .showreel { padding: 4.5rem 0 0; }
@@ -498,7 +510,7 @@ footer {
 }
 
 .project-hero h1 {
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-size: clamp(2.4rem, 6vw, 4.5rem);
   font-weight: 800;
   text-transform: uppercase;
@@ -592,7 +604,7 @@ footer {
   padding: 0 2rem 2.5rem;
 }
 .stills-header h1 {
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-size: clamp(2.4rem, 6vw, 4rem);
   font-weight: 700;
   text-transform: uppercase;

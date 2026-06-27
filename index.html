@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -171,13 +171,9 @@
             'px) scale(' + (0.95 + 0.05 * bp).toFixed(3) + ')';
           ctaH2.style.opacity = bp.toFixed(3);
           ctaH2.style.color = '#ffffff';
-          if (ctaBlurG) {
-            var cBlur = (1 - bp) * 22;
-            ctaBlurG.setAttribute('stdDeviation', '0 ' + cBlur.toFixed(2));
-            // remove the filter entirely once settled so the text is crisp
-            // (an active SVG filter softens text even at zero blur)
-            ctaH2.style.filter = bp > 0.995 ? 'none' : 'url(#ctaBlur)';
-          }
+          // CSS blur during the rise; removed entirely once settled so the
+          // text renders perfectly crisp (no SVG-filter rasterization)
+          ctaH2.style.filter = bp > 0.96 ? 'none' : 'blur(' + ((1 - bp) * 12).toFixed(1) + 'px)';
           if (ctaBtn) {
             var bp2 = clamp((vh - hr.top - 40) / (vh * 0.38));
             ctaBtn.style.transform = 'translateY(' + ((1 - bp2) * 50).toFixed(1) + 'px)';
