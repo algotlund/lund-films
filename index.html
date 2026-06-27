@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lund Films</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <div class="texture"></div>
+
+  <nav>
+    <a href="index.html" class="logo">Lund Films</a>
+    <div class="nav-links">
+      <a href="#work">Work</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </nav>
+
+  <!-- Showreel hero -->
+  <section class="showreel">
+    <div class="showreel-frame">
+      <video
+        class="showreel-video"
+        autoplay
+        muted
+        loop
+        playsinline
+        poster="assets/showreel-poster.jpg">
+        <source src="assets/showreel.mp4" type="video/mp4">
+      </video>
+      <div class="showreel-overlay">
+        <h1>Lund Films</h1>
+        <p>Filmmaker &amp; Visual Storyteller</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Intro line -->
+  <section class="intro">
+    <h2>Stories told through light, motion, and sound.</h2>
+    <p>A selection of recent films, documentaries, and commercial work.</p>
+  </section>
+
+  <!-- Project collage -->
+  <section id="work" class="collage">
+
+    <a href="#" class="tile tile-large">
+      <div class="tile-media"><span>16:9</span></div>
+      <div class="tile-caption"><h3>Project One</h3><p>Short Film · 2025</p></div>
+    </a>
+
+    <a href="#" class="tile tile-tall">
+      <div class="tile-media"><span>4:5</span></div>
+      <div class="tile-caption"><h3>Project Two</h3><p>Music Video · 2025</p></div>
+    </a>
+
+    <a href="#" class="tile">
+      <div class="tile-media"><span>16:9</span></div>
+      <div class="tile-caption"><h3>Project Three</h3><p>Documentary · 2024</p></div>
+    </a>
+
+    <a href="#" class="tile">
+      <div class="tile-media"><span>16:9</span></div>
+      <div class="tile-caption"><h3>Project Four</h3><p>Commercial · 2024</p></div>
+    </a>
+
+    <a href="#" class="tile tile-wide">
+      <div class="tile-media"><span>21:9</span></div>
+      <div class="tile-caption"><h3>Project Five</h3><p>Short Film · 2024</p></div>
+    </a>
+
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <h2>Let's make something.</h2>
+    <a href="contact.html" class="btn">Get in touch</a>
+  </section>
+
+  <footer>
+    <p>&copy; 2026 Lund Films</p>
+  </footer>
+
+  <script>
+    // Ensure the showreel starts even if the browser defers autoplay
+    (function () {
+      var v = document.querySelector('.showreel-video');
+      if (!v) return;
+      function play() { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+      play();
+      // Retry once metadata/data is ready
+      v.addEventListener('loadeddata', play);
+      v.addEventListener('canplay', play);
+      // Fallback: kick off on first user interaction if still paused
+      function onInteract() {
+        if (v.paused) play();
+        window.removeEventListener('pointerdown', onInteract);
+        window.removeEventListener('keydown', onInteract);
+        window.removeEventListener('scroll', onInteract);
+      }
+      window.addEventListener('pointerdown', onInteract, { passive: true });
+      window.addEventListener('keydown', onInteract);
+      window.addEventListener('scroll', onInteract, { passive: true });
+    })();
+  </script>
+
+</body>
+</html>
