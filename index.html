@@ -51,7 +51,7 @@
   <!-- Intro line -->
   <section class="intro">
     <h2>Stories told through light, motion, and sound.</h2>
-    <p>A selection of recent films, documentaries, and commercial work.</p>
+    <p>A selection of recent films.</p>
   </section>
 
   <!-- Project collage -->
@@ -181,6 +181,8 @@
             'px) scale(' + (0.95 + 0.05 * bp).toFixed(3) + ')';
           ctaH2.style.opacity = bp.toFixed(3);
           ctaH2.style.color = '#ffffff';
+          ctaH2.style.textShadow = '0 0 ' + (bp * 16).toFixed(0) +
+            'px rgba(255,255,255,' + (bp * 0.4).toFixed(2) + ')';
           if (ctaBtn) {
             var bp2 = clamp((vh - hr.top - 40) / (vh * 0.5));
             ctaBtn.style.transform = 'translateY(' + ((1 - bp2) * 50).toFixed(1) + 'px)';
