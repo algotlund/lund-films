@@ -1,9 +1,9 @@
 :root {
   --blue: #0046FF;
-  --ink: #211d18;
-  --paper: #f7f3ea;
-  --muted: #9a907d;
-  --line: #211d18;
+  --ink: #16181d;
+  --paper: #eceef1;
+  --muted: #7c828d;
+  --line: #16181d;
 }
 
 * {
@@ -36,7 +36,7 @@ a {
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  background: #161210;
+  background: #121319;
   opacity: 0;
   will-change: opacity;
 }
@@ -65,7 +65,7 @@ nav {
   top: 0;
   left: 0;
   right: 0;
-  background: rgba(247, 243, 234, 0.82);
+  background: rgba(236, 238, 241, 0.82);
   backdrop-filter: saturate(140%) blur(14px);
   -webkit-backdrop-filter: saturate(140%) blur(14px);
   border-bottom: 1px solid rgba(33, 29, 24, 0.15);
@@ -152,14 +152,14 @@ nav {
   opacity: 0.9;
 }
 
-/* Anamorphic lens flare — sharp white-hot core, soft elliptical halo,
-   and a row of secondary lens orbs trailing along the horizontal axis. */
+/* Lens flare — a star burst: a long horizontal beam crossed by a short
+   vertical beam, with a bright bloom and color-fringed core. */
 .flare {
   position: fixed;
   left: 50%;
   top: 0;
-  width: 160vw;
-  height: 1.5px;
+  width: 170vw;
+  height: 2px;
   z-index: 3;
   pointer-events: none;
   opacity: 0;
@@ -168,45 +168,41 @@ nav {
   mix-blend-mode: screen;
   background: linear-gradient(90deg,
     transparent 0%,
-    rgba(40, 110, 255, 0) 22%,
-    rgba(150, 200, 255, 0.7) 42%,
-    rgba(255, 255, 255, 0.95) 50%,
-    rgba(150, 200, 255, 0.7) 58%,
-    rgba(40, 110, 255, 0) 78%,
+    rgba(0, 200, 255, 0) 20%,
+    rgba(0, 200, 255, 0.5) 40%,
+    rgba(255, 255, 255, 1) 50%,
+    rgba(120, 90, 255, 0.5) 60%,
+    rgba(120, 90, 255, 0) 80%,
     transparent 100%);
-  filter: blur(0.6px);
+  filter: blur(0.5px);
   will-change: opacity, transform;
 }
-/* wide soft elliptical halo around the core */
+/* vertical crossing beam */
 .flare::before {
   content: '';
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 46vw;
-  height: 90px;
+  width: 2px;
+  height: 230px;
   transform: translate(-50%, -50%);
-  background: radial-gradient(ellipse closest-side,
-    rgba(90, 150, 255, 0.45), rgba(60, 120, 255, 0.12) 55%, transparent 75%);
-  filter: blur(4px);
+  background: linear-gradient(180deg,
+    transparent, rgba(170, 210, 255, 0.7) 45%, #fff 50%, rgba(170, 210, 255, 0.7) 55%, transparent);
+  filter: blur(0.6px);
 }
-/* secondary lens orbs spaced out along the streak */
+/* central radial bloom */
 .flare::after {
   content: '';
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 7px;
-  height: 7px;
+  width: 160px;
+  height: 160px;
   border-radius: 50%;
   transform: translate(-50%, -50%);
-  background: rgba(190, 215, 255, 0.85);
-  box-shadow:
-    -16vw 0 8px 1px rgba(120, 170, 255, 0.35),
-    -9vw 0 5px 0 rgba(150, 195, 255, 0.4),
-    9vw 0 5px 0 rgba(150, 195, 255, 0.4),
-    16vw 0 8px 1px rgba(120, 170, 255, 0.35),
-    24vw 0 12px 2px rgba(90, 150, 255, 0.25);
+  background: radial-gradient(closest-side,
+    rgba(255, 255, 255, 0.85), rgba(120, 180, 255, 0.35) 35%, transparent 70%);
+  filter: blur(2px);
 }
 
 /* Intro */
@@ -253,9 +249,9 @@ nav {
   display: block;
   border-radius: 8px;
   overflow: hidden;
-  background: #f3ecdd;
-  border: 1px solid rgba(33, 29, 24, 0.18);
-  box-shadow: 0 8px 22px rgba(33, 29, 24, 0.1);
+  background: #ffffff;
+  border: 1px solid rgba(22, 24, 29, 0.14);
+  box-shadow: 0 8px 22px rgba(22, 24, 29, 0.1);
   opacity: 0;
   transform: translateY(-32px);
   transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1),
@@ -283,12 +279,12 @@ nav {
 .tile-media {
   width: 100%;
   aspect-ratio: 16 / 9;
-  background: linear-gradient(135deg, #cfc6b2, #b3a98f);
-  border-bottom: 1px solid rgba(33, 29, 24, 0.15);
+  background: linear-gradient(135deg, #d4d8de, #b6bcc6);
+  border-bottom: 1px solid rgba(22, 24, 29, 0.12);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(33, 29, 24, 0.45);
+  color: rgba(22, 24, 29, 0.42);
   font-size: 0.85rem;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -338,7 +334,7 @@ nav {
   text-transform: uppercase;
   letter-spacing: -0.02em;
   margin-bottom: 2rem;
-  color: #f3ecdd;
+  color: #ffffff;
 }
 
 .btn {
@@ -421,8 +417,8 @@ nav {
   font-family: 'Inter', sans-serif;
   font-size: 1rem;
   color: var(--ink);
-  background: #f3ecdd;
-  border: 1px solid rgba(33, 29, 24, 0.25);
+  background: #ffffff;
+  border: 1px solid rgba(22, 24, 29, 0.22);
   border-radius: 8px;
   padding: 0.85rem 1rem;
   outline: none;

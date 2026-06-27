@@ -176,8 +176,7 @@
           ctaH2.style.transform = 'translateY(' + ((1 - bp) * 70).toFixed(1) +
             'px) scale(' + (0.95 + 0.05 * bp).toFixed(3) + ')';
           ctaH2.style.opacity = bp.toFixed(3);
-          // brighten when the reveal completes (no glow)
-          ctaH2.style.color = bp > 0.99 ? '#ffffff' : '#f3ecdd';
+          ctaH2.style.color = '#ffffff';
           if (ctaBtn) {
             var bp2 = clamp((vh - hr.top - 40) / (vh * 0.5));
             ctaBtn.style.transform = 'translateY(' + ((1 - bp2) * 50).toFixed(1) + 'px)';
