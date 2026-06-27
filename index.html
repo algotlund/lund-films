@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -27,6 +27,7 @@
     <a href="index.html" class="logo">Lund Films</a>
     <div class="nav-links">
       <a href="#work">Work</a>
+      <a href="stills.html">Stills</a>
       <a href="contact.html">Contact</a>
     </div>
   </nav>
@@ -171,9 +172,11 @@
           ctaH2.style.opacity = bp.toFixed(3);
           ctaH2.style.color = '#ffffff';
           if (ctaBlurG) {
-            // blur clears completely at full reveal (no residual velocity term)
             var cBlur = (1 - bp) * 22;
             ctaBlurG.setAttribute('stdDeviation', '0 ' + cBlur.toFixed(2));
+            // remove the filter entirely once settled so the text is crisp
+            // (an active SVG filter softens text even at zero blur)
+            ctaH2.style.filter = bp > 0.995 ? 'none' : 'url(#ctaBlur)';
           }
           if (ctaBtn) {
             var bp2 = clamp((vh - hr.top - 40) / (vh * 0.38));

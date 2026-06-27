@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stills — Lund Films</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="logo">Lund Films</a>
+    <div class="nav-links">
+      <a href="index.html#work">Work</a>
+      <a href="stills.html" class="active">Stills</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </nav>
+
+  <main class="stills-page">
+    <header class="stills-header">
+      <h1>Stills</h1>
+      <p>A selection of photographs.</p>
+    </header>
+
+    <div class="stills-grid">
+      <figure class="still" style="aspect-ratio: 3 / 4;"><span>3:4</span></figure>
+      <figure class="still" style="aspect-ratio: 4 / 3;"><span>4:3</span></figure>
+      <figure class="still" style="aspect-ratio: 1 / 1;"><span>1:1</span></figure>
+      <figure class="still" style="aspect-ratio: 2 / 3;"><span>2:3</span></figure>
+      <figure class="still" style="aspect-ratio: 3 / 2;"><span>3:2</span></figure>
+      <figure class="still" style="aspect-ratio: 4 / 5;"><span>4:5</span></figure>
+      <figure class="still" style="aspect-ratio: 1 / 1;"><span>1:1</span></figure>
+      <figure class="still" style="aspect-ratio: 3 / 4;"><span>3:4</span></figure>
+      <figure class="still" style="aspect-ratio: 16 / 9;"><span>16:9</span></figure>
+      <figure class="still" style="aspect-ratio: 2 / 3;"><span>2:3</span></figure>
+      <figure class="still" style="aspect-ratio: 4 / 3;"><span>4:3</span></figure>
+      <figure class="still" style="aspect-ratio: 3 / 4;"><span>3:4</span></figure>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Lund Films</p>
+  </footer>
+
+  <script>
+    // Photos fade up as they scroll into view
+    (function () {
+      var items = document.querySelectorAll('.still');
+      if (!('IntersectionObserver' in window)) {
+        items.forEach(function (i) { i.classList.add('in'); });
+        return;
+      }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+        });
+      }, { threshold: 0.12 });
+      items.forEach(function (i) { io.observe(i); });
+    })();
+  </script>
+
+</body>
+</html>
