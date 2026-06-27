@@ -11,7 +11,15 @@
 </head>
 <body>
 
-  <div class="texture"></div>
+  <div class="bg-dim"></div>
+  <div class="flare"></div>
+
+  <!-- Vertical (motion) blur filter, driven by scroll for the intro text -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <filter id="introBlur" x="-20%" y="-50%" width="140%" height="200%">
+      <feGaussianBlur id="introBlurG" in="SourceGraphic" stdDeviation="0 0" />
+    </filter>
+  </svg>
 
   <nav>
     <a href="index.html" class="logo">Lund Films</a>
@@ -106,6 +114,109 @@
       window.addEventListener('pointerdown', onInteract, { passive: true });
       window.addEventListener('keydown', onInteract);
       window.addEventListener('scroll', onInteract, { passive: true });
+    })();
+
+    // Scroll-driven choreography: dim the page, vanish the intro with motion,
+    // sweep an anamorphic flare as the collage arrives, and reveal the CTA.
+    (function () {
+      var dim = document.querySelector('.bg-dim');
+      var flare = document.querySelector('.flare');
+      var intro = document.querySelector('.intro');
+      var collage = document.querySelector('.collage');
+      var ctaH2 = document.querySelector('.cta h2');
+      var ctaBtn = document.querySelector('.cta .btn');
+      var clamp = function (v) { return v < 0 ? 0 : v > 1 ? 1 : v; };
+      var ticking = false;
+
+      var blurG = document.getElementById('introBlurG');
+      var lastY = window.scrollY;
+
+      function update() {
+        var vh = window.innerHeight;
+        var y = window.scrollY;
+        var vel = Math.abs(y - lastY);
+        lastY = y;
+
+        // --- Page dim, tied to collage approach ---
+        var cAbs = collage.getBoundingClientRect().top + y;
+        var dimP = clamp((y - (cAbs - vh * 0.95)) / (vh * 0.7));
+        if (dim) dim.style.opacity = dimP.toFixed(3);
+
+        // --- Intro vanishes upward, with heavy scroll-driven motion blur ---
+        var ip = 0, iCenter = vh * 0.5;
+        if (intro) {
+          var ir = intro.getBoundingClientRect();
+          iCenter = ir.top + ir.height / 2;
+          ip = clamp((vh * 0.34 - ir.top) / (vh * 0.5));
+          intro.style.transform = 'translateY(' + (-ip * 120) + 'px)';
+          intro.style.opacity = (1 - ip).toFixed(3);
+          if (blurG) {
+            // vertical motion blur: grows with vanish progress + scroll speed
+            var blur = Math.min(28, ip * 16 + Math.min(vel * 0.6, 14));
+            blurG.setAttribute('stdDeviation', '0 ' + blur.toFixed(2));
+          }
+        }
+
+        // --- Anamorphic flare tracks the intro text and blooms as it leaves ---
+        if (flare) {
+          var inView = iCenter > -60 && iCenter < vh + 60;
+          var bloom = Math.sin(clamp(ip) * Math.PI);
+          var op = inView ? (0.22 * (1 - ip) + bloom * 0.9) : 0;
+          flare.style.top = iCenter.toFixed(1) + 'px';
+          flare.style.opacity = clamp(op).toFixed(3);
+          flare.style.transform =
+            'translate(-50%, -50%) scaleX(' + (0.25 + ip * 1.2).toFixed(3) + ')';
+        }
+
+        // --- CTA reveal at the bottom; brightens once fully through ---
+        if (ctaH2) {
+          var hr = ctaH2.getBoundingClientRect();
+          var bp = clamp((vh - hr.top) / (vh * 0.6));
+          ctaH2.style.transform = 'translateY(' + ((1 - bp) * 70).toFixed(1) +
+            'px) scale(' + (0.95 + 0.05 * bp).toFixed(3) + ')';
+          ctaH2.style.opacity = bp.toFixed(3);
+          // brighten when the reveal completes
+          ctaH2.style.color = bp > 0.99 ? '#ffffff' : '#f3ecdd';
+          ctaH2.style.textShadow = bp > 0.4
+            ? '0 0 ' + (bp * 26).toFixed(0) + 'px rgba(120,160,255,' + (bp * 0.55).toFixed(2) + ')'
+            : 'none';
+          if (ctaBtn) {
+            var bp2 = clamp((vh - hr.top - 40) / (vh * 0.5));
+            ctaBtn.style.transform = 'translateY(' + ((1 - bp2) * 50).toFixed(1) + 'px)';
+            ctaBtn.style.opacity = bp2.toFixed(3);
+          }
+        }
+
+        ticking = false;
+      }
+
+      window.addEventListener('scroll', function () {
+        if (!ticking) { window.requestAnimationFrame(update); ticking = true; }
+      }, { passive: true });
+      window.addEventListener('resize', update);
+      update();
+    })();
+
+    // Tiles fall into place + fade in as they scroll into view
+    (function () {
+      var tiles = document.querySelectorAll('.tile');
+      if (!('IntersectionObserver' in window)) {
+        tiles.forEach(function (t) { t.classList.add('in'); });
+        return;
+      }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) {
+            e.target.style.transitionDelay = (e.target.dataset.delay || '0s');
+            e.target.classList.add('in');
+            io.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.15 });
+      tiles.forEach(function (t, i) {
+        t.dataset.delay = (i % 2) * 0.08 + 's';
+        io.observe(t);
+      });
     })();
   </script>
 

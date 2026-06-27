@@ -30,21 +30,29 @@ a {
 }
 
 /* Halftone paper texture overlay */
-.texture {
+/* Scroll-driven dim layer: darkens the page as you reach the collage */
+.bg-dim {
   position: fixed;
   inset: 0;
+  z-index: 0;
   pointer-events: none;
-  z-index: 1;
-  opacity: 0.75;
-  mix-blend-mode: multiply;
-  /* Layered, uneven halftone: organic SVG grain + two offset dot grids
-     at different scales so the pattern never reads as a perfect lattice. */
-  background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.24  0 0 0 0 0.18  0 0 0 0 0.08  0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
-    radial-gradient(rgba(60, 45, 20, 0.40) 0.8px, transparent 1px),
-    radial-gradient(rgba(60, 45, 20, 0.28) 0.6px, transparent 1px);
-  background-size: 220px 220px, 4px 4px, 7px 7px;
-  background-position: 0 0, 0 0, 2px 3px;
+  background: #161210;
+  opacity: 0;
+  will-change: opacity;
+}
+
+/* Apple-style launch entrance: elements drop into place and fade in */
+@keyframes fallIn {
+  from { opacity: 0; transform: translateY(-32px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+nav            { animation: fallIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both 0.1s; }
+.showreel-frame{ animation: fallIn 1s   cubic-bezier(0.2, 0.8, 0.2, 1) both 0.28s; }
+.intro h2      { animation: fallIn 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both 0.5s; }
+.intro p       { animation: fallIn 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both 0.62s; }
+
+@media (prefers-reduced-motion: reduce) {
+  nav, .showreel-frame, .intro h2, .intro p { animation: none; }
 }
 
 /* Nav */
@@ -144,6 +152,52 @@ nav {
   opacity: 0.9;
 }
 
+/* Anamorphic lens flare — wide horizontal blue streak, scroll-reactive */
+.flare {
+  position: fixed;
+  left: 50%;
+  top: 0;
+  width: 150vw;
+  height: 3px;
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -50%) scaleX(0.15);
+  transform-origin: center;
+  mix-blend-mode: screen;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(0, 70, 255, 0) 18%,
+    rgba(90, 150, 255, 0.85) 50%,
+    rgba(0, 70, 255, 0) 82%,
+    transparent 100%);
+  filter: blur(1.5px);
+  will-change: opacity, transform;
+}
+/* central bloom + vertical glint of the flare */
+.flare::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 220px;
+  height: 220px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(closest-side, rgba(120, 170, 255, 0.55), transparent 70%);
+  border-radius: 50%;
+}
+.flare::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 2px;
+  height: 120px;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(180deg, transparent, rgba(150, 190, 255, 0.6), transparent);
+  filter: blur(1px);
+}
+
 /* Intro */
 .intro {
   position: relative;
@@ -152,15 +206,16 @@ nav {
   margin: 0 auto;
   padding: 6rem 2rem 4rem;
   text-align: center;
+  will-change: opacity, transform, filter;
+  filter: url(#introBlur);
 }
 
 .intro h2 {
-  font-family: 'Instrument Serif', serif;
-  font-style: italic;
-  font-size: clamp(2.4rem, 5.5vw, 4.5rem);
-  font-weight: 400;
-  letter-spacing: 0;
-  line-height: 1.05;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: clamp(2rem, 4.8vw, 3.6rem);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.08;
 }
 
 .intro p {
@@ -190,12 +245,24 @@ nav {
   background: #f3ecdd;
   border: 1px solid rgba(33, 29, 24, 0.18);
   box-shadow: 0 8px 22px rgba(33, 29, 24, 0.1);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  opacity: 0;
+  transform: translateY(-32px);
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1),
+              box-shadow 0.3s ease, opacity 0.6s ease;
 }
 
-.tile:hover {
+.tile.in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.tile.in:hover {
   transform: translateY(-5px);
   box-shadow: 0 16px 34px rgba(0, 70, 255, 0.18);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tile { opacity: 1; transform: none; }
 }
 
 .tile-large { grid-column: 1 / -1; }
@@ -248,6 +315,11 @@ nav {
   padding: 5rem 2rem 6rem;
 }
 
+.cta h2,
+.cta .btn {
+  will-change: opacity, transform;
+}
+
 .cta h2 {
   font-family: 'Syne', sans-serif;
   font-size: clamp(2rem, 5vw, 3.8rem);
@@ -255,6 +327,7 @@ nav {
   text-transform: uppercase;
   letter-spacing: -0.02em;
   margin-bottom: 2rem;
+  color: #f3ecdd;
 }
 
 .btn {
@@ -374,8 +447,8 @@ footer {
   padding: 2.5rem;
   text-align: center;
   font-size: 0.8rem;
-  color: var(--muted);
-  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  color: rgba(243, 236, 221, 0.6);
+  border-top: 1px solid rgba(243, 236, 221, 0.15);
 }
 
 /* Mobile */
