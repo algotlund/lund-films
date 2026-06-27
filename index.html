@@ -7,17 +7,19 @@
   <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
   <div class="bg-dim"></div>
-  <div class="flare"></div>
 
-  <!-- Vertical (motion) blur filter, driven by scroll for the intro text -->
+  <!-- Vertical (motion) blur filters, driven by scroll -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
     <filter id="introBlur" x="-20%" y="-50%" width="140%" height="200%">
       <feGaussianBlur id="introBlurG" in="SourceGraphic" stdDeviation="0 0" />
+    </filter>
+    <filter id="ctaBlur" x="-20%" y="-50%" width="140%" height="200%">
+      <feGaussianBlur id="ctaBlurG" in="SourceGraphic" stdDeviation="0 0" />
     </filter>
   </svg>
 
@@ -51,33 +53,37 @@
   <!-- Intro line -->
   <section class="intro">
     <h2>Stories told through light, motion, and sound.</h2>
-    <p>A selection of recent films.</p>
   </section>
+
+  <!-- Section label above the collage, with an Apple-style word reveal -->
+  <div class="collage-intro">
+    <p class="reveal-text">A selection of recent films.</p>
+  </div>
 
   <!-- Project collage -->
   <section id="work" class="collage">
 
-    <a href="#" class="tile tile-large">
+    <a href="project-1.html" class="tile tile-large">
       <div class="tile-media"><span>16:9</span></div>
       <div class="tile-caption"><h3>Project One</h3><p>Short Film · 2025</p></div>
     </a>
 
-    <a href="#" class="tile tile-tall">
+    <a href="project-2.html" class="tile tile-tall">
       <div class="tile-media"><span>4:5</span></div>
       <div class="tile-caption"><h3>Project Two</h3><p>Music Video · 2025</p></div>
     </a>
 
-    <a href="#" class="tile">
+    <a href="project-3.html" class="tile">
       <div class="tile-media"><span>16:9</span></div>
       <div class="tile-caption"><h3>Project Three</h3><p>Documentary · 2024</p></div>
     </a>
 
-    <a href="#" class="tile">
+    <a href="project-4.html" class="tile">
       <div class="tile-media"><span>16:9</span></div>
       <div class="tile-caption"><h3>Project Four</h3><p>Commercial · 2024</p></div>
     </a>
 
-    <a href="#" class="tile tile-wide">
+    <a href="project-5.html" class="tile tile-wide">
       <div class="tile-media"><span>21:9</span></div>
       <div class="tile-caption"><h3>Project Five</h3><p>Short Film · 2024</p></div>
     </a>
@@ -101,10 +107,8 @@
       if (!v) return;
       function play() { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
       play();
-      // Retry once metadata/data is ready
       v.addEventListener('loadeddata', play);
       v.addEventListener('canplay', play);
-      // Fallback: kick off on first user interaction if still paused
       function onInteract() {
         if (v.paused) play();
         window.removeEventListener('pointerdown', onInteract);
@@ -116,11 +120,10 @@
       window.addEventListener('scroll', onInteract, { passive: true });
     })();
 
-    // Scroll-driven choreography: dim the page, vanish the intro with motion,
-    // sweep an anamorphic flare as the collage arrives, and reveal the CTA.
+    // Scroll-driven choreography: dim the page, vanish the intro with motion
+    // blur, and reveal the CTA (with its own motion blur as it settles).
     (function () {
       var dim = document.querySelector('.bg-dim');
-      var flare = document.querySelector('.flare');
       var intro = document.querySelector('.intro');
       var collage = document.querySelector('.collage');
       var ctaH2 = document.querySelector('.cta h2');
@@ -128,8 +131,8 @@
       var clamp = function (v) { return v < 0 ? 0 : v > 1 ? 1 : v; };
       var ticking = false;
 
-      var blurG = document.getElementById('introBlurG');
-      var introH2 = document.querySelector('.intro h2');
+      var introBlurG = document.getElementById('introBlurG');
+      var ctaBlurG = document.getElementById('ctaBlurG');
       var lastY = window.scrollY;
 
       function update() {
@@ -144,36 +147,20 @@
         if (dim) dim.style.opacity = dimP.toFixed(3);
 
         // --- Intro vanishes upward, with heavy scroll-driven motion blur ---
-        var ip = 0, iCenter = vh * 0.5;
         if (intro) {
           var ir = intro.getBoundingClientRect();
-          iCenter = ir.top + ir.height / 2;
-          ip = clamp((vh * 0.34 - ir.top) / (vh * 0.5));
+          var ip = clamp((vh * 0.34 - ir.top) / (vh * 0.5));
           intro.style.transform = 'translateY(' + (-ip * 120) + 'px)';
           intro.style.opacity = (1 - ip).toFixed(3);
-          if (blurG) {
-            // vertical motion blur kicks in later, once the text is mostly gone
+          if (introBlurG) {
             var ipBlur = clamp((ip - 0.45) / 0.55) * 30;
             var blur = Math.min(30, ipBlur + Math.min(vel * 0.3, 6));
-            blurG.setAttribute('stdDeviation', '0 ' + blur.toFixed(2));
+            introBlurG.setAttribute('stdDeviation', '0 ' + blur.toFixed(2));
           }
         }
 
-        // --- Flare locks to the bold headline's center and blooms as it leaves ---
-        if (flare && introH2) {
-          var hb = introH2.getBoundingClientRect();
-          var bc = Math.round(hb.top + hb.height / 2);
-          var inView = bc > -60 && bc < vh + 60;
-          var bloom = Math.sin(clamp(ip) * Math.PI);
-          var op = inView ? (0.22 * (1 - ip) + bloom * 0.9) : 0;
-          flare.style.opacity = clamp(op).toFixed(3);
-          // position + scale via transform only (no layout, no jitter)
-          flare.style.transform =
-            'translateX(-50%) translateY(' + bc + 'px) translateY(-50%) scaleX(' +
-            (0.25 + ip * 1.2).toFixed(3) + ')';
-        }
-
-        // --- CTA reveal at the bottom; brightens once fully through ---
+        // --- CTA reveal at the bottom: rises, sharpens from motion blur,
+        //     and is fully white once the animation completes ---
         if (ctaH2) {
           var hr = ctaH2.getBoundingClientRect();
           var bp = clamp((vh - hr.top) / (vh * 0.6));
@@ -181,8 +168,10 @@
             'px) scale(' + (0.95 + 0.05 * bp).toFixed(3) + ')';
           ctaH2.style.opacity = bp.toFixed(3);
           ctaH2.style.color = '#ffffff';
-          ctaH2.style.textShadow = '0 0 ' + (bp * 16).toFixed(0) +
-            'px rgba(255,255,255,' + (bp * 0.4).toFixed(2) + ')';
+          if (ctaBlurG) {
+            var cBlur = Math.min(26, (1 - bp) * 22 + Math.min(vel * 0.3, 6));
+            ctaBlurG.setAttribute('stdDeviation', '0 ' + cBlur.toFixed(2));
+          }
           if (ctaBtn) {
             var bp2 = clamp((vh - hr.top - 40) / (vh * 0.5));
             ctaBtn.style.transform = 'translateY(' + ((1 - bp2) * 50).toFixed(1) + 'px)';
@@ -200,7 +189,29 @@
       update();
     })();
 
-    // Tiles fall into place + fade in as they scroll into view
+    // Apple-style word reveal for the section label
+    (function () {
+      var el = document.querySelector('.reveal-text');
+      if (!el) return;
+      var words = el.textContent.split(' ');
+      el.textContent = '';
+      words.forEach(function (w, i) {
+        var s = document.createElement('span');
+        s.textContent = w;
+        s.style.transitionDelay = (i * 0.09).toFixed(2) + 's';
+        el.appendChild(s);
+        if (i < words.length - 1) el.appendChild(document.createTextNode(' '));
+      });
+      if (!('IntersectionObserver' in window)) { el.classList.add('in'); return; }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { el.classList.add('in'); io.unobserve(el); }
+        });
+      }, { threshold: 0.6 });
+      io.observe(el);
+    })();
+
+    // Collage tiles emerge from the dark as they scroll in, then stay put
     (function () {
       var tiles = document.querySelectorAll('.tile');
       if (!('IntersectionObserver' in window)) {
