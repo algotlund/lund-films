@@ -163,17 +163,20 @@
         //     and is fully white once the animation completes ---
         if (ctaH2) {
           var hr = ctaH2.getBoundingClientRect();
-          var bp = clamp((vh - hr.top) / (vh * 0.6));
+          // completes while the headline is still in the lower viewport, so it
+          // reaches bp = 1 (blur fully cleared) even sitting near the page end
+          var bp = clamp((vh - hr.top) / (vh * 0.38));
           ctaH2.style.transform = 'translateY(' + ((1 - bp) * 70).toFixed(1) +
             'px) scale(' + (0.95 + 0.05 * bp).toFixed(3) + ')';
           ctaH2.style.opacity = bp.toFixed(3);
           ctaH2.style.color = '#ffffff';
           if (ctaBlurG) {
-            var cBlur = Math.min(26, (1 - bp) * 22 + Math.min(vel * 0.3, 6));
+            // blur clears completely at full reveal (no residual velocity term)
+            var cBlur = (1 - bp) * 22;
             ctaBlurG.setAttribute('stdDeviation', '0 ' + cBlur.toFixed(2));
           }
           if (ctaBtn) {
-            var bp2 = clamp((vh - hr.top - 40) / (vh * 0.5));
+            var bp2 = clamp((vh - hr.top - 40) / (vh * 0.38));
             ctaBtn.style.transform = 'translateY(' + ((1 - bp2) * 50).toFixed(1) + 'px)';
             ctaBtn.style.opacity = bp2.toFixed(3);
           }

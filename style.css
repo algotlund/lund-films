@@ -1,8 +1,8 @@
 :root {
   --blue: #0046FF;
   --ink: #16181d;
-  --paper: #d9dce1;
-  --muted: #6f7682;
+  --paper: #c5c9d0;
+  --muted: #646b78;
   --line: #16181d;
 }
 
@@ -65,7 +65,7 @@ nav {
   top: 0;
   left: 0;
   right: 0;
-  background: rgba(217, 220, 225, 0.82);
+  background: rgba(197, 201, 208, 0.82);
   backdrop-filter: saturate(140%) blur(14px);
   -webkit-backdrop-filter: saturate(140%) blur(14px);
   border-bottom: 1px solid rgba(33, 29, 24, 0.15);
@@ -157,7 +157,7 @@ nav {
   z-index: 2;
   max-width: 900px;
   margin: 0 auto;
-  padding: 7rem 2rem 7rem;
+  padding: 9rem 2rem 10rem;
   text-align: center;
   will-change: opacity, transform, filter;
   filter: url(#introBlur);
@@ -185,7 +185,8 @@ nav {
   z-index: 2;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 1.25rem 1.75rem;
+  padding: 1rem 1.25rem 2.5rem;
+  text-align: center;
 }
 
 .reveal-text {
