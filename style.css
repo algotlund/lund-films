@@ -72,17 +72,19 @@ nav {
   z-index: 50;
 }
 
-/* Blue gradient dropshadow that bleeds down behind the top bar */
+/* Blue gradient dropshadow — fades in as the page darkens on scroll */
 nav::after {
   content: '';
   position: absolute;
   left: 0;
   right: 0;
   top: 100%;
-  height: 80px;
+  height: 90px;
   pointer-events: none;
+  opacity: var(--navglow, 0);
+  transition: opacity 0.15s linear;
   background: linear-gradient(to bottom,
-    rgba(0, 70, 255, 0.28), rgba(0, 70, 255, 0.08) 45%, rgba(0, 70, 255, 0));
+    rgba(0, 70, 255, 0.42), rgba(0, 70, 255, 0.12) 45%, rgba(0, 70, 255, 0));
 }
 
 .logo {
@@ -170,10 +172,9 @@ nav::after {
   z-index: 2;
   max-width: 900px;
   margin: 0 auto;
-  padding: 18rem 2rem 20rem;
+  padding: 13rem 2rem 14rem;
   text-align: center;
   will-change: opacity, transform, filter;
-  filter: url(#introBlur);
 }
 
 .intro h2 {
@@ -462,7 +463,7 @@ footer {
     grid-template-columns: 1fr;
   }
   .tile-tall .tile-media { aspect-ratio: 16 / 9; }
-  .intro { padding: 10rem 1.5rem 11rem; }
+  .intro { padding: 8rem 1.5rem 9rem; }
 
   /* Full-bleed showreel on phones — reaches the screen edges */
   .showreel { padding: 4.5rem 0 0; }

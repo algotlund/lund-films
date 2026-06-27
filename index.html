@@ -13,16 +13,6 @@
 
   <div class="bg-dim"></div>
 
-  <!-- Vertical (motion) blur filters, driven by scroll -->
-  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-    <filter id="introBlur" x="-20%" y="-50%" width="140%" height="200%">
-      <feGaussianBlur id="introBlurG" in="SourceGraphic" stdDeviation="0 0" />
-    </filter>
-    <filter id="ctaBlur" x="-20%" y="-50%" width="140%" height="200%">
-      <feGaussianBlur id="ctaBlurG" in="SourceGraphic" stdDeviation="0 0" />
-    </filter>
-  </svg>
-
   <nav>
     <a href="index.html" class="logo">Lund Films</a>
     <div class="nav-links">
@@ -124,6 +114,7 @@
     // Scroll-driven choreography: dim the page, vanish the intro with motion
     // blur, and reveal the CTA (with its own motion blur as it settles).
     (function () {
+      var nav = document.querySelector('nav');
       var dim = document.querySelector('.bg-dim');
       var intro = document.querySelector('.intro');
       var collage = document.querySelector('.collage');
@@ -132,48 +123,36 @@
       var clamp = function (v) { return v < 0 ? 0 : v > 1 ? 1 : v; };
       var ticking = false;
 
-      var introBlurG = document.getElementById('introBlurG');
-      var ctaBlurG = document.getElementById('ctaBlurG');
-      var lastY = window.scrollY;
-
       function update() {
         var vh = window.innerHeight;
         var y = window.scrollY;
-        var vel = Math.abs(y - lastY);
-        lastY = y;
 
         // --- Page dim, tied to collage approach ---
         var cAbs = collage.getBoundingClientRect().top + y;
         var dimP = clamp((y - (cAbs - vh * 0.95)) / (vh * 0.7));
         if (dim) dim.style.opacity = dimP.toFixed(3);
+        // blue nav glow comes in together with the dimming
+        if (nav) nav.style.setProperty('--navglow', dimP.toFixed(3));
 
-        // --- Intro vanishes upward, with heavy scroll-driven motion blur ---
+        // --- Intro vanishes upward with a smooth CSS motion blur ---
         if (intro) {
           var ir = intro.getBoundingClientRect();
           var ip = clamp((vh * 0.34 - ir.top) / (vh * 0.5));
-          intro.style.transform = 'translateY(' + (-ip * 120) + 'px)';
+          intro.style.transform = 'translateY(' + (-ip * 120).toFixed(1) + 'px)';
           intro.style.opacity = (1 - ip).toFixed(3);
-          if (introBlurG) {
-            var ipBlur = clamp((ip - 0.45) / 0.55) * 30;
-            var blur = Math.min(30, ipBlur + Math.min(vel * 0.3, 6));
-            introBlurG.setAttribute('stdDeviation', '0 ' + blur.toFixed(2));
-          }
+          // GPU-accelerated CSS blur (smooth) — starts later, no velocity jitter
+          var ipBlur = clamp((ip - 0.4) / 0.6) * 14;
+          intro.style.filter = ipBlur > 0.1 ? 'blur(' + ipBlur.toFixed(1) + 'px)' : 'none';
         }
 
-        // --- CTA reveal at the bottom: rises, sharpens from motion blur,
-        //     and is fully white once the animation completes ---
+        // --- CTA reveal at the bottom: rises and fades in, no blur ---
         if (ctaH2) {
           var hr = ctaH2.getBoundingClientRect();
-          // completes while the headline is still in the lower viewport, so it
-          // reaches bp = 1 (blur fully cleared) even sitting near the page end
           var bp = clamp((vh - hr.top) / (vh * 0.38));
           ctaH2.style.transform = 'translateY(' + ((1 - bp) * 70).toFixed(1) +
             'px) scale(' + (0.95 + 0.05 * bp).toFixed(3) + ')';
           ctaH2.style.opacity = bp.toFixed(3);
           ctaH2.style.color = '#ffffff';
-          // CSS blur during the rise; removed entirely once settled so the
-          // text renders perfectly crisp (no SVG-filter rasterization)
-          ctaH2.style.filter = bp > 0.96 ? 'none' : 'blur(' + ((1 - bp) * 12).toFixed(1) + 'px)';
           if (ctaBtn) {
             var bp2 = clamp((vh - hr.top - 40) / (vh * 0.38));
             ctaBtn.style.transform = 'translateY(' + ((1 - bp2) * 50).toFixed(1) + 'px)';
