@@ -7,11 +7,22 @@
   <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@600;700;800&family=Fraunces:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 </head>
 <body>
 
   <div class="bg-dim"></div>
+
+  <!-- Rough, hand-printed edge filter for the banner text -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <filter id="roughEdge" x="-8%" y="-8%" width="116%" height="116%"
+            filterUnits="objectBoundingBox">
+      <feTurbulence type="fractalNoise" baseFrequency="0.55" numOctaves="2"
+                    seed="4" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.6"
+                         xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </svg>
 
   <nav>
     <a href="index.html" class="logo">Lund Films</a>

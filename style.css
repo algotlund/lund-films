@@ -140,6 +140,7 @@ nav {
   font-weight: 800;
   letter-spacing: -0.02em;
   text-transform: uppercase;
+  filter: url(#roughEdge);
 }
 
 .showreel-overlay p {
@@ -281,7 +282,7 @@ nav {
 }
 
 .tile-caption h3 {
-  font-family: 'Fraunces', serif;
+  font-family: 'Instrument Serif', serif;
   font-size: 1.5rem;
   font-weight: 600;
   letter-spacing: -0.01em;
@@ -495,7 +496,7 @@ footer {
 }
 
 .project-hero h1 {
-  font-family: 'Fraunces', serif;
+  font-family: 'Instrument Serif', serif;
   font-size: clamp(2.6rem, 6vw, 5rem);
   font-weight: 600;
   letter-spacing: -0.02em;
