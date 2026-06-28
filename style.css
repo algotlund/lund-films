@@ -268,6 +268,13 @@ nav {
   letter-spacing: 0.1em;
 }
 
+.tile-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
 .tile-large .tile-media { aspect-ratio: 21 / 9; }
 .tile-wide .tile-media  { aspect-ratio: 21 / 9; }
 .tile-tall .tile-media  { aspect-ratio: 4 / 5; }
@@ -513,6 +520,26 @@ footer {
   max-width: 1100px;
   margin: 2.5rem auto 0;
   padding: 0 2rem;
+}
+.video-embed {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #0a0a0a;
+}
+.video-embed iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+.video-embed .frame {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
 }
 .project-media .frame {
   width: 100%;

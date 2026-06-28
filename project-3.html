@@ -30,7 +30,10 @@
     </header>
 
     <div class="project-media">
-      <div class="frame"><span>16:9</span></div>
+      <!-- Paste your YouTube video ID between the quotes below, e.g. data-yt="dQw4w9WgXcQ" -->
+      <div class="video-embed" data-yt="">
+        <div class="frame"><span>Add YouTube video ID</span></div>
+      </div>
     </div>
 
     <div class="project-body">
@@ -57,5 +60,21 @@
     <p>&copy; 2026 Lund Films</p>
   </footer>
 
+  <script>
+    (function () {
+      document.querySelectorAll(".video-embed[data-yt]").forEach(function (el) {
+        var id = (el.getAttribute("data-yt") || "").trim();
+        if (!id) return;
+        var f = document.createElement("iframe");
+        f.src = "https://www.youtube-nocookie.com/embed/" + id + "?rel=0&modestbranding=1";
+        f.title = document.title;
+        f.loading = "lazy";
+        f.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+        f.setAttribute("allowfullscreen", "");
+        el.innerHTML = "";
+        el.appendChild(f);
+      });
+    })();
+  </script>
 </body>
 </html>
