@@ -19,7 +19,7 @@
             filterUnits="objectBoundingBox">
       <feTurbulence type="fractalNoise" baseFrequency="1.0" numOctaves="2"
                     seed="4" result="noise" />
-      <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.7"
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.1"
                          xChannelSelector="R" yChannelSelector="G" />
     </filter>
   </svg>
@@ -144,12 +144,13 @@
         var vh = window.innerHeight;
         var y = window.scrollY;
 
-        // --- Page dim, tied to collage approach ---
+        // --- Page dim, tied to collage approach (eases in a bit slower) ---
         var cAbs = collage.getBoundingClientRect().top + y;
-        var dimP = clamp((y - (cAbs - vh * 0.95)) / (vh * 0.7));
+        var dimP = clamp((y - (cAbs - vh * 0.95)) / (vh * 1.05));
         if (dim) dim.style.opacity = dimP.toFixed(3);
 
-        // --- Section label: each word reveals scrubbed by the scroll wheel ---
+        // --- Section label: words scrub in, and the colour fades blue -> white
+        //     as the background darkens ---
         if (revealText && revealWords.length) {
           var lr = revealText.getBoundingClientRect();
           var lp = clamp((vh * 0.86 - lr.top) / (vh * 0.34));
@@ -161,6 +162,10 @@
             w.style.transform = 'translateY(' + ((1 - local) * 14).toFixed(1) + 'px)';
             w.style.filter = 'blur(' + ((1 - local) * 6).toFixed(2) + 'px)';
           }
+          // stay blue for a while, then fade to white as it gets dark
+          var colorT = clamp((dimP - 0.28) / 0.3);
+          revealText.style.color = 'rgb(' + Math.round(255 * colorT) + ', ' +
+            Math.round(70 + 185 * colorT) + ', 255)';
         }
 
         // --- Intro vanishes upward with a smooth CSS motion blur ---
