@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@600;700;800&family=Archivo:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@600;700;800&family=Archivo:wght@700;800&family=Bebas+Neue&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -29,6 +29,7 @@
     <div class="nav-links">
       <a href="#work">Work</a>
       <a href="stills.html">Stills</a>
+      <a href="about.html">About</a>
       <a href="contact.html">Contact</a>
     </div>
   </nav>
@@ -88,6 +89,7 @@
   </section>
 
   <footer>
+    <div class="footer-links"><a href="https://www.instagram.com/lund.films/" target="_blank" rel="noopener">Instagram</a></div>
     <p>&copy; 2026 Lund Films</p>
   </footer>
 
@@ -147,7 +149,7 @@
         // --- Page dim, tied to collage approach (eases in a bit slower) ---
         var cAbs = collage.getBoundingClientRect().top + y;
         var dimP = clamp((y - (cAbs - vh * 0.95)) / (vh * 1.05));
-        if (dim) dim.style.opacity = dimP.toFixed(3);
+        if (dim) dim.style.opacity = clamp(dimP * 1.3).toFixed(3);
 
         // --- Section label: words scrub in, and the colour fades blue -> white
         //     as the background darkens ---

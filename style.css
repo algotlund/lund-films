@@ -17,7 +17,7 @@ html {
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
   color: var(--ink);
   background: var(--paper);
   line-height: 1.6;
@@ -36,7 +36,7 @@ a {
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  background: #121319;
+  background: #000000;
   opacity: 0;
   will-change: opacity;
 }
@@ -70,6 +70,7 @@ nav {
   -webkit-backdrop-filter: saturate(140%) blur(14px);
   border-bottom: 1px solid rgba(33, 29, 24, 0.15);
   z-index: 50;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 .logo {
@@ -84,15 +85,42 @@ nav {
 }
 
 .nav-links a {
+  position: relative;
   font-size: 0.9rem;
-  font-weight: 500;
-  color: var(--muted);
-  transition: color 0.2s;
+  font-weight: 600;
+  color: var(--blue);
 }
 
-.nav-links a:hover,
-.nav-links a.active {
-  color: var(--blue);
+/* Same creep-in halftone shadow behind the nav text on hover */
+.nav-links a::before,
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  inset: -16px -20px;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(0.7);
+  transition: opacity 0.45s ease, transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.nav-links a::before {
+  background: radial-gradient(ellipse 52% 52% at 50% 50%,
+    rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.32) 48%, transparent 80%);
+  filter: blur(5px);
+}
+.nav-links a::after {
+  background-image: radial-gradient(circle, #000 1px, transparent 1.4px);
+  background-size: 4px 4px;
+  -webkit-mask: radial-gradient(ellipse 56% 56% at 50% 50%,
+    transparent 26%, rgba(0, 0, 0, 0.9) 46%, transparent 100%);
+  mask: radial-gradient(ellipse 56% 56% at 50% 50%,
+    transparent 26%, rgba(0, 0, 0, 0.9) 46%, transparent 100%);
+  filter: url(#roughEdge);
+}
+.nav-links a:hover::before,
+.nav-links a:hover::after {
+  opacity: 0.48;
+  transform: scale(1);
 }
 
 /* Showreel hero */
@@ -164,11 +192,11 @@ nav {
 }
 
 .intro h2 {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: clamp(2rem, 4.8vw, 3.6rem);
-  font-weight: 600;
-  letter-spacing: -0.035em;
-  line-height: 1.08;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(2.6rem, 6vw, 4.6rem);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  line-height: 0.98;
 }
 
 .intro p {
@@ -194,7 +222,6 @@ nav {
   color: var(--blue);
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  filter: url(#roughEdge);
 }
 
 /* Word reveal scrubbed by scroll — JS sets each word's state per frame */
@@ -223,16 +250,13 @@ nav {
 
 .tile {
   display: block;
-  border-radius: 8px;
-  overflow: hidden;
-  background: #ffffff;
-  border: 1px solid rgba(22, 24, 29, 0.14);
-  box-shadow: 0 8px 22px rgba(22, 24, 29, 0.1);
+  position: relative;
+  background: transparent;
   opacity: 0;
   transform: translateY(22px);
   filter: brightness(0.18);
   transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1),
-              box-shadow 0.3s ease, opacity 0.8s ease, filter 1s ease;
+              opacity 0.8s ease, filter 1s ease;
 }
 
 .tile.in {
@@ -243,7 +267,6 @@ nav {
 
 .tile.in:hover {
   transform: translateY(-5px);
-  box-shadow: 0 16px 34px rgba(0, 70, 255, 0.18);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -255,17 +278,57 @@ nav {
 .tile-tall  { grid-row: span 1; }
 
 .tile-media {
+  position: relative;
   width: 100%;
   aspect-ratio: 16 / 9;
-  background: linear-gradient(135deg, #d4d8de, #b6bcc6);
-  border-bottom: 1px solid rgba(22, 24, 29, 0.12);
+  background: linear-gradient(135deg, #2a2d33, #16181d);
+  border-radius: 10px;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(22, 24, 29, 0.42);
+  color: rgba(255, 255, 255, 0.4);
   font-size: 0.85rem;
   font-weight: 700;
   letter-spacing: 0.1em;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.35);
+  transition: box-shadow 0.3s ease;
+}
+
+/* Halftone shadow that creeps in BEHIND the video on hover:
+   ::before = dark solid core, ::after = uneven halftone-dot edge */
+.tile::before,
+.tile::after {
+  content: '';
+  position: absolute;
+  inset: -24px;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity 0.55s ease, transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+/* dark core — solid in the middle, fading out softly */
+.tile::before {
+  background: radial-gradient(ellipse 52% 52% at 50% 50%,
+    rgba(0, 0, 0, 0.92), rgba(0, 0, 0, 0.4) 48%, transparent 80%);
+  filter: blur(10px);
+}
+/* halftone dots, masked into a soft rounded blob that feathers out
+   gradually, roughened so the silhouette is uneven */
+.tile::after {
+  background-image: radial-gradient(circle, #000 1.9px, transparent 2.4px);
+  background-size: 7px 7px;
+  -webkit-mask: radial-gradient(ellipse 56% 56% at 50% 50%,
+    transparent 30%, rgba(0, 0, 0, 0.9) 46%, transparent 100%);
+  mask: radial-gradient(ellipse 56% 56% at 50% 50%,
+    transparent 30%, rgba(0, 0, 0, 0.9) 46%, transparent 100%);
+  filter: url(#roughEdge);
+}
+.tile.in:hover::before,
+.tile.in:hover::after {
+  opacity: 0.6;
+  transform: scale(1);
 }
 
 .tile-media img {
@@ -280,21 +343,31 @@ nav {
 .tile-tall .tile-media  { aspect-ratio: 4 / 5; }
 
 .tile-caption {
-  padding: 1.1rem 1.25rem;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  padding: 2.5rem 1.4rem 1.2rem;
+  pointer-events: none;
+  border-radius: 0 0 10px 10px;
+  background: linear-gradient(to top,
+    rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0.32) 55%, rgba(0, 0, 0, 0));
 }
 
 .tile-caption h3 {
-  font-family: 'Archivo', sans-serif;
-  font-size: 1.25rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: -0.02em;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.9rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  color: #ffffff;
 }
 
 .tile-caption p {
   font-size: 0.75rem;
-  color: var(--muted);
-  margin-top: 0.35rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 0.3rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
@@ -313,11 +386,11 @@ nav {
 }
 
 .cta h2 {
-  font-family: 'Syne', sans-serif;
-  font-size: clamp(2rem, 5vw, 3.8rem);
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: -0.02em;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(2.6rem, 6vw, 4.6rem);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 0.98;
   margin-bottom: 2rem;
   color: #ffffff;
 }
@@ -326,9 +399,9 @@ nav {
   display: inline-block;
   background: var(--blue);
   color: #fff;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.9rem;
-  font-weight: 600;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
   letter-spacing: 0.02em;
   padding: 0.85rem 2rem;
   border-radius: 8px;
@@ -361,11 +434,11 @@ nav {
 }
 
 .contact-page h1 {
-  font-family: 'Syne', sans-serif;
-  font-size: clamp(2.5rem, 6vw, 4.5rem);
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: -0.02em;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(3rem, 7vw, 5.5rem);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 0.95;
 }
 
 .contact-lead {
@@ -399,7 +472,7 @@ nav {
 
 .field input,
 .field textarea {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Nunito', sans-serif;
   font-size: 1rem;
   color: var(--ink);
   background: #ffffff;
@@ -439,8 +512,20 @@ footer {
   padding: 2.5rem;
   text-align: center;
   font-size: 0.8rem;
-  color: rgba(243, 236, 221, 0.6);
-  border-top: 1px solid rgba(243, 236, 221, 0.15);
+  color: var(--muted);
+  border-top: 1px solid rgba(138, 132, 121, 0.25);
+}
+.footer-links {
+  margin-bottom: 0.75rem;
+}
+.footer-links a {
+  color: var(--blue);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: opacity 0.2s;
+}
+.footer-links a:hover {
+  opacity: 0.6;
 }
 
 /* Mobile */
@@ -499,12 +584,11 @@ footer {
 }
 
 .project-hero h1 {
-  font-family: 'Archivo', sans-serif;
-  font-size: clamp(2.6rem, 6vw, 5rem);
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: -0.03em;
-  line-height: 0.98;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(3rem, 7vw, 5.5rem);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  line-height: 0.95;
   margin-top: 0.75rem;
 }
 
@@ -613,11 +697,11 @@ footer {
   padding: 0 2rem 2.5rem;
 }
 .stills-header h1 {
-  font-family: 'Syne', sans-serif;
-  font-size: clamp(2.4rem, 6vw, 4rem);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: -0.02em;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(3rem, 7vw, 5rem);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 0.95;
 }
 .stills-header p {
   margin-top: 0.5rem;
@@ -658,3 +742,52 @@ footer {
 .still.in { opacity: 1; transform: none; }
 .still img { width: 100%; height: auto; display: block; }
 @media (prefers-reduced-motion: reduce) { .still { opacity: 1; transform: none; } }
+
+/* ---------------- About page ---------------- */
+.about-page {
+  position: relative;
+  z-index: 2;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 8rem 2rem 5rem;
+}
+.about-grid {
+  display: grid;
+  grid-template-columns: 5fr 6fr;
+  gap: 3rem;
+  align-items: center;
+}
+.about-portrait {
+  border-radius: 12px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #d4d8de, #b6bcc6);
+  aspect-ratio: 4 / 5;
+  box-shadow: 0 12px 30px rgba(22, 24, 29, 0.14);
+}
+.about-portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.about-text h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(3rem, 7vw, 5rem);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 0.95;
+  margin-bottom: 1.25rem;
+}
+.about-text p {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #34373d;
+  margin-bottom: 1.1rem;
+}
+.about-text .btn {
+  margin-top: 1rem;
+}
+@media (max-width: 768px) {
+  .about-grid { grid-template-columns: 1fr; gap: 1.75rem; }
+  .about-page { padding: 6.5rem 1.5rem 4rem; }
+}
