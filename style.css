@@ -1,8 +1,8 @@
 :root {
   --blue: #0046FF;
   --ink: #16181d;
-  --paper: #c5c9d0;
-  --muted: #646b78;
+  --paper: #f4f2ec;
+  --muted: #8a8479;
   --line: #16181d;
 }
 
@@ -65,7 +65,7 @@ nav {
   top: 0;
   left: 0;
   right: 0;
-  background: rgba(197, 201, 208, 0.82);
+  background: rgba(244, 242, 236, 0.82);
   backdrop-filter: saturate(140%) blur(14px);
   -webkit-backdrop-filter: saturate(140%) blur(14px);
   border-bottom: 1px solid rgba(33, 29, 24, 0.15);
@@ -191,27 +191,22 @@ nav {
 
 .reveal-text {
   font-size: 0.95rem;
-  color: var(--muted);
+  color: var(--blue);
   text-transform: uppercase;
   letter-spacing: 0.12em;
+  filter: url(#roughEdge);
 }
 
-/* Apple-style word reveal: each word fades up and sharpens in sequence */
+/* Word reveal scrubbed by scroll — JS sets each word's state per frame */
 .reveal-text span {
   display: inline-block;
   opacity: 0;
   transform: translateY(14px);
   filter: blur(6px);
-  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1),
-              filter 0.7s ease;
-}
-.reveal-text.in span {
-  opacity: 1;
-  transform: translateY(0);
-  filter: blur(0);
+  will-change: opacity, transform, filter;
 }
 @media (prefers-reduced-motion: reduce) {
-  .reveal-text span { opacity: 1; transform: none; filter: none; transition: none; }
+  .reveal-text span { opacity: 1; transform: none; filter: none; }
 }
 
 /* Project collage */
@@ -282,10 +277,11 @@ nav {
 }
 
 .tile-caption h3 {
-  font-family: 'Instrument Serif', serif;
-  font-size: 1.5rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  font-family: 'Archivo', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
 }
 
 .tile-caption p {
@@ -496,11 +492,12 @@ footer {
 }
 
 .project-hero h1 {
-  font-family: 'Instrument Serif', serif;
+  font-family: 'Archivo', sans-serif;
   font-size: clamp(2.6rem, 6vw, 5rem);
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  line-height: 1.02;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  line-height: 0.98;
   margin-top: 0.75rem;
 }
 

@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@600;700;800&family=Archivo:wght@700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -17,10 +17,9 @@
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
     <filter id="roughEdge" x="-8%" y="-8%" width="116%" height="116%"
             filterUnits="objectBoundingBox">
-      <feTurbulence type="fractalNoise" baseFrequency="0.5" numOctaves="2"
+      <feTurbulence type="fractalNoise" baseFrequency="1.0" numOctaves="2"
                     seed="4" result="noise" />
-      <feGaussianBlur in="noise" stdDeviation="1.4" result="smoothNoise" />
-      <feDisplacementMap in="SourceGraphic" in2="smoothNoise" scale="3"
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.7"
                          xChannelSelector="R" yChannelSelector="G" />
     </filter>
   </svg>
@@ -130,10 +129,27 @@
       var dim = document.querySelector('.bg-dim');
       var intro = document.querySelector('.intro');
       var collage = document.querySelector('.collage');
+      var revealText = document.querySelector('.reveal-text');
+      var revealWords = [];
       var ctaH2 = document.querySelector('.cta h2');
       var ctaBtn = document.querySelector('.cta .btn');
       var clamp = function (v) { return v < 0 ? 0 : v > 1 ? 1 : v; };
       var ticking = false;
+
+      // Split the label into per-word spans for the scroll-scrubbed reveal
+      if (revealText) {
+        var words = revealText.textContent.split(' ');
+        revealText.textContent = '';
+        words.forEach(function (word, i) {
+          var s = document.createElement('span');
+          s.textContent = word;
+          revealText.appendChild(s);
+          revealWords.push(s);
+          if (i < words.length - 1) {
+            revealText.appendChild(document.createTextNode(' '));
+          }
+        });
+      }
 
       function update() {
         var vh = window.innerHeight;
@@ -143,6 +159,20 @@
         var cAbs = collage.getBoundingClientRect().top + y;
         var dimP = clamp((y - (cAbs - vh * 0.95)) / (vh * 0.7));
         if (dim) dim.style.opacity = dimP.toFixed(3);
+
+        // --- Section label: each word reveals scrubbed by the scroll wheel ---
+        if (revealText && revealWords.length) {
+          var lr = revealText.getBoundingClientRect();
+          var lp = clamp((vh * 0.86 - lr.top) / (vh * 0.34));
+          var n = revealWords.length;
+          for (var i = 0; i < n; i++) {
+            var local = clamp((lp - i * (0.55 / n)) / 0.45);
+            var w = revealWords[i];
+            w.style.opacity = local.toFixed(3);
+            w.style.transform = 'translateY(' + ((1 - local) * 14).toFixed(1) + 'px)';
+            w.style.filter = 'blur(' + ((1 - local) * 6).toFixed(2) + 'px)';
+          }
+        }
 
         // --- Intro vanishes upward with a smooth CSS motion blur ---
         if (intro) {
@@ -178,28 +208,6 @@
       }, { passive: true });
       window.addEventListener('resize', update);
       update();
-    })();
-
-    // Apple-style word reveal for the section label
-    (function () {
-      var el = document.querySelector('.reveal-text');
-      if (!el) return;
-      var words = el.textContent.split(' ');
-      el.textContent = '';
-      words.forEach(function (w, i) {
-        var s = document.createElement('span');
-        s.textContent = w;
-        s.style.transitionDelay = (i * 0.09).toFixed(2) + 's';
-        el.appendChild(s);
-        if (i < words.length - 1) el.appendChild(document.createTextNode(' '));
-      });
-      if (!('IntersectionObserver' in window)) { el.classList.add('in'); return; }
-      var io = new IntersectionObserver(function (entries) {
-        entries.forEach(function (e) {
-          if (e.isIntersecting) { el.classList.add('in'); io.unobserve(el); }
-        });
-      }, { threshold: 0.6 });
-      io.observe(el);
     })();
 
     // Collage tiles emerge from the dark as they scroll in, then stay put
