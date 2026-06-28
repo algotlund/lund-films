@@ -1,2 +1,5 @@
 .DS_Store
 .claude/
+
+# Original full-res stills (web-optimized copies live in assets/stills-web/)
+assets/stills/
