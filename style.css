@@ -835,40 +835,70 @@ footer {
   display: block;
 }
 .sp-products {
-  max-width: 1200px;
+  max-width: 1100px;
   margin: 3.5rem auto 0;
   padding: 0 2rem;
 }
-.sp-product { margin-top: 2.75rem; }
-.sp-product h3 {
+.sp-product {
+  margin-top: 2.75rem;
+  max-width: 680px;
+}
+.sp-product-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.85rem;
+}
+.sp-product-head h3 {
   font-family: 'Bebas Neue', sans-serif;
   font-size: 1.7rem;
   font-weight: 400;
   letter-spacing: 0.04em;
-  margin-bottom: 0.85rem;
 }
-.sp-carousel {
+.sp-controls {
   display: flex;
-  gap: 1rem;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  padding-bottom: 0.85rem;
-  -webkit-overflow-scrolling: touch;
+  align-items: center;
+  gap: 0.75rem;
 }
-.sp-carousel img {
-  flex: 0 0 auto;
-  width: clamp(260px, 42%, 430px);
+.sp-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid rgba(22, 24, 29, 0.2);
+  background: #fff;
+  color: var(--ink);
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+.sp-btn:hover {
+  background: var(--blue);
+  color: #fff;
+  border-color: var(--blue);
+}
+.sp-counter {
+  font-size: 0.85rem;
+  color: var(--muted);
+  min-width: 3.5em;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.sp-stage { position: relative; }
+.sp-slide {
+  display: none;
+  width: 100%;
   height: auto;
-  scroll-snap-align: start;
   border-radius: 8px;
   background: #fff;
   border: 1px solid rgba(22, 24, 29, 0.1);
   box-shadow: 0 6px 18px rgba(22, 24, 29, 0.07);
 }
-.sp-carousel::-webkit-scrollbar { height: 6px; }
-.sp-carousel::-webkit-scrollbar-thumb { background: rgba(22, 24, 29, 0.22); border-radius: 3px; }
-.sp-carousel::-webkit-scrollbar-track { background: transparent; }
+.sp-slide.active { display: block; }
 @media (max-width: 600px) {
   .sp-products { padding: 0 1.25rem; }
-  .sp-carousel img { width: 80%; }
 }
