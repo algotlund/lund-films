@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projects — Lund Films</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@600;700;800&family=Bebas+Neue&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <filter id="roughEdge" x="-8%" y="-8%" width="116%" height="116%" filterUnits="objectBoundingBox">
+      <feTurbulence type="fractalNoise" baseFrequency="1.0" numOctaves="2" seed="4" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.1" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </svg>
+
+  <nav>
+    <a href="index.html" class="logo">Lund Films</a>
+    <div class="nav-links">
+      <a href="projects.html" class="active">Projects</a>
+      <a href="stills.html">Stills</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </nav>
+
+  <main class="projects-page">
+    <header class="projects-header">
+      <h1>Projects</h1>
+      <p>Selected films and work.</p>
+    </header>
+
+    <section class="collage">
+
+      <a href="project-1.html" class="tile">
+        <div class="tile-media">
+          <img src="assets/thumbnails/project-1.jpg" alt="Sting" loading="lazy">
+        </div>
+        <div class="tile-caption"><h3>Sting</h3><p>Short Promo · 2025</p></div>
+      </a>
+
+      <a href="project-2.html" class="tile">
+        <div class="tile-media">
+          <img src="assets/thumbnails/project-2.jpg" alt="Secret DIY" loading="lazy">
+        </div>
+        <div class="tile-caption"><h3>Secret DIY</h3><p>Entertainment · 2025</p></div>
+      </a>
+
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-links"><a href="https://www.instagram.com/lund.films/" target="_blank" rel="noopener">Instagram</a></div>
+    <p>&copy; 2026 Lund Films</p>
+  </footer>
+
+  <script>
+    // Tiles fade in as they scroll into view
+    (function () {
+      var tiles = document.querySelectorAll('.tile');
+      if (!('IntersectionObserver' in window)) {
+        tiles.forEach(function (t) { t.classList.add('in'); });
+        return;
+      }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+        });
+      }, { threshold: 0.15 });
+      tiles.forEach(function (t) { io.observe(t); });
+    })();
+  </script>
+
+</body>
+</html>

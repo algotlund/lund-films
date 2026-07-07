@@ -791,3 +791,29 @@ footer {
   .about-grid { grid-template-columns: 1fr; gap: 1.75rem; }
   .about-page { padding: 6.5rem 1.5rem 4rem; }
 }
+
+/* ---------------- Projects page ---------------- */
+.projects-page {
+  position: relative;
+  z-index: 2;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding-top: 7rem;
+}
+.projects-header {
+  padding: 0 1.25rem 2.5rem;
+}
+.projects-header h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(3rem, 7vw, 5rem);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 0.95;
+}
+.projects-header p {
+  margin-top: 0.5rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.9rem;
+}

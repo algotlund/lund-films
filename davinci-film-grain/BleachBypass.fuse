@@ -1,0 +1,151 @@
+--[[
+BleachBypass.fuse
+
+Digital emulation of the bleach bypass (silver retention / skip bleach)
+film processing technique for the Fusion page in DaVinci Resolve
+(including the free version - Fuses ship with Fusion, unlike third-party
+OFX plugins which require Studio).
+
+Real bleach bypass skips or reduces the bleaching step of color film
+development, leaving metallic silver in the emulsion alongside the dye
+layers. Effect: increased contrast, reduced/muted color saturation,
+deeper (sometimes crushed) blacks, a gritty "silvery" quality, and often
+a slight shift toward cyan.
+
+Standard digital recipe (matches the common DaVinci Resolve node-graph
+technique): desaturate a copy of the image, optionally push extra
+contrast into it (standing in for the density the retained silver would
+add), then composite it back over the original with an Overlay-family
+blend mode. This entire pipeline is built from Fusion's native fast
+Image operations (Saturate, Gamma, ChannelOpOf, MergeOf with
+MO_ApplyMode = "Overlay"/"SoftLight"/"HardLight") - no per-pixel Lua
+scripting, so none of the multithreading pitfalls that showed up while
+building the film grain Fuse apply here.
+
+Install:
+  macOS   ~/Library/Application Support/Blackmagic Design/DaVinci Resolve/Fusion/Fuses/
+  Windows C:\ProgramData\Blackmagic Design\DaVinci Resolve\Fusion\Fuses\
+  Linux   ~/.local/share/DaVinciResolve/Fusion/Fuses/
+  Restart Resolve. Find it in the Fusion page Effects Library under Fuses > Film.
+]]
+
+FuRegisterClass("BleachBypass", CT_Tool, {
+	REGS_Category = "Fuses\\Film",
+	REGS_OpIconString = "BlBy",
+	REGS_OpDescription = "Bleach bypass: desaturated silver layer blended over the original with contrast",
+	REGS_Name = "Bleach Bypass",
+	REG_NoBlendCtrls = false,
+	REG_NoMotionBlurCtrls = true,
+	REG_NoObjMatCtrls = true,
+	REG_Fuse_NoEdit = false,
+	REG_Fuse_NoReload = false,
+	REG_Version = 1,
+})
+
+function Create()
+	InAmount = self:AddInput("Amount", "Amount", {
+		LINKID_DataType = "Number",
+		INPID_InputControl = "SliderControl",
+		INP_MinScale = 0.0,
+		INP_MaxScale = 1.0,
+		INP_Default = 0.75,
+	})
+
+	InDesaturation = self:AddInput("Desaturation", "Desaturation", {
+		LINKID_DataType = "Number",
+		INPID_InputControl = "SliderControl",
+		INP_MinScale = 0.0,
+		INP_MaxScale = 1.0,
+		INP_Default = 0.6,
+	})
+
+	InContrast = self:AddInput("Silver Density", "SilverDensity", {
+		LINKID_DataType = "Number",
+		INPID_InputControl = "SliderControl",
+		INP_MinScale = 0.0,
+		INP_MaxScale = 1.0,
+		INP_Default = 0.3,
+	})
+
+	InTint = self:AddInput("Cyan Shift", "CyanShift", {
+		LINKID_DataType = "Number",
+		INPID_InputControl = "SliderControl",
+		INP_MinScale = 0.0,
+		INP_MaxScale = 1.0,
+		INP_Default = 0.15,
+	})
+
+	InBlendMode = self:AddInput("Blend Mode", "BlendMode", {
+		LINKID_DataType = "Number",
+		INPID_InputControl = "ComboControl",
+		INP_Default = 0.0,
+		INP_Integer = true,
+		{ CCS_AddString = "Overlay", },
+		{ CCS_AddString = "Soft Light", },
+		{ CCS_AddString = "Hard Light", },
+	})
+
+	InImage = self:AddInput("Input", "Input", {
+		LINKID_DataType = "Image",
+		LINK_Main = 1,
+	})
+
+	OutImage = self:AddOutput("Output", "Output", {
+		LINKID_DataType = "Image",
+		LINK_Main = 1,
+	})
+end
+
+function Process(req)
+	local img = InImage:GetValue(req)
+
+	local amount = InAmount:GetValue(req).Value
+	local desat = InDesaturation:GetValue(req).Value
+	local density = InContrast:GetValue(req).Value
+	local tint = InTint:GetValue(req).Value
+	local blendModeIdx = InBlendMode:GetValue(req).Value
+
+	local blendModeStr = "Overlay"
+	if blendModeIdx == 1 then
+		blendModeStr = "SoftLight"
+	elseif blendModeIdx == 2 then
+		blendModeStr = "HardLight"
+	end
+
+	-- Build the "silver" layer: a desaturated copy of the source.
+	local satVal = 1 - desat
+	local silverLayer = img:Copy()
+	silverLayer:Saturate(satVal, satVal, satVal)
+
+	-- Push extra contrast into that layer, pivoted around mid-gray, to
+	-- stand in for the density the retained silver halide would add on
+	-- real film - this is what keeps the effect from reading as just
+	-- "desaturated" and gives it the harder, grittier look.
+	if density > 0 then
+		local contrastFactor = 1 + density * 1.5
+		silverLayer = silverLayer:ChannelOpOf("Subtract", nil, { R = 0.5, G = 0.5, B = 0.5, A = 0 })
+		silverLayer = silverLayer:ChannelOpOf("Multiply", nil, { R = contrastFactor, G = contrastFactor, B = contrastFactor, A = 1 })
+		silverLayer = silverLayer:ChannelOpOf("Add", nil, { R = 0.5, G = 0.5, B = 0.5, A = 0 })
+	end
+
+	-- Real bleach bypass typically shifts color balance slightly toward
+	-- cyan. Gamma (rather than Gain) affects the lower part of the
+	-- range more than the top, so a small per-channel gamma offset
+	-- leans the shift toward shadows without needing a luminance mask.
+	if tint > 0 then
+		silverLayer:Gamma(1 + tint * 0.3, 1, 1 - tint * 0.2, 1)
+	end
+
+	-- Core bleach bypass look: composite the silver layer back over the
+	-- original with an Overlay-family blend, which is what produces the
+	-- characteristic contrast/desaturation combination in one step.
+	local bypassed = img:MergeOf(silverLayer, { MO_ApplyMode = blendModeStr })
+
+	-- Amount: linear mix between the untouched original and the full
+	-- effect, built from native ChannelOpOf calls (no per-pixel loop).
+	local imgScaled = img:ChannelOpOf("Multiply", nil, { R = 1 - amount, G = 1 - amount, B = 1 - amount, A = 1 })
+	local bypassedScaled = bypassed:ChannelOpOf("Multiply", nil, { R = amount, G = amount, B = amount, A = 1 })
+	local final = imgScaled:ChannelOpOf("Add", bypassedScaled, { R = "bypassedScaled.R", G = "bypassedScaled.G", B = "bypassedScaled.B", A = "bypassedScaled.A" })
+
+	OutImage:Set(req, final)
+end
