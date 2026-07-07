@@ -6,3 +6,6 @@ assets/stills/
 
 # Unrelated DaVinci Resolve grain files (not part of the website)
 davinci-film-grain/
+
+# SP Connectors original renders/animations (web copies in sp-connectors-web/)
+assets/sp-connectors/
