@@ -840,7 +840,7 @@ footer {
   padding: 0 2rem;
 }
 .sp-product {
-  margin-top: 2.75rem;
+  margin: 2.75rem auto 0;
   max-width: 680px;
 }
 .sp-product-head {
