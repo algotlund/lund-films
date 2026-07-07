@@ -3,3 +3,6 @@
 
 # Original full-res stills (web-optimized copies live in assets/stills-web/)
 assets/stills/
+
+# Unrelated DaVinci Resolve grain files (not part of the website)
+davinci-film-grain/
