@@ -834,23 +834,41 @@ footer {
   object-fit: cover;
   display: block;
 }
-.sp-gallery {
+.sp-products {
   max-width: 1200px;
   margin: 3.5rem auto 0;
   padding: 0 2rem;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 1rem;
 }
-.sp-gallery img {
-  width: 100%;
+.sp-product { margin-top: 2.75rem; }
+.sp-product h3 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.7rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.85rem;
+}
+.sp-carousel {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 0.85rem;
+  -webkit-overflow-scrolling: touch;
+}
+.sp-carousel img {
+  flex: 0 0 auto;
+  width: clamp(260px, 42%, 430px);
   height: auto;
-  display: block;
+  scroll-snap-align: start;
   border-radius: 8px;
   background: #fff;
   border: 1px solid rgba(22, 24, 29, 0.1);
   box-shadow: 0 6px 18px rgba(22, 24, 29, 0.07);
 }
+.sp-carousel::-webkit-scrollbar { height: 6px; }
+.sp-carousel::-webkit-scrollbar-thumb { background: rgba(22, 24, 29, 0.22); border-radius: 3px; }
+.sp-carousel::-webkit-scrollbar-track { background: transparent; }
 @media (max-width: 600px) {
-  .sp-gallery { grid-template-columns: repeat(2, 1fr); gap: 0.6rem; padding: 0 1.25rem; }
+  .sp-products { padding: 0 1.25rem; }
+  .sp-carousel img { width: 80%; }
 }
