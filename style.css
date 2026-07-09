@@ -89,38 +89,12 @@ nav {
   font-size: 0.9rem;
   font-weight: 600;
   color: var(--blue);
+  transition: none;
 }
 
-/* Same creep-in halftone shadow behind the nav text on hover */
-.nav-links a::before,
-.nav-links a::after {
-  content: '';
-  position: absolute;
-  inset: -16px -20px;
-  z-index: -1;
-  pointer-events: none;
-  opacity: 0;
-  transform: scale(0.7);
-  transition: opacity 0.45s ease, transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-.nav-links a::before {
-  background: radial-gradient(ellipse 52% 52% at 50% 50%,
-    rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.32) 48%, transparent 80%);
-  filter: blur(5px);
-}
-.nav-links a::after {
-  background-image: radial-gradient(circle, #000 1px, transparent 1.4px);
-  background-size: 4px 4px;
-  -webkit-mask: radial-gradient(ellipse 56% 56% at 50% 50%,
-    transparent 26%, rgba(0, 0, 0, 0.9) 46%, transparent 100%);
-  mask: radial-gradient(ellipse 56% 56% at 50% 50%,
-    transparent 26%, rgba(0, 0, 0, 0.9) 46%, transparent 100%);
-  filter: url(#roughEdge);
-}
-.nav-links a:hover::before,
-.nav-links a:hover::after {
-  opacity: 0.48;
-  transform: scale(1);
+/* Instant black on hover — no animation */
+.nav-links a:hover {
+  color: #000;
 }
 
 /* Showreel hero */
