@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@600;700;800&family=Archivo:wght@700;800&family=Bebas+Neue&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@500,700&display=swap" rel="stylesheet">
   <meta name="description" content="Lund Films — filmmaker and photographer based in Helsinki, capturing motion and moments through film, 3D animation, and photography.">
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
@@ -26,7 +27,6 @@
 </head>
 <body>
 
-  <div class="bg-dim"></div>
 
   <!-- Rough, hand-printed edge filter for the banner text -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -128,11 +128,10 @@
       window.addEventListener('scroll', onInteract, { passive: true });
     })();
 
-    // Scroll-driven choreography: dim the page, vanish the intro with motion
-    // blur, and reveal the CTA (with its own motion blur as it settles).
+    // Scroll-driven choreography: vanish the intro with motion blur and
+    // reveal the CTA as it settles.
     (function () {
       var nav = document.querySelector('nav');
-      var dim = document.querySelector('.bg-dim');
       var intro = document.querySelector('.intro');
       var collage = document.querySelector('.collage');
       var revealText = document.querySelector('.reveal-text');
@@ -161,13 +160,7 @@
         var vh = window.innerHeight;
         var y = window.scrollY;
 
-        // --- Page dim, tied to collage approach (eases in a bit slower) ---
-        var cAbs = collage.getBoundingClientRect().top + y;
-        var dimP = clamp((y - (cAbs - vh * 0.95)) / (vh * 1.05));
-        if (dim) dim.style.opacity = clamp(dimP * 1.3).toFixed(3);
-
-        // --- Section label: words scrub in, and the colour fades blue -> white
-        //     as the background darkens ---
+        // --- Section label: words scrub in ---
         if (revealText && revealWords.length) {
           var lr = revealText.getBoundingClientRect();
           var lp = clamp((vh * 0.86 - lr.top) / (vh * 0.34));
@@ -179,10 +172,6 @@
             w.style.transform = 'translateY(' + ((1 - local) * 14).toFixed(1) + 'px)';
             w.style.filter = 'blur(' + ((1 - local) * 6).toFixed(2) + 'px)';
           }
-          // stay blue for a while, then fade to white as it gets dark
-          var colorT = clamp((dimP - 0.28) / 0.3);
-          revealText.style.color = 'rgb(' + Math.round(255 * colorT) + ', ' +
-            Math.round(70 + 185 * colorT) + ', 255)';
         }
 
         // --- Intro vanishes upward with a smooth CSS motion blur ---
@@ -203,7 +192,6 @@
           ctaH2.style.transform = 'translateY(' + ((1 - bp) * 70).toFixed(1) +
             'px) scale(' + (0.95 + 0.05 * bp).toFixed(3) + ')';
           ctaH2.style.opacity = bp.toFixed(3);
-          ctaH2.style.color = '#ffffff';
           if (ctaBtn) {
             var bp2 = clamp((vh - hr.top - 40) / (vh * 0.38));
             ctaBtn.style.transform = 'translateY(' + ((1 - bp2) * 50).toFixed(1) + 'px)';
