@@ -17,7 +17,8 @@ html {
 }
 
 body {
-  font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Supreme', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 300;
   color: var(--ink);
   background: var(--paper);
   line-height: 1.6;
@@ -58,13 +59,19 @@ nav {
   -webkit-backdrop-filter: saturate(140%) blur(14px);
   border-bottom: 1px solid rgba(33, 29, 24, 0.15);
   z-index: 50;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Supreme', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
+/* Wordmark — same style as the old showreel overlay title */
 .logo {
-  font-size: 1.1rem;
-  font-weight: 700;
-  letter-spacing: -0.01em;
+  font-family: 'Syne', sans-serif;
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--blue);
+  line-height: 1;
+  filter: url(#roughEdge);
 }
 
 .nav-links {
@@ -75,7 +82,7 @@ nav {
 .nav-links a {
   position: relative;
   font-size: 0.9rem;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--blue);
   transition: none;
 }
@@ -98,7 +105,7 @@ nav {
   max-width: 1400px;
   margin: 0 auto;
   aspect-ratio: 16 / 9;
-  border-radius: 8px;
+  border-radius: 0;
   overflow: hidden;
   background: linear-gradient(135deg, #0046FF, #0a0a0a);
   box-shadow: 0 18px 40px rgba(33, 29, 24, 0.18);
@@ -154,11 +161,11 @@ nav {
 }
 
 .intro h2 {
-  font-family: 'Satoshi', 'Inter', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-size: clamp(2.4rem, 5.5vw, 4.2rem);
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: -0.02em;
-  line-height: 1.02;
+  line-height: 1.05;
 }
 
 .intro p {
@@ -257,42 +264,6 @@ nav {
   transition: box-shadow 0.3s ease;
 }
 
-/* Halftone shadow that creeps in BEHIND the video on hover:
-   ::before = dark solid core, ::after = uneven halftone-dot edge */
-.tile::before,
-.tile::after {
-  content: '';
-  position: absolute;
-  inset: -24px;
-  z-index: -1;
-  pointer-events: none;
-  opacity: 0;
-  transform: scale(0.85);
-  transition: opacity 0.55s ease, transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-/* dark core — solid in the middle, fading out softly */
-.tile::before {
-  background: radial-gradient(ellipse 52% 52% at 50% 50%,
-    rgba(0, 0, 0, 0.92), rgba(0, 0, 0, 0.4) 48%, transparent 80%);
-  filter: blur(10px);
-}
-/* halftone dots, masked into a soft rounded blob that feathers out
-   gradually, roughened so the silhouette is uneven */
-.tile::after {
-  background-image: radial-gradient(circle, #000 1.9px, transparent 2.4px);
-  background-size: 7px 7px;
-  -webkit-mask: radial-gradient(ellipse 56% 56% at 50% 50%,
-    transparent 30%, rgba(0, 0, 0, 0.9) 46%, transparent 100%);
-  mask: radial-gradient(ellipse 56% 56% at 50% 50%,
-    transparent 30%, rgba(0, 0, 0, 0.9) 46%, transparent 100%);
-  filter: url(#roughEdge);
-}
-.tile.in:hover::before,
-.tile.in:hover::after {
-  opacity: 0.6;
-  transform: scale(1);
-}
-
 .tile-media img {
   width: 100%;
   height: 100%;
@@ -348,13 +319,13 @@ nav {
 }
 
 .cta h2 {
-  font-family: 'Satoshi', 'Inter', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-size: clamp(2.4rem, 5.5vw, 4.2rem);
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: -0.02em;
-  line-height: 1.02;
+  line-height: 1.05;
   margin-bottom: 2rem;
-  color: var(--ink);
+  color: #000;
 }
 
 /* Clean text button — matches the nav links: blue, instant black on hover */
@@ -362,9 +333,9 @@ nav {
   display: inline-block;
   background: none;
   color: var(--blue);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Supreme', -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 0.95rem;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0.02em;
   padding: 0;
   border-radius: 0;
@@ -433,7 +404,8 @@ nav {
 
 .field input,
 .field textarea {
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Supreme', sans-serif;
+  font-weight: 300;
   font-size: 1rem;
   color: var(--ink);
   background: #ffffff;
@@ -481,12 +453,12 @@ footer {
 }
 .footer-links a {
   color: var(--blue);
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0.02em;
-  transition: opacity 0.2s;
+  transition: none;
 }
 .footer-links a:hover {
-  opacity: 0.6;
+  color: #000;
 }
 
 /* Mobile */
@@ -675,23 +647,18 @@ footer {
 .stills-grid {
   padding: 0 2rem 5rem;
   column-count: 3;
-  column-gap: 1rem;
+  column-gap: 0;
 }
 @media (max-width: 900px) { .stills-grid { column-count: 2; } }
 @media (max-width: 560px) { .stills-grid { column-count: 1; } }
 
 .still {
   break-inside: avoid;
-  margin: 0 0 1rem;
+  margin: 0;
   width: 100%;
   overflow: hidden;
   background: #eef0f3;
-  opacity: 0;
-  transform: translateY(18px);
-  transition: opacity 0.7s ease,
-              transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
-.still.in { opacity: 1; transform: none; }
 .still img {
   width: 100%;
   height: 100%;
@@ -704,7 +671,6 @@ footer {
   .still:hover img { transform: scale(1.06); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .still { opacity: 1; transform: none; }
   .still img { transition: none; }
   .still:hover img { transform: none; }
 }
@@ -876,13 +842,12 @@ footer {
   right: 1.5rem;
   width: 44px;
   height: 44px;
-  border-radius: 50%;
-  border: 1px solid rgba(22, 24, 29, 0.2);
-  background: rgba(244, 242, 236, 0.9);
-  backdrop-filter: saturate(140%) blur(8px);
-  -webkit-backdrop-filter: saturate(140%) blur(8px);
-  color: var(--ink);
-  font-size: 1.2rem;
+  border: none;
+  background: none;
+  color: #000;
+  font-family: 'Supreme', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 1.9rem;
+  font-weight: 700;
   line-height: 1;
   display: flex;
   align-items: center;
@@ -891,11 +856,10 @@ footer {
   opacity: 0;
   transform: translateY(10px);
   pointer-events: none;
-  transition: opacity 0.3s ease, transform 0.3s ease, background 0.2s, color 0.2s, border-color 0.2s;
+  transition: opacity 0.3s ease, transform 0.3s ease;
   z-index: 60;
 }
 .to-top.visible { opacity: 1; transform: none; pointer-events: auto; }
-.to-top:hover { background: var(--blue); color: #fff; border-color: var(--blue); }
 
 /* ---------------- Stills lightbox ---------------- */
 .stills-grid .still img { cursor: zoom-in; }
@@ -926,7 +890,7 @@ footer {
   line-height: 1;
   padding: 0.5rem 0.75rem;
   transition: color 0.2s, opacity 0.2s;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Supreme', sans-serif;
 }
 .lb-close:hover, .lb-prev:hover, .lb-next:hover { color: #fff; }
 .lb-close { top: 1rem; right: 1.25rem; font-size: 2rem; }
@@ -940,7 +904,7 @@ footer {
   transform: translateX(-50%);
   color: rgba(255, 255, 255, 0.65);
   font-size: 0.85rem;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Supreme', sans-serif;
   font-variant-numeric: tabular-nums;
 }
 @media (max-width: 600px) {
