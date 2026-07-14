@@ -37,11 +37,10 @@ a {
 }
 nav            { animation: fallIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both 0.1s; }
 .showreel-frame{ animation: fallIn 1s   cubic-bezier(0.2, 0.8, 0.2, 1) both 0.28s; }
-.intro h2      { animation: fallIn 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both 0.5s; }
-.intro p       { animation: fallIn 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both 0.62s; }
 
 @media (prefers-reduced-motion: reduce) {
-  nav, .showreel-frame, .intro h2, .intro p { animation: none; }
+  nav, .showreel-frame { animation: none; }
+  .intro { opacity: 1 !important; }
 }
 
 /* Nav */
@@ -150,6 +149,7 @@ nav {
 
 /* Intro */
 .intro {
+  opacity: 0;
   position: relative;
   z-index: 2;
   max-width: 900px;

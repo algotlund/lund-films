@@ -170,12 +170,14 @@
           }
         }
 
-        // --- Intro vanishes upward with a smooth CSS motion blur ---
+        // --- Intro: hidden at the top, fades in as you scroll down,
+        //     then vanishes upward with a smooth CSS motion blur ---
         if (intro) {
           var ir = intro.getBoundingClientRect();
           var ip = clamp((vh * 0.34 - ir.top) / (vh * 0.5));
+          var fadeIn = clamp((y - 60) / 240);
           intro.style.transform = 'translateY(' + (-ip * 120).toFixed(1) + 'px)';
-          intro.style.opacity = (1 - ip).toFixed(3);
+          intro.style.opacity = Math.min(fadeIn, 1 - ip).toFixed(3);
           // GPU-accelerated CSS blur (smooth) — starts later, no velocity jitter
           var ipBlur = clamp((ip - 0.4) / 0.6) * 14;
           intro.style.filter = ipBlur > 0.1 ? 'blur(' + ipBlur.toFixed(1) + 'px)' : 'none';
