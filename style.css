@@ -71,7 +71,6 @@ nav {
   text-transform: uppercase;
   color: var(--blue);
   line-height: 1;
-  filter: url(#roughEdge);
 }
 
 .nav-links {
@@ -289,9 +288,9 @@ nav {
 }
 
 .tile-caption h3 {
-  font-family: 'Bebas Neue', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-size: 1.9rem;
-  font-weight: 400;
+  font-weight: 800;
   letter-spacing: 0.02em;
   line-height: 1;
   color: #ffffff;
@@ -366,9 +365,9 @@ nav {
 }
 
 .contact-page h1 {
-  font-family: 'Bebas Neue', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-size: clamp(3rem, 7vw, 5.5rem);
-  font-weight: 400;
+  font-weight: 800;
   letter-spacing: 0.02em;
   line-height: 0.95;
 }
@@ -521,9 +520,9 @@ footer {
 }
 
 .project-hero h1 {
-  font-family: 'Bebas Neue', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-size: clamp(3rem, 7vw, 5.5rem);
-  font-weight: 400;
+  font-weight: 800;
   letter-spacing: 0.01em;
   line-height: 0.95;
   margin-top: 0.75rem;
@@ -634,9 +633,9 @@ footer {
   padding: 0 2rem 2.5rem;
 }
 .stills-header h1 {
-  font-family: 'Bebas Neue', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-size: clamp(3rem, 7vw, 5rem);
-  font-weight: 400;
+  font-weight: 800;
   letter-spacing: 0.02em;
   line-height: 0.95;
 }
@@ -707,9 +706,9 @@ footer {
   display: block;
 }
 .about-text h1 {
-  font-family: 'Bebas Neue', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-size: clamp(3rem, 7vw, 5rem);
-  font-weight: 400;
+  font-weight: 800;
   letter-spacing: 0.02em;
   line-height: 0.95;
   margin-bottom: 1.25rem;
@@ -740,9 +739,9 @@ footer {
   padding: 0 1.25rem 2.5rem;
 }
 .projects-header h1 {
-  font-family: 'Bebas Neue', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-size: clamp(3rem, 7vw, 5rem);
-  font-weight: 400;
+  font-weight: 800;
   letter-spacing: 0.02em;
   line-height: 0.95;
 }
@@ -786,9 +785,9 @@ footer {
   margin-bottom: 0.85rem;
 }
 .sp-product-head h3 {
-  font-family: 'Bebas Neue', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-size: 1.7rem;
-  font-weight: 400;
+  font-weight: 800;
   letter-spacing: 0.04em;
 }
 .sp-controls {
