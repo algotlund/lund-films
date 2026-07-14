@@ -132,12 +132,11 @@ nav {
 
 .showreel-overlay h1 {
   font-family: 'Syne', sans-serif;
-  font-size: clamp(1.6rem, 4vw, 3.4rem);
+  font-size: clamp(2.8rem, 8vw, 6rem);
   font-weight: 800;
   letter-spacing: -0.02em;
-  line-height: 1.1;
-  max-width: 18ch;
-  margin: 0 auto;
+  text-transform: uppercase;
+  filter: url(#roughEdge);
 }
 
 .showreel-overlay p {
