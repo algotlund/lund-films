@@ -154,7 +154,7 @@ nav {
   z-index: 2;
   max-width: 900px;
   margin: 0 auto;
-  padding: 13rem 2rem 14rem;
+  padding: 7rem 2rem 6rem;
   text-align: center;
   will-change: opacity, transform, filter;
 }
@@ -472,7 +472,7 @@ footer {
     gap: 0.75rem;
   }
   .tile-tall .tile-media { aspect-ratio: 16 / 9; }
-  .intro { padding: 8rem 1.5rem 9rem; }
+  .intro { padding: 4.5rem 1.5rem 4rem; }
 
   /* Full-bleed showreel on phones — reaches the screen edges */
   .showreel { padding: 4.5rem 0 0; }
