@@ -161,8 +161,8 @@ nav {
 
 .intro h2 {
   font-family: 'Syne', sans-serif;
-  font-size: clamp(2rem, 4.5vw, 3.4rem);
-  font-weight: 700;
+  font-size: clamp(1.4rem, 3vw, 2.2rem);
+  font-weight: 600;
   letter-spacing: -0.02em;
   line-height: 1.05;
   text-transform: uppercase;
@@ -320,8 +320,8 @@ nav {
 
 .cta h2 {
   font-family: 'Syne', sans-serif;
-  font-size: clamp(2rem, 4.5vw, 3.4rem);
-  font-weight: 700;
+  font-size: clamp(1.4rem, 3vw, 2.2rem);
+  font-weight: 600;
   letter-spacing: -0.02em;
   line-height: 1.05;
   text-transform: uppercase;
@@ -588,6 +588,43 @@ footer {
   line-height: 1.8;
   color: #2b2f36;
   margin-bottom: 1.25rem;
+}
+
+/* Behind the scenes photos on project pages */
+.project-bts {
+  max-width: 1100px;
+  margin: 3rem auto 0;
+  padding: 0 2rem;
+}
+.project-bts h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.7rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  margin-bottom: 1.25rem;
+}
+.bts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+.bts-grid figure { margin: 0; overflow: hidden; }
+.bts-grid img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+@media (hover: hover) {
+  .bts-grid figure:hover img { transform: scale(1.06); }
+}
+@media (max-width: 700px) {
+  .bts-grid { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bts-grid img { transition: none; }
+  .bts-grid figure:hover img { transform: none; }
 }
 
 .project-credits {
