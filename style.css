@@ -547,7 +547,7 @@ footer {
   position: relative;
   width: 100%;
   aspect-ratio: 16 / 9;
-  border-radius: 10px;
+  border-radius: 0;
   overflow: hidden;
   background: #0a0a0a;
 }
@@ -566,7 +566,7 @@ footer {
 .project-media .frame {
   width: 100%;
   aspect-ratio: 16 / 9;
-  border-radius: 10px;
+  border-radius: 0;
   overflow: hidden;
   background: linear-gradient(135deg, #d4d8de, #b6bcc6);
   display: flex;
@@ -796,7 +796,7 @@ footer {
 .sp-hero {
   max-width: 680px;
   margin: 0 auto;
-  border-radius: 12px;
+  border-radius: 0;
   overflow: hidden;
   background: #000;
   aspect-ratio: 1 / 1;
