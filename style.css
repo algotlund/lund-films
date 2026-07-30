@@ -40,7 +40,6 @@ nav            { animation: fallIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both 0.1s
 
 @media (prefers-reduced-motion: reduce) {
   nav, .showreel-frame { animation: none; }
-  .intro { opacity: 1 !important; }
 }
 
 /* Nav */
@@ -147,42 +146,13 @@ nav {
   opacity: 0.9;
 }
 
-/* Intro */
-.intro {
-  opacity: 0;
-  position: relative;
-  z-index: 2;
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 4rem 2rem 3rem;
-  text-align: center;
-  will-change: opacity, transform, filter;
-}
-
-.intro h2 {
-  font-family: 'Syne', sans-serif;
-  font-size: clamp(1.4rem, 3vw, 2.2rem);
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  line-height: 1.05;
-  text-transform: uppercase;
-}
-
-.intro p {
-  margin-top: 1.25rem;
-  font-size: 0.95rem;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-
 /* Section label above the collage */
 .collage-intro {
   position: relative;
   z-index: 2;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0.5rem 1.25rem 1.75rem;
+  padding: 5rem 1.25rem 2.5rem;
   text-align: center;
 }
 
@@ -474,7 +444,7 @@ footer {
     gap: 0.75rem;
   }
   .tile-tall .tile-media { aspect-ratio: 16 / 9; }
-  .intro { padding: 3rem 1.5rem 2.5rem; }
+  .collage-intro { padding: 3rem 1.25rem 1.75rem; }
 
   /* Full-bleed showreel on phones — reaches the screen edges */
   .showreel { padding: 4.5rem 0 0; }

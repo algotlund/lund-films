@@ -64,11 +64,6 @@
     </div>
   </section>
 
-  <!-- Intro line -->
-  <section class="intro">
-    <h2>Stories told through light, motion, and sound.</h2>
-  </section>
-
   <!-- Section label above the collage, with an Apple-style word reveal -->
   <div class="collage-intro">
     <p class="reveal-text">A selection of recent films.</p>
@@ -124,11 +119,10 @@
       window.addEventListener('scroll', onInteract, { passive: true });
     })();
 
-    // Scroll-driven choreography: vanish the intro with motion blur and
-    // reveal the CTA as it settles.
+    // Scroll-driven choreography: scrub in the section label and reveal
+    // the CTA as it settles.
     (function () {
       var nav = document.querySelector('nav');
-      var intro = document.querySelector('.intro');
       var collage = document.querySelector('.collage');
       var revealText = document.querySelector('.reveal-text');
       var revealWords = [];
@@ -154,7 +148,6 @@
 
       function update() {
         var vh = window.innerHeight;
-        var y = window.scrollY;
 
         // --- Section label: words scrub in ---
         if (revealText && revealWords.length) {
@@ -168,19 +161,6 @@
             w.style.transform = 'translateY(' + ((1 - local) * 14).toFixed(1) + 'px)';
             w.style.filter = 'blur(' + ((1 - local) * 6).toFixed(2) + 'px)';
           }
-        }
-
-        // --- Intro: hidden at the top, fades in as you scroll down,
-        //     then vanishes upward with a smooth CSS motion blur ---
-        if (intro) {
-          var ir = intro.getBoundingClientRect();
-          var ip = clamp((vh * 0.34 - ir.top) / (vh * 0.5));
-          var fadeIn = clamp((y - 60) / 240);
-          intro.style.transform = 'translateY(' + (-ip * 120).toFixed(1) + 'px)';
-          intro.style.opacity = Math.min(fadeIn, 1 - ip).toFixed(3);
-          // GPU-accelerated CSS blur (smooth) — starts later, no velocity jitter
-          var ipBlur = clamp((ip - 0.4) / 0.6) * 14;
-          intro.style.filter = ipBlur > 0.1 ? 'blur(' + ipBlur.toFixed(1) + 'px)' : 'none';
         }
 
         // --- CTA reveal at the bottom: rises and fades in, no blur ---
