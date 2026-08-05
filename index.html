@@ -69,23 +69,43 @@
     <p class="reveal-text">A selection of recent films.</p>
   </div>
 
-  <!-- Project collage -->
-  <section id="work" class="collage">
+  <!-- Recent films carousel -->
+  <section id="work" class="film-carousel">
+    <button class="film-arrow film-prev" type="button" aria-label="Previous films">&larr;</button>
 
-    <a href="project-1.html" class="tile">
-      <div class="tile-media">
-        <img src="assets/thumbnails/project-1.jpg" alt="Project One" loading="lazy">
-      </div>
-      <div class="tile-caption"><h3>Sting</h3><p>Short Promo · 2025</p></div>
-    </a>
+    <div class="film-track">
 
-    <a href="project-2.html" class="tile">
-      <div class="tile-media">
-        <img src="assets/thumbnails/project-2.jpg" alt="Project Two" loading="lazy">
-      </div>
-      <div class="tile-caption"><h3>Secret DIY</h3><p>Entertainment · 2025</p></div>
-    </a>
+      <a href="project-4.html" class="tile">
+        <div class="tile-media">
+          <img src="assets/thumbnails/project-4.jpg" alt="Sting Lookbook" loading="lazy">
+        </div>
+        <div class="tile-caption"><h3>Sting Lookbook</h3><p>Lookbook · 2026</p></div>
+      </a>
 
+      <a href="project-1.html" class="tile">
+        <div class="tile-media">
+          <img src="assets/thumbnails/project-1.jpg" alt="Sting" loading="lazy">
+        </div>
+        <div class="tile-caption"><h3>Sting</h3><p>Short Promo · 2025</p></div>
+      </a>
+
+      <a href="project-2.html" class="tile">
+        <div class="tile-media">
+          <img src="assets/thumbnails/project-2.jpg" alt="Secret DIY" loading="lazy">
+        </div>
+        <div class="tile-caption"><h3>Secret DIY</h3><p>Entertainment · 2025</p></div>
+      </a>
+
+      <a href="project-3.html" class="tile">
+        <div class="tile-media">
+          <img src="assets/thumbnails/project-3.jpg" alt="SP Connectors" loading="lazy">
+        </div>
+        <div class="tile-caption"><h3>SP Connectors</h3><p>3D &amp; Animation · 2025 – Ongoing</p></div>
+      </a>
+
+    </div>
+
+    <button class="film-arrow film-next" type="button" aria-label="Next films">&rarr;</button>
   </section>
 
   <!-- CTA -->
@@ -187,26 +207,56 @@
       update();
     })();
 
-    // Collage tiles emerge from the dark as they scroll in, then stay put
+    // Film tiles emerge from the dark once the carousel scrolls into view.
+    // The whole row reveals together, since tiles parked off to the side of
+    // the track would otherwise stay hidden until you scrolled the carousel.
     (function () {
+      var section = document.querySelector('.film-carousel');
       var tiles = document.querySelectorAll('.tile');
-      if (!('IntersectionObserver' in window)) {
-        tiles.forEach(function (t) { t.classList.add('in'); });
-        return;
+      if (!section || !tiles.length) return;
+      function revealAll() {
+        tiles.forEach(function (t, i) {
+          t.style.transitionDelay = (i % 2) * 0.08 + 's';
+          t.classList.add('in');
+        });
       }
+      if (!('IntersectionObserver' in window)) { revealAll(); return; }
       var io = new IntersectionObserver(function (entries) {
         entries.forEach(function (e) {
-          if (e.isIntersecting) {
-            e.target.style.transitionDelay = (e.target.dataset.delay || '0s');
-            e.target.classList.add('in');
-            io.unobserve(e.target);
-          }
+          if (e.isIntersecting) { revealAll(); io.disconnect(); }
         });
       }, { threshold: 0.15 });
-      tiles.forEach(function (t, i) {
-        t.dataset.delay = (i % 2) * 0.08 + 's';
-        io.observe(t);
+      io.observe(section);
+    })();
+
+    // Recent films carousel: arrows page through the track, and grey out
+    // when there is nothing further to scroll to.
+    (function () {
+      var track = document.querySelector('.film-track');
+      var prev = document.querySelector('.film-prev');
+      var next = document.querySelector('.film-next');
+      if (!track || !prev || !next) return;
+
+      function page() {
+        var tile = track.querySelector('.tile');
+        return tile ? tile.getBoundingClientRect().width + 20 : track.clientWidth;
+      }
+      function sync() {
+        var max = track.scrollWidth - track.clientWidth;
+        prev.disabled = track.scrollLeft <= 2;
+        next.disabled = track.scrollLeft >= max - 2;
+      }
+      prev.addEventListener('click', function () {
+        track.scrollBy({ left: -page(), behavior: 'smooth' });
       });
+      next.addEventListener('click', function () {
+        track.scrollBy({ left: page(), behavior: 'smooth' });
+      });
+      track.addEventListener('scroll', function () {
+        window.requestAnimationFrame(sync);
+      }, { passive: true });
+      window.addEventListener('resize', sync);
+      sync();
     })();
   </script>
 

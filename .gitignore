@@ -10,3 +10,6 @@ davinci-film-grain/
 # SP Connectors original renders/animations (web copies in sp-connectors-web/)
 assets/sp-connectors/
 assets/BTS/
+
+# Thumbnail sources (web copies are the .jpg files)
+assets/thumbnails/*.png
