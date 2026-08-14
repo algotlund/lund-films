@@ -72,6 +72,19 @@
       </dl>
     </section>
 
+    <section class="project-shorts">
+      <h2>Outfits</h2>
+      <div class="shorts-grid">
+        <figure><video muted loop playsinline preload="none" poster="assets/shorts-web/sting2/outfit-1.jpg"><source src="assets/shorts-web/sting2/outfit-1.mp4" type="video/mp4"></video></figure>
+        <figure><video muted loop playsinline preload="none" poster="assets/shorts-web/sting2/outfit-2.jpg"><source src="assets/shorts-web/sting2/outfit-2.mp4" type="video/mp4"></video></figure>
+        <figure><video muted loop playsinline preload="none" poster="assets/shorts-web/sting2/outfit-3.jpg"><source src="assets/shorts-web/sting2/outfit-3.mp4" type="video/mp4"></video></figure>
+        <figure><video muted loop playsinline preload="none" poster="assets/shorts-web/sting2/outfit-4.jpg"><source src="assets/shorts-web/sting2/outfit-4.mp4" type="video/mp4"></video></figure>
+        <figure><video muted loop playsinline preload="none" poster="assets/shorts-web/sting2/outfit-5.jpg"><source src="assets/shorts-web/sting2/outfit-5.mp4" type="video/mp4"></video></figure>
+        <figure><video muted loop playsinline preload="none" poster="assets/shorts-web/sting2/outfit-6.jpg"><source src="assets/shorts-web/sting2/outfit-6.mp4" type="video/mp4"></video></figure>
+        <figure><video muted loop playsinline preload="none" poster="assets/shorts-web/sting2/outfit-7.jpg"><source src="assets/shorts-web/sting2/outfit-7.mp4" type="video/mp4"></video></figure>
+      </div>
+    </section>
+
     <section class="project-bts">
       <h2>Behind the scenes</h2>
       <div class="bts-grid">
@@ -111,6 +124,29 @@
         el.innerHTML = "";
         el.appendChild(f);
       });
+    })();
+  </script>
+  <script>
+    // Outfit shorts: only download and play a clip once it scrolls into
+    // view, so the page doesn't pull seven videos at once on arrival.
+    (function () {
+      var vids = document.querySelectorAll('.shorts-grid video');
+      if (!vids.length) return;
+      if (!('IntersectionObserver' in window)) {
+        vids.forEach(function (v) { v.preload = 'metadata'; v.play().catch(function () {}); });
+        return;
+      }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          var v = e.target;
+          if (e.isIntersecting) {
+            v.play().catch(function () {});
+          } else if (!v.paused) {
+            v.pause();
+          }
+        });
+      }, { threshold: 0.25 });
+      vids.forEach(function (v) { io.observe(v); });
     })();
   </script>
   <script src="back-to-top.js" defer></script>

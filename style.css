@@ -622,12 +622,51 @@ footer {
   margin-bottom: 1.25rem;
 }
 
+/* Outfit shorts — silent loops cut from the main film */
+.project-shorts {
+  max-width: 1100px;
+  margin: 3rem auto 0;
+  padding: 0 2rem;
+}
+.shorts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+.shorts-grid figure {
+  margin: 0;
+  overflow: hidden;
+  aspect-ratio: 5 / 4;
+  background: #0a0a0a;
+}
+.shorts-grid video {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+@media (hover: hover) {
+  .shorts-grid figure:hover video { transform: scale(1.06); }
+}
+@media (max-width: 900px) {
+  .shorts-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 560px) {
+  .shorts-grid { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .shorts-grid video { transition: none; }
+  .shorts-grid figure:hover video { transform: none; }
+}
+
 /* Behind the scenes photos on project pages */
 .project-bts {
   max-width: 1100px;
   margin: 3rem auto 0;
   padding: 0 2rem;
 }
+.project-shorts h2,
 .project-bts h2 {
   font-family: 'Syne', sans-serif;
   font-size: 1.7rem;

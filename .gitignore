@@ -13,3 +13,6 @@ assets/BTS/
 
 # Thumbnail sources (web copies are the .jpg files)
 assets/thumbnails/*.png
+
+# Outfit shorts originals (web copies in shorts-web/)
+assets/outfits shorts/
