@@ -66,6 +66,16 @@
       <p>Started in 2025 and still growing — an evolving library of photoreal visuals and motion pieces for the brand.</p>
     </div>
 
+    <!-- Scroll-scrubbed exploded view: frames advance with scroll position -->
+    <section class="scroll-anim" aria-label="Connector exploded view animation">
+      <div class="scroll-anim-track">
+        <div class="scroll-anim-sticky">
+          <canvas class="scroll-anim-canvas" width="1400" height="864"
+                  role="img" aria-label="An SP connector rotating, separating into its component parts, and reassembling"></canvas>
+        </div>
+      </div>
+    </section>
+
     <div class="sp-products">
       <section class="sp-product">
         <div class="sp-product-head">
@@ -330,6 +340,125 @@
       });
     })();
   </script>
+
+  <script>
+    // Scroll-scrubbed frame sequence. The frames are only fetched once the
+    // section is approaching the viewport, so visitors who never scroll this
+    // far don't pay for them.
+    (function () {
+      var TOTAL = 121;
+      var PATH = function (i) {
+        return 'assets/sp-anim/frame-' + String(i).padStart(3, '0') + '.jpg';
+      };
+
+      var section = document.querySelector('.scroll-anim');
+      var track = document.querySelector('.scroll-anim-track');
+      var canvas = document.querySelector('.scroll-anim-canvas');
+      if (!section || !track || !canvas) return;
+
+      var ctx = canvas.getContext('2d', { alpha: false });
+      var frames = new Array(TOTAL);
+      var loaded = new Array(TOTAL).fill(false);
+      var current = -1;
+      var ticking = false;
+      var started = false;
+
+      var reduced = window.matchMedia &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      function draw(i) {
+        // If that exact frame hasn't arrived yet, show the nearest one that has,
+        // so the canvas never goes blank mid-scroll.
+        var n = i;
+        if (!loaded[n]) {
+          var found = -1;
+          for (var d = 1; d < TOTAL; d++) {
+            if (n - d >= 0 && loaded[n - d]) { found = n - d; break; }
+            if (n + d < TOTAL && loaded[n + d]) { found = n + d; break; }
+          }
+          if (found === -1) return;
+          n = found;
+        }
+        if (n === current) return;
+        current = n;
+        ctx.drawImage(frames[n], 0, 0, canvas.width, canvas.height);
+      }
+
+      function frameForScroll() {
+        var rect = track.getBoundingClientRect();
+        var distance = rect.height - window.innerHeight;
+        if (distance <= 0) return 0;
+        var p = -rect.top / distance;
+        p = p < 0 ? 0 : p > 1 ? 1 : p;
+        return Math.min(TOTAL - 1, Math.round(p * (TOTAL - 1)));
+      }
+
+      function onScroll() {
+        if (ticking) return;
+        ticking = true;
+        window.requestAnimationFrame(function () {
+          draw(frameForScroll());
+          ticking = false;
+        });
+      }
+
+      function load(i, onDone) {
+        var img = new Image();
+        img.onload = function () {
+          frames[i] = img;
+          loaded[i] = true;
+          if (onDone) onDone();
+        };
+        img.onerror = function () { if (onDone) onDone(); };
+        img.src = PATH(i);
+      }
+
+      function start() {
+        if (started) return;
+        started = true;
+
+        if (reduced) {
+          // Single representative still — the exploded view.
+          load(Math.round(TOTAL * 0.75), function () { draw(Math.round(TOTAL * 0.75)); });
+          return;
+        }
+
+        // First frame first so something is on screen immediately, then the
+        // rest in order, a few at a time to avoid flooding the connection.
+        load(0, function () {
+          draw(frameForScroll());
+          var next = 1;
+          var inFlight = 0;
+          function pump() {
+            while (inFlight < 6 && next < TOTAL) {
+              inFlight++;
+              load(next++, function () {
+                inFlight--;
+                draw(frameForScroll());
+                pump();
+              });
+            }
+          }
+          pump();
+        });
+
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', onScroll);
+      }
+
+      if ('IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) { start(); io.disconnect(); }
+          });
+        }, { rootMargin: '150% 0px' });
+        io.observe(section);
+      } else {
+        start();
+      }
+    })();
+  </script>
+
   <script src="back-to-top.js" defer></script>
 </body>
 </html>

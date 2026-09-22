@@ -16,3 +16,6 @@ assets/thumbnails/*.png
 
 # Outfit shorts originals (web copies in shorts-web/)
 assets/outfits shorts/
+
+# Scroll-animation source frames (web sequence lives in assets/sp-anim/)
+assets/test v3/
