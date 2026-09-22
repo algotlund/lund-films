@@ -313,9 +313,10 @@ nav {
 
 .tile-caption h3 {
   font-family: 'Syne', sans-serif;
-  font-size: 1.9rem;
+  font-size: 1.35rem;
   font-weight: 800;
-  letter-spacing: 0.02em;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
   line-height: 1;
   color: #ffffff;
 }
@@ -393,6 +394,7 @@ nav {
   font-family: 'Syne', sans-serif;
   font-size: clamp(3rem, 7vw, 5.5rem);
   font-weight: 800;
+  text-transform: uppercase;
   letter-spacing: 0.02em;
   line-height: 0.95;
 }
@@ -557,7 +559,8 @@ footer {
   font-family: 'Syne', sans-serif;
   font-size: clamp(3rem, 7vw, 5.5rem);
   font-weight: 800;
-  letter-spacing: 0.01em;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
   line-height: 0.95;
   margin-top: 0.75rem;
 }
@@ -755,6 +758,7 @@ footer {
   font-family: 'Syne', sans-serif;
   font-size: clamp(3rem, 7vw, 5rem);
   font-weight: 800;
+  text-transform: uppercase;
   letter-spacing: 0.02em;
   line-height: 0.95;
 }
@@ -828,6 +832,7 @@ footer {
   font-family: 'Syne', sans-serif;
   font-size: clamp(3rem, 7vw, 5rem);
   font-weight: 800;
+  text-transform: uppercase;
   letter-spacing: 0.02em;
   line-height: 0.95;
   margin-bottom: 1.25rem;
@@ -861,6 +866,7 @@ footer {
   font-family: 'Syne', sans-serif;
   font-size: clamp(3rem, 7vw, 5rem);
   font-weight: 800;
+  text-transform: uppercase;
   letter-spacing: 0.02em;
   line-height: 0.95;
 }
