@@ -19,3 +19,6 @@ assets/outfits shorts/
 
 # Scroll-animation source frames (web sequence lives in assets/sp-anim/)
 assets/test v3/
+
+# Source PNGs for review sequences (web copies live in review/seq/)
+review/web test/

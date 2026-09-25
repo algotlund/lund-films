@@ -130,11 +130,24 @@
     var brandEl = document.querySelector('header .brand');
     var id = new URLSearchParams(location.search).get('s');
 
+    function slugify(t) { return t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); }
+    function getMeta(seq) {
+      return fetch('seq/' + seq + '/meta.json', { cache: 'no-cache' })
+        .then(function (r) { if (!r.ok) throw 0; return r.json(); });
+    }
+
     if (id && /^[a-z0-9-]+$/.test(id)) {
-      var base = 'seq/' + id + '/';
-      fetch(base + 'meta.json', { cache: 'no-cache' })
-        .then(function (r) { if (!r.ok) throw 0; return r.json(); })
-        .then(function (meta) {
+      // The linked sequence owns the page: its title and tabs. A tab can be a
+      // range of its own frames, or a different sequence ("seq": "<id>").
+      getMeta(id).then(function (page) {
+        var tabs = (page.cuts && page.cuts.length ? page.cuts : [{ label: 'Full', start: 0 }])
+          .map(function (c) {
+            return { label: c.label, slug: slugify(c.label), seq: c.seq || id, start: c.start, end: c.end };
+          });
+        var hash = location.hash.slice(1);
+        var active = tabs.filter(function (t) { return t.slug === hash; })[0] || tabs[0];
+        return (active.seq === id ? Promise.resolve(page) : getMeta(active.seq)).then(function (meta) {
+          var base = 'seq/' + active.seq + '/';
           // Phones (and any small window) get the lighter frame set: the
           // canvas can't show more pixels than that anyway, and full-size
           // frames exceed iPhone Safari's memory limit on long sequences.
@@ -150,20 +163,22 @@
           for (var i = 0; i < meta.frames; i++) {
             urls.push(base + 'frame-' + String(i).padStart(4, '0') + '.' + (meta.ext || 'webp') + '?v=' + (meta.updated || ''));
           }
-          player(meta, urls);
-        })
-        .catch(function () {
-          app.innerHTML = '<div class="error"><p>This preview link isn’t available.<br>Please check the link or ask for a new one.</p></div>';
+          player(meta, urls, { title: page.title, tabs: tabs, active: active });
         });
+      }).catch(function () {
+        app.innerHTML = '<div class="error"><p>This preview link isn’t available.<br>Please check the link or ask for a new one.</p></div>';
+      });
     } else {
       localPicker();
     }
 
     // ---------- Scroll-scrubbed player ----------
-    function player(meta, urls) {
+    function player(meta, urls, page) {
       var TOTAL = urls.length;
-      document.title = meta.title;
-      brandEl.textContent = meta.title;
+      page = page || { title: meta.title, tabs: [{ label: 'Full', slug: 'full', seq: '' }] };
+      page.active = page.active || page.tabs[0];
+      document.title = page.title;
+      brandEl.textContent = page.title;
       titleEl.textContent = '';
 
       app.innerHTML =
@@ -175,7 +190,7 @@
           '<button type="button" data-bg="black" aria-pressed="false">Black</button>' +
           '<button type="button" data-bg="white" aria-pressed="false">White</button>' +
         '</div>';
-      app.querySelector('.intro h1').textContent = meta.title;
+      app.querySelector('.intro h1').textContent = page.title;
 
       var track = app.querySelector('.track');
       var canvas = app.querySelector('canvas');
@@ -183,18 +198,16 @@
       var ctx = canvas.getContext('2d');
       var endEl = app.querySelector('.end');
 
-      // Optional cuts (tabs), e.g. the full animation and a version that
-      // skips the opening spin. Each cut is a frame range of the same set,
-      // so switching tabs reuses frames that are already loaded.
-      var cuts = (meta.cuts && meta.cuts.length ? meta.cuts : [{ label: 'Full', start: 0 }])
-        .map(function (c) {
-          return {
-            label: c.label,
-            slug: c.label.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''),
-            start: Math.max(0, c.start || 0),
-            end: Math.min(TOTAL - 1, c.end == null ? TOTAL - 1 : c.end)
-          };
-        });
+      // Tabs: ranges of the loaded frames switch in place (reusing frames
+      // already loaded); a tab on another sequence reloads the page on it.
+      var cuts = page.tabs.map(function (t) {
+        return {
+          label: t.label, slug: t.slug, seq: t.seq,
+          here: t.seq === page.active.seq,
+          start: Math.max(0, t.start || 0),
+          end: Math.min(TOTAL - 1, t.end == null ? TOTAL - 1 : t.end)
+        };
+      });
       var A = 0, B = TOTAL - 1, N = TOTAL;
       function useCut(c) {
         A = c.start; B = c.end; N = B - A + 1;
@@ -221,6 +234,11 @@
         document.body.classList.add('has-tabs');
       }
       function switchCut(c) {
+        if (!c.here) {
+          location.hash = c.slug;
+          location.reload();
+          return;
+        }
         useCut(c);
         history.replaceState(null, '', '#' + c.slug);
         prioritize();
@@ -338,7 +356,8 @@
       setBg(meta.bg && !isLight(meta.bg) ? 'black' : 'white');
 
       var fromHash = location.hash.slice(1);
-      useCut(cuts.filter(function (c) { return c.slug === fromHash; })[0] || cuts[0]);
+      useCut(cuts.filter(function (c) { return c.here && c.slug === fromHash; })[0] ||
+             cuts.filter(function (c) { return c.slug === page.active.slug; })[0] || cuts[0]);
       fit();
       var sticky = canvas.parentNode, lastSize = '';
       window.addEventListener('resize', function () {

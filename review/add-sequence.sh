@@ -16,6 +16,8 @@
 #                     range with "Label:66-200". Repeatable. Frame numbers
 #                     are output frames (after --step). With any --cut, a
 #                     "Full animation" tab is added first.
+#   --tab "Label:id"  Add a tab that plays another sequence (made with this
+#                     script under that id) on the same link. Repeatable.
 #
 # Phones get the smaller set in m/ — full-size frames for a long sequence
 # use more memory than iPhone Safari allows and the tab reloads.
@@ -40,6 +42,9 @@ while [ $# -gt 0 ]; do
       label="${2%:*}"; range="${2##*:}"; start="${range%-*}"
       case "$range" in *-*) end=", \"end\": ${range#*-}" ;; *) end="" ;; esac
       CUTS="$CUTS, { \"label\": \"$label\", \"start\": $start$end }"
+      shift 2 ;;
+    --tab)
+      CUTS="$CUTS, { \"label\": \"${2%:*}\", \"seq\": \"${2##*:}\" }"
       shift 2 ;;
     *) echo "Unknown option: $1" >&2; exit 1 ;;
   esac
