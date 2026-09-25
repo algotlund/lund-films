@@ -12,6 +12,10 @@
 #   --bg "#ffffff"    Starting background, black or white (default: #ffffff)
 #   --scroll 400      Scroll length, in % of screen    (default: 400)
 #   --mobile 720      Width of the lighter phone set   (default: 720)
+#   --cut "Label:66"  Add a tab playing from frame 66 to the end, or a
+#                     range with "Label:66-200". Repeatable. Frame numbers
+#                     are output frames (after --step). With any --cut, a
+#                     "Full animation" tab is added first.
 #
 # Phones get the smaller set in m/ — full-size frames for a long sequence
 # use more memory than iPhone Safari allows and the tab reloads.
@@ -19,10 +23,10 @@
 # Share it as:  https://lundfilms.fi/review/?s=<id>
 set -euo pipefail
 
-if [ $# -lt 2 ]; then sed -n '2,16p' "$0" | sed 's/^# \{0,1\}//'; exit 1; fi
+if [ $# -lt 2 ]; then sed -n '2,/^# Share/p' "$0" | sed 's/^# \{0,1\}//'; exit 1; fi
 
 SRC="$1"; ID="$2"; shift 2
-TITLE="$ID"; WIDTH=1400; STEP=1; QUALITY=82; BG="#ffffff"; SCROLL=400; MOBILE=720
+TITLE="$ID"; WIDTH=1400; STEP=1; QUALITY=82; BG="#ffffff"; SCROLL=400; MOBILE=720; CUTS=""
 while [ $# -gt 0 ]; do
   case "$1" in
     --title) TITLE="$2"; shift 2 ;;
@@ -32,6 +36,11 @@ while [ $# -gt 0 ]; do
     --bg) BG="$2"; shift 2 ;;
     --scroll) SCROLL="$2"; shift 2 ;;
     --mobile) MOBILE="$2"; shift 2 ;;
+    --cut)
+      label="${2%:*}"; range="${2##*:}"; start="${range%-*}"
+      case "$range" in *-*) end=", \"end\": ${range#*-}" ;; *) end="" ;; esac
+      CUTS="$CUTS, { \"label\": \"$label\", \"start\": $start$end }"
+      shift 2 ;;
     *) echo "Unknown option: $1" >&2; exit 1 ;;
   esac
 done
@@ -78,6 +87,7 @@ cat > "$OUT/meta.json" <<JSON
   "ext": "webp",
   "bg": "$BG",
   "scroll": $SCROLL,
+$([ -n "$CUTS" ] && echo "  \"cuts\": [ { \"label\": \"Full animation\", \"start\": 0 }$CUTS ],")
   "updated": "$(date +%Y-%m-%d)"
 }
 JSON

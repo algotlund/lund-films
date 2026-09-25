@@ -7,5 +7,6 @@
   "ext": "webp",
   "bg": "#ffffff",
   "scroll": 400,
+  "cuts": [ { "label": "Full animation", "start": 0 }, { "label": "Without spin", "start": 66 } ],
   "updated": "2026-09-25"
 }

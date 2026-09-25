@@ -77,6 +77,23 @@
     .hud button:hover, .hud button:focus-visible { background: rgba(255,255,255,0.12); outline: none; }
     .hud button[aria-pressed="true"] { background: #f2f2f2; color: #111; }
 
+    .tabs {
+      position: fixed; z-index: 10; left: 50%; transform: translateX(-50%);
+      top: calc(48px + env(safe-area-inset-top));
+      display: flex; gap: 4px; padding: 4px; border-radius: 999px;
+      background: var(--pill); color: #f2f2f2;
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      font-size: 12px; white-space: nowrap;
+    }
+    .tabs button {
+      border: 0; background: transparent; color: inherit; font: inherit;
+      padding: 8px 14px; border-radius: 999px; cursor: pointer;
+      touch-action: manipulation;
+    }
+    .tabs button:hover, .tabs button:focus-visible { background: rgba(255,255,255,0.12); outline: none; }
+    .tabs button[aria-selected="true"] { background: #f2f2f2; color: #111; }
+    body.has-tabs .sticky { padding-top: 104px; }
+
     .error { min-height: 100vh; display: grid; place-items: center; text-align: center; padding: 16px; color: var(--muted); }
 
     /* Local preview (no ?s= in the URL) */
@@ -152,9 +169,9 @@
       app.innerHTML =
         '<section class="intro"><h1></h1><p>Scroll to play the animation</p><p class="hint">↓</p></section>' +
         '<section class="track"><div class="sticky"><canvas></canvas></div></section>' +
-        '<section class="outro"><p>End of sequence · ' + TOTAL + ' frames</p></section>' +
+        '<section class="outro"><p class="end"></p></section>' +
         '<div class="hud" role="toolbar" aria-label="Preview controls">' +
-          '<span class="count">– / ' + TOTAL + '</span>' +
+          '<span class="count"></span>' +
           '<button type="button" data-bg="black" aria-pressed="false">Black</button>' +
           '<button type="button" data-bg="white" aria-pressed="false">White</button>' +
         '</div>';
@@ -164,7 +181,54 @@
       var canvas = app.querySelector('canvas');
       var count = app.querySelector('.count');
       var ctx = canvas.getContext('2d');
-      track.style.height = (meta.scroll || 400) + 'vh';
+      var endEl = app.querySelector('.end');
+
+      // Optional cuts (tabs), e.g. the full animation and a version that
+      // skips the opening spin. Each cut is a frame range of the same set,
+      // so switching tabs reuses frames that are already loaded.
+      var cuts = (meta.cuts && meta.cuts.length ? meta.cuts : [{ label: 'Full', start: 0 }])
+        .map(function (c) {
+          return {
+            label: c.label,
+            slug: c.label.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''),
+            start: Math.max(0, c.start || 0),
+            end: Math.min(TOTAL - 1, c.end == null ? TOTAL - 1 : c.end)
+          };
+        });
+      var A = 0, B = TOTAL - 1, N = TOTAL;
+      function useCut(c) {
+        A = c.start; B = c.end; N = B - A + 1;
+        // Same scroll speed in every cut: shorter cut, shorter track
+        track.style.height = Math.max(150, (meta.scroll || 400) * N / TOTAL) + 'vh';
+        endEl.textContent = 'End of sequence · ' + N + ' frames';
+        if (tabBtns) tabBtns.forEach(function (b, i) { b.setAttribute('aria-selected', String(cuts[i] === c)); });
+      }
+      var tabBtns = null;
+      if (cuts.length > 1) {
+        var tabs = document.createElement('div');
+        tabs.className = 'tabs';
+        tabs.setAttribute('role', 'tablist');
+        cuts.forEach(function (c) {
+          var b = document.createElement('button');
+          b.type = 'button';
+          b.setAttribute('role', 'tab');
+          b.textContent = c.label;
+          b.addEventListener('click', function () { switchCut(c); });
+          tabs.appendChild(b);
+        });
+        app.appendChild(tabs);
+        tabBtns = Array.prototype.slice.call(tabs.children);
+        document.body.classList.add('has-tabs');
+      }
+      function switchCut(c) {
+        useCut(c);
+        history.replaceState(null, '', '#' + c.slug);
+        prioritize();
+        // Start the new cut from its first frame, animation pinned in view
+        window.scrollTo(0, track.offsetTop);
+        pos = target = scrollTarget();
+        shown = -1; draw(Math.round(pos));
+      }
 
       var W = meta.width || 1400, H = meta.height || 1400;
       function fit() {
@@ -187,15 +251,15 @@
 
       function nearestLoaded(n) {
         if (loaded[n]) return n;
-        for (var d = 1; d < TOTAL; d++) {
-          if (n - d >= 0 && loaded[n - d]) return n - d;
-          if (n + d < TOTAL && loaded[n + d]) return n + d;
+        for (var d = 1; d < N; d++) {
+          if (n - d >= A && loaded[n - d]) return n - d;
+          if (n + d <= B && loaded[n + d]) return n + d;
         }
         return -1;
       }
       function draw(n) {
         var f = nearestLoaded(n);
-        count.textContent = (n + 1) + ' / ' + TOTAL;
+        count.textContent = (n - A + 1) + ' / ' + N;
         if (f < 0 || f === shown) return;
         shown = f;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -205,7 +269,7 @@
         var r = track.getBoundingClientRect();
         var dist = r.height - canvas.parentNode.offsetHeight;
         var p = dist > 0 ? Math.min(1, Math.max(0, -r.top / dist)) : 0;
-        return p * (TOTAL - 1);
+        return A + p * (N - 1);
       }
       // Ease toward the scroll position so trackpad/wheel steps feel smooth
       function tick() {
@@ -217,7 +281,9 @@
       }
       function kick() { if (!raf) raf = requestAnimationFrame(tick); }
 
+      var requested = new Array(TOTAL).fill(false);
       function load(i, done) {
+        requested[i] = true;
         var img = new Image();
         img.decoding = 'async';
         img.onload = function () {
@@ -231,16 +297,27 @@
         img.onerror = function () { nLoaded++; done(); };
         img.src = urls[i];
       }
-      // Frame 0 first, then a coarse pass over the whole range so any scroll
-      // position has something close by, then fill the gaps in order.
-      var order = [0], seen = { 0: 1 };
-      for (var step = 16; step >= 1; step = step >> 1)
-        for (var k = 0; k < TOTAL; k += step) if (!seen[k]) { seen[k] = 1; order.push(k); }
-      var next = 0, inFlight = 0;
+      // Current cut first: its first frame, then a coarse pass over its
+      // range so any scroll position has something close by, then the gaps.
+      // Frames of the other cuts come after.
+      var order = [], next = 0, inFlight = 0;
+      function prioritize() {
+        var seen = {};
+        order = [];
+        function add(k) { if (!seen[k] && !requested[k]) { seen[k] = 1; order.push(k); } }
+        add(A);
+        for (var step = 16; step >= 1; step = step >> 1)
+          for (var k = A; k <= B; k += step) add(k);
+        for (var j = 0; j < TOTAL; j++) add(j);
+        next = 0;
+        pump();
+      }
       function pump() {
         while (inFlight < 8 && next < order.length) {
+          var k = order[next++];
+          if (requested[k]) continue;
           inFlight++;
-          load(order[next++], function () { inFlight--; pump(); });
+          load(k, function () { inFlight--; pump(); });
         }
       }
 
@@ -260,6 +337,8 @@
       // White unless the sequence explicitly asks for black
       setBg(meta.bg && !isLight(meta.bg) ? 'black' : 'white');
 
+      var fromHash = location.hash.slice(1);
+      useCut(cuts.filter(function (c) { return c.slug === fromHash; })[0] || cuts[0]);
       fit();
       var sticky = canvas.parentNode, lastSize = '';
       window.addEventListener('resize', function () {
@@ -269,7 +348,7 @@
       });
       window.addEventListener('scroll', kick, { passive: true });
       pos = target = scrollTarget();
-      pump();
+      prioritize();
     }
 
     // ---------- Local preview: drop a folder of PNGs ----------
