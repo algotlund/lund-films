@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Scroll Preview — Lund Films</title>
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #ffffff;
+      --fg: #f2f2f2;
+      --muted: rgba(242, 242, 242, 0.55);
+      --line: rgba(242, 242, 242, 0.14);
+      --pill: rgba(20, 20, 20, 0.72);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; }
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font: 400 15px/1.5 Inter, system-ui, sans-serif;
+      transition: background 0.25s;
+    }
+    body.light { --fg: #161616; --muted: rgba(22,22,22,0.55); --line: rgba(22,22,22,0.14); }
+
+    header {
+      position: fixed; inset: 0 0 auto 0; z-index: 10;
+      display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+      padding: calc(14px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) 14px calc(16px + env(safe-area-inset-left));
+      font-size: 13px; letter-spacing: 0.04em;
+      pointer-events: none;
+    }
+    header .brand { font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; }
+    header .title { color: var(--muted); text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    .progress { position: fixed; inset: 0 0 auto 0; height: 2px; z-index: 11; }
+    .progress i { display: block; height: 100%; width: 0; background: var(--fg); opacity: 0.8; transition: width 0.15s, opacity 0.6s; }
+
+    .intro, .outro {
+      min-height: 70vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; text-align: center; gap: 0.5rem;
+      padding: 0 16px;
+    }
+    .intro h1 { font-size: clamp(1.4rem, 4vw, 2.2rem); font-weight: 500; letter-spacing: -0.01em; }
+    .intro p, .outro p { color: var(--muted); font-size: 14px; }
+    .hint { margin-top: 1.5rem; animation: bob 1.8s ease-in-out infinite; }
+    @keyframes bob { 50% { transform: translateY(6px); } }
+
+    .track { position: relative; }
+    .sticky {
+      position: sticky; top: 0; height: 100vh; height: 100svh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 56px 16px;
+    }
+    canvas { display: block; max-width: 100%; max-height: 100%; }
+
+    .hud {
+      position: fixed; z-index: 10;
+      right: calc(16px + env(safe-area-inset-right));
+      bottom: calc(16px + env(safe-area-inset-bottom));
+      display: flex; align-items: center; gap: 4px;
+      padding: 4px; border-radius: 999px;
+      background: var(--pill); color: #f2f2f2;
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      font-size: 12px; font-variant-numeric: tabular-nums;
+    }
+    .hud span { padding: 0 10px; min-width: 7.5em; text-align: center; }
+    .hud button {
+      border: 0; background: transparent; color: inherit; font: inherit;
+      padding: 8px 12px; border-radius: 999px; cursor: pointer;
+      touch-action: manipulation;
+    }
+    .hud button:hover, .hud button:focus-visible { background: rgba(255,255,255,0.12); outline: none; }
+    .hud button[aria-pressed="true"] { background: #f2f2f2; color: #111; }
+
+    .error { min-height: 100vh; display: grid; place-items: center; text-align: center; padding: 16px; color: var(--muted); }
+
+    /* Local preview (no ?s= in the URL) */
+    .local { max-width: 640px; margin: 0 auto; padding: 18vh 16px 4rem; }
+    .local h1 { font-size: 1.6rem; font-weight: 500; margin-bottom: 0.5rem; }
+    .local p { color: var(--muted); margin-bottom: 1.5rem; }
+    .drop {
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.75rem;
+      min-height: 220px; padding: 2rem 1rem; text-align: center;
+      border: 1.5px dashed var(--line); border-radius: 14px; cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .drop.over { border-color: var(--fg); background: rgba(255,255,255,0.04); }
+    .drop strong { font-weight: 500; }
+    .drop small { color: var(--muted); }
+    .local code { font: 13px/1.6 ui-monospace, Menlo, monospace; color: var(--fg); }
+    .local .how { margin-top: 2.5rem; font-size: 14px; color: var(--muted); }
+    .local .how code { display: block; margin: 0.5rem 0 1rem; padding: 0.75rem 1rem; border: 1px solid var(--line); border-radius: 8px; overflow-x: auto; white-space: pre; }
+  </style>
+</head>
+<body class="light">
+  <div class="progress" aria-hidden="true"><i></i></div>
+  <header>
+    <span class="brand">Lund Films</span>
+    <span class="title"></span>
+  </header>
+  <main id="app"></main>
+
+  <script>
+  (function () {
+    var app = document.getElementById('app');
+    var bar = document.querySelector('.progress i');
+    var titleEl = document.querySelector('header .title');
+    var brandEl = document.querySelector('header .brand');
+    var id = new URLSearchParams(location.search).get('s');
+
+    if (id && /^[a-z0-9-]+$/.test(id)) {
+      var base = 'seq/' + id + '/';
+      fetch(base + 'meta.json', { cache: 'no-cache' })
+        .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+        .then(function (meta) {
+          // Phones (and any small window) get the lighter frame set: the
+          // canvas can't show more pixels than that anyway, and full-size
+          // frames exceed iPhone Safari's memory limit on long sequences.
+          var needed = Math.min(window.innerWidth - 32, (window.innerHeight - 112) * meta.width / meta.height) *
+            Math.min(window.devicePixelRatio || 1, 2);
+          if (meta.mobile && needed <= meta.mobile.width * 1.15) {
+            base += 'm/';
+            meta.width = meta.mobile.width;
+            meta.height = meta.mobile.height;
+            meta.lite = true;
+          }
+          var urls = [];
+          for (var i = 0; i < meta.frames; i++) {
+            urls.push(base + 'frame-' + String(i).padStart(4, '0') + '.' + (meta.ext || 'webp') + '?v=' + (meta.updated || ''));
+          }
+          player(meta, urls);
+        })
+        .catch(function () {
+          app.innerHTML = '<div class="error"><p>This preview link isn’t available.<br>Please check the link or ask for a new one.</p></div>';
+        });
+    } else {
+      localPicker();
+    }
+
+    // ---------- Scroll-scrubbed player ----------
+    function player(meta, urls) {
+      var TOTAL = urls.length;
+      document.title = meta.title;
+      brandEl.textContent = meta.title;
+      titleEl.textContent = '';
+
+      app.innerHTML =
+        '<section class="intro"><h1></h1><p>Scroll to play the animation</p><p class="hint">↓</p></section>' +
+        '<section class="track"><div class="sticky"><canvas></canvas></div></section>' +
+        '<section class="outro"><p>End of sequence · ' + TOTAL + ' frames</p></section>' +
+        '<div class="hud" role="toolbar" aria-label="Preview controls">' +
+          '<span class="count">– / ' + TOTAL + '</span>' +
+          '<button type="button" data-bg="black" aria-pressed="false">Black</button>' +
+          '<button type="button" data-bg="white" aria-pressed="false">White</button>' +
+        '</div>';
+      app.querySelector('.intro h1').textContent = meta.title;
+
+      var track = app.querySelector('.track');
+      var canvas = app.querySelector('canvas');
+      var count = app.querySelector('.count');
+      var ctx = canvas.getContext('2d');
+      track.style.height = (meta.scroll || 400) + 'vh';
+
+      var W = meta.width || 1400, H = meta.height || 1400;
+      function fit() {
+        var sticky = canvas.parentNode;
+        var cs = getComputedStyle(sticky);
+        var maxW = sticky.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+        var maxH = sticky.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+        var s = Math.min(maxW / W, maxH / H);
+        var cw = Math.round(W * s), ch = Math.round(H * s);
+        var dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.style.width = cw + 'px';
+        canvas.style.height = ch + 'px';
+        canvas.width = Math.min(W, Math.round(cw * dpr));
+        canvas.height = Math.round(canvas.width * H / W);
+        shown = -1;
+      }
+
+      var frames = new Array(TOTAL), loaded = new Array(TOTAL).fill(false), nLoaded = 0;
+      var shown = -1, pos = 0, target = 0, raf = 0;
+
+      function nearestLoaded(n) {
+        if (loaded[n]) return n;
+        for (var d = 1; d < TOTAL; d++) {
+          if (n - d >= 0 && loaded[n - d]) return n - d;
+          if (n + d < TOTAL && loaded[n + d]) return n + d;
+        }
+        return -1;
+      }
+      function draw(n) {
+        var f = nearestLoaded(n);
+        count.textContent = (n + 1) + ' / ' + TOTAL;
+        if (f < 0 || f === shown) return;
+        shown = f;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(frames[f], 0, 0, canvas.width, canvas.height);
+      }
+      function scrollTarget() {
+        var r = track.getBoundingClientRect();
+        var dist = r.height - canvas.parentNode.offsetHeight;
+        var p = dist > 0 ? Math.min(1, Math.max(0, -r.top / dist)) : 0;
+        return p * (TOTAL - 1);
+      }
+      // Ease toward the scroll position so trackpad/wheel steps feel smooth
+      function tick() {
+        target = scrollTarget();
+        pos += (target - pos) * 0.25;
+        if (Math.abs(target - pos) < 0.05) pos = target;
+        draw(Math.round(pos));
+        raf = pos === target ? 0 : requestAnimationFrame(tick);
+      }
+      function kick() { if (!raf) raf = requestAnimationFrame(tick); }
+
+      function load(i, done) {
+        var img = new Image();
+        img.decoding = 'async';
+        img.onload = function () {
+          (img.decode && !meta.lite ? img.decode() : Promise.resolve()).catch(function () {}).then(function () {
+            frames[i] = img; loaded[i] = true; nLoaded++;
+            bar.style.width = (nLoaded / TOTAL * 100) + '%';
+            if (nLoaded === TOTAL) bar.style.opacity = 0;
+            shown = -1; draw(Math.round(pos)); done();
+          });
+        };
+        img.onerror = function () { nLoaded++; done(); };
+        img.src = urls[i];
+      }
+      // Frame 0 first, then a coarse pass over the whole range so any scroll
+      // position has something close by, then fill the gaps in order.
+      var order = [0], seen = { 0: 1 };
+      for (var step = 16; step >= 1; step = step >> 1)
+        for (var k = 0; k < TOTAL; k += step) if (!seen[k]) { seen[k] = 1; order.push(k); }
+      var next = 0, inFlight = 0;
+      function pump() {
+        while (inFlight < 8 && next < order.length) {
+          inFlight++;
+          load(order[next++], function () { inFlight--; pump(); });
+        }
+      }
+
+      // Black / white background switch (B toggles)
+      var bgBtns = app.querySelectorAll('.hud [data-bg]');
+      function setBg(which) {
+        document.documentElement.style.setProperty('--bg', which === 'white' ? '#ffffff' : '#000000');
+        document.body.classList.toggle('light', which === 'white');
+        bgBtns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.bg === which)); });
+      }
+      bgBtns.forEach(function (b) {
+        b.addEventListener('click', function () { setBg(b.dataset.bg); });
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'b' || e.key === 'B') setBg(document.body.classList.contains('light') ? 'black' : 'white');
+      });
+      // White unless the sequence explicitly asks for black
+      setBg(meta.bg && !isLight(meta.bg) ? 'black' : 'white');
+
+      fit();
+      var sticky = canvas.parentNode, lastSize = '';
+      window.addEventListener('resize', function () {
+        var size = sticky.clientWidth + 'x' + sticky.clientHeight;
+        if (size !== lastSize) { lastSize = size; fit(); }
+        kick();
+      });
+      window.addEventListener('scroll', kick, { passive: true });
+      pos = target = scrollTarget();
+      pump();
+    }
+
+    // ---------- Local preview: drop a folder of PNGs ----------
+    function localPicker() {
+      titleEl.textContent = 'Scroll Preview';
+      app.innerHTML =
+        '<div class="local">' +
+          '<h1>Scroll preview</h1>' +
+          '<p>Drop a folder of PNG frames to test a scroll animation locally. Nothing is uploaded; the files stay on this computer.</p>' +
+          '<label class="drop"><strong>Drop PNG frames or a folder here</strong><small>or click to choose files</small>' +
+            '<input type="file" accept="image/png,image/webp,image/jpeg" multiple hidden></label>' +
+          '<div class="how">To make a link for a client, convert the frames and push:' +
+            '<code>review/add-sequence.sh "path/to/frames" client-name --title "Project name"</code>' +
+            'Then send <code>https://lundfilms.fi/review/?s=client-name</code></div>' +
+        '</div>';
+
+      var drop = app.querySelector('.drop');
+      var input = drop.querySelector('input');
+      input.addEventListener('change', function () { start(Array.prototype.slice.call(input.files)); });
+      ['dragenter', 'dragover'].forEach(function (t) {
+        drop.addEventListener(t, function (e) { e.preventDefault(); drop.classList.add('over'); });
+      });
+      ['dragleave', 'drop'].forEach(function (t) {
+        drop.addEventListener(t, function (e) { e.preventDefault(); drop.classList.remove('over'); });
+      });
+      drop.addEventListener('drop', function (e) {
+        var items = e.dataTransfer.items, files = [], pending = 0;
+        function finish() { if (--pending === 0) start(files); }
+        function walk(entry) {
+          pending++;
+          if (entry.isFile) {
+            entry.file(function (f) { files.push(f); finish(); }, finish);
+          } else if (entry.isDirectory) {
+            var reader = entry.createReader(), acc = [];
+            (function readAll() {
+              reader.readEntries(function (batch) {
+                if (batch.length) { acc = acc.concat(batch); readAll(); }
+                else { acc.forEach(walk); finish(); }
+              }, finish);
+            })();
+          } else finish();
+        }
+        pending++;
+        for (var i = 0; i < items.length; i++) {
+          var en = items[i].webkitGetAsEntry && items[i].webkitGetAsEntry();
+          if (en) walk(en);
+        }
+        finish();
+      });
+
+      function start(files) {
+        files = files.filter(function (f) { return /\.(png|webp|jpe?g)$/i.test(f.name); })
+          .sort(function (a, b) { return a.name.localeCompare(b.name, undefined, { numeric: true }); });
+        if (!files.length) return;
+        var probe = new Image();
+        probe.onload = function () {
+          player({
+            title: files.length + ' local frames',
+            frames: files.length,
+            width: probe.naturalWidth,
+            height: probe.naturalHeight,
+            bg: '#ffffff',
+            scroll: 400
+          }, files.map(function (f) { return URL.createObjectURL(f); }));
+          window.scrollTo(0, 0);
+        };
+        probe.src = URL.createObjectURL(files[0]);
+      }
+    }
+
+    function isLight(hex) {
+      var m = /^#?([0-9a-f]{6})$/i.exec(hex || '');
+      if (!m) return false;
+      var n = parseInt(m[1], 16);
+      return (0.299 * (n >> 16) + 0.587 * (n >> 8 & 255) + 0.114 * (n & 255)) > 150;
+    }
+  })();
+  </script>
+</body>
+</html>
