@@ -22,3 +22,4 @@ assets/test v3/
 
 # Source PNGs for review sequences (web copies live in review/seq/)
 review/web test/
+review/src/

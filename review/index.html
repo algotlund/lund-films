@@ -84,8 +84,12 @@
       background: var(--pill); color: #f2f2f2;
       backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
       font-size: 12px; white-space: nowrap;
+      max-width: calc(100vw - 32px);
+      overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
     }
+    .tabs::-webkit-scrollbar { display: none; }
     .tabs button {
+      flex: none;
       border: 0; background: transparent; color: inherit; font: inherit;
       padding: 8px 14px; border-radius: 999px; cursor: pointer;
       touch-action: manipulation;
@@ -93,6 +97,10 @@
     .tabs button:hover, .tabs button:focus-visible { background: rgba(255,255,255,0.12); outline: none; }
     .tabs button[aria-selected="true"] { background: #f2f2f2; color: #111; }
     body.has-tabs .sticky { padding-top: 104px; }
+    @media (max-width: 480px) {
+      .tabs { gap: 0; }
+      .tabs button { padding: 8px 10px; }
+    }
 
     .error { min-height: 100vh; display: grid; place-items: center; text-align: center; padding: 16px; color: var(--muted); }
 
@@ -214,7 +222,11 @@
         // Same scroll speed in every cut: shorter cut, shorter track
         track.style.height = Math.max(150, (meta.scroll || 400) * N / TOTAL) + 'vh';
         endEl.textContent = 'End of sequence · ' + N + ' frames';
-        if (tabBtns) tabBtns.forEach(function (b, i) { b.setAttribute('aria-selected', String(cuts[i] === c)); });
+        if (tabBtns) tabBtns.forEach(function (b, i) {
+          b.setAttribute('aria-selected', String(cuts[i] === c));
+          // Keep the selected tab visible if the bar has to scroll sideways
+          if (cuts[i] === c) b.parentNode.scrollLeft = b.offsetLeft - (b.parentNode.clientWidth - b.offsetWidth) / 2;
+        });
       }
       var tabBtns = null;
       if (cuts.length > 1) {
