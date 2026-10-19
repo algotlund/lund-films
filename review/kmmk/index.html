@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <title>KMMK — Innovative Designs For The MI And Pro Audio Industries</title>
+  <meta name="description" content="SquarePlug (SP) connectors and SP Cables by KMMK Solutions.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ------------------------------------------------------------------
+       KMMK website template — design concept by Lund Films.
+       Strictly black and white. SF Pro on Apple devices, Inter elsewhere.
+       ------------------------------------------------------------------ */
+    :root {
+      --black: #000;
+      --white: #fff;
+      --grey-1: #6e6e73;   /* secondary text on white */
+      --grey-2: #86868b;   /* secondary text on black */
+      --line: #d2d2d7;
+      --line-dark: #333336;
+      --wrap: 1120px;
+      --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", "Helvetica Neue", Arial, sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; scroll-behavior: smooth; }
+    body {
+      background: var(--white); color: var(--black);
+      font: 400 17px/1.47 var(--font); letter-spacing: -0.022em;
+      -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+    }
+    img, video, canvas { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+    button, input, textarea, select { font: inherit; color: inherit; letter-spacing: inherit; }
+    .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 22px; }
+    .center { text-align: center; }
+
+    /* Type */
+    .eyebrow { font-size: 17px; font-weight: 600; color: var(--grey-1); margin-bottom: 10px; letter-spacing: -0.01em; }
+    .display { font-size: clamp(48px, 9vw, 112px); font-weight: 600; line-height: 1.02; letter-spacing: -0.04em; }
+    .h1 { font-size: clamp(36px, 5.6vw, 64px); font-weight: 600; line-height: 1.06; letter-spacing: -0.03em; }
+    .h2 { font-size: clamp(28px, 3.6vw, 40px); font-weight: 600; line-height: 1.1; letter-spacing: -0.025em; }
+    .h3 { font-size: clamp(24px, 2.6vw, 32px); font-weight: 600; line-height: 1.12; letter-spacing: -0.022em; }
+    .lead { font-size: clamp(19px, 2vw, 24px); line-height: 1.4; letter-spacing: -0.016em; color: var(--grey-1); }
+    .black { background: var(--black); color: var(--white); }
+    .black .eyebrow, .black .lead { color: var(--grey-2); }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 980px;
+      background: var(--black); color: var(--white); font-size: 17px; border: 1px solid var(--black);
+      cursor: pointer; transition: background 0.25s, color 0.25s;
+    }
+    .btn:hover { background: var(--white); color: var(--black); }
+    .black .btn { background: var(--white); color: var(--black); border-color: var(--white); }
+    .black .btn:hover { background: transparent; color: var(--white); }
+
+    /* ---------------- Navigation ---------------- */
+    .nav {
+      position: fixed; inset: 0 0 auto 0; z-index: 50;
+      height: calc(48px + env(safe-area-inset-top)); padding-top: env(safe-area-inset-top);
+      background: rgba(255, 255, 255, 0.78);
+      backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+      transition: background 0.3s, color 0.3s, border-color 0.3s;
+    }
+    .nav.dark { background: rgba(0, 0, 0, 0.72); color: var(--white); border-color: rgba(255,255,255,0.1); }
+    .nav .wrap { height: 48px; display: flex; align-items: center; justify-content: space-between; }
+    .logo { font-weight: 700; font-size: 20px; letter-spacing: 0.1em; }
+    .nav-links { display: flex; gap: 34px; font-size: 13px; letter-spacing: -0.01em; }
+    .nav-links a { opacity: 0.8; transition: opacity 0.2s; }
+    .nav-links a:hover { opacity: 1; }
+    .nav-toggle { display: none; background: none; border: 0; width: 40px; height: 40px; margin-right: -10px; cursor: pointer; }
+    .nav-toggle span { display: block; width: 17px; height: 1.5px; background: currentColor; margin: 5px auto; transition: transform 0.3s; }
+    .nav.open .nav-toggle span:first-child { transform: translateY(3.25px) rotate(45deg); }
+    .nav.open .nav-toggle span:last-child { transform: translateY(-3.25px) rotate(-45deg); }
+
+    /* ---------------- Hero: scroll-driven exploded view ---------------- */
+    .hero-track { height: 520vh; }
+    .hero-stage {
+      position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .hero-canvas { width: min(92vw, 78vh); height: auto; aspect-ratio: 1 / 1; }
+    .hero-copy {
+      position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center;
+      padding: calc(13vh + 48px) 22px 0; text-align: center; pointer-events: none;
+    }
+    .hero-copy .lead { margin-top: 16px; color: var(--grey-1); }
+    .caption {
+      position: absolute; left: 0; right: 0; bottom: 11vh; padding: 0 22px; text-align: center;
+      opacity: 0; transform: translateY(16px); pointer-events: none; transition: opacity 0.5s, transform 0.5s;
+    }
+    .caption.on { opacity: 1; transform: none; }
+    .caption .eyebrow { margin-bottom: 6px; }
+    .scroll-cue {
+      position: absolute; bottom: 5vh; left: 50%; transform: translateX(-50%);
+      font-size: 12px; color: var(--grey-1); transition: opacity 0.4s;
+    }
+    .scroll-cue::after {
+      content: ""; display: block; width: 1px; height: 28px; margin: 8px auto 0;
+      background: linear-gradient(var(--grey-1), transparent); animation: cue 1.8s ease-in-out infinite;
+    }
+    @keyframes cue { 0% { transform: scaleY(0); transform-origin: top; } 50% { transform: scaleY(1); transform-origin: top; } 51% { transform-origin: bottom; } 100% { transform: scaleY(0); transform-origin: bottom; } }
+
+    /* ---------------- Sections ---------------- */
+    section.block { padding: 140px 0; }
+
+    /* About */
+    .about-text { font-size: clamp(26px, 3.4vw, 44px); font-weight: 600; line-height: 1.18; letter-spacing: -0.028em; max-width: 980px; }
+    .about-text .dim { color: var(--grey-2); }
+    .pillars { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 96px; border-top: 1px solid var(--line-dark); }
+    .pillar { padding: 32px 28px 0 0; }
+    .pillar + .pillar { padding-left: 28px; border-left: 1px solid var(--line-dark); }
+    .pillar .num { font-size: 14px; color: var(--grey-2); margin-bottom: 40px; font-variant-numeric: tabular-nums; }
+    .pillar h3 { font-size: 21px; font-weight: 600; line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 12px; }
+    .pillar p { color: var(--grey-2); font-size: 15px; }
+
+    /* Section intro */
+    .intro { max-width: 860px; margin: 0 auto; text-align: center; }
+    .intro .h1 { margin-bottom: 28px; }
+    .intro .lead + .lead { margin-top: 14px; }
+
+    .film { max-width: 760px; margin: 72px auto 0; aspect-ratio: 1 / 1; background: #000; overflow: hidden; border-radius: 28px; }
+    .film video { width: 100%; height: 100%; object-fit: cover; }
+
+    /* Product rows */
+    .rows { margin-top: 120px; }
+    .row {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center;
+      padding: 72px 0; border-top: 1px solid var(--line);
+    }
+    .row:nth-child(even) .row-media { order: 2; }
+    .row-media { display: flex; align-items: center; justify-content: center; min-height: 340px; }
+    .row-media > img { max-height: 360px; width: auto; object-fit: contain; transition: transform 1.2s cubic-bezier(.2,.7,.2,1); }
+    .row:hover .row-media > img { transform: scale(1.04); }
+    .row .num { font-size: 14px; color: var(--grey-1); font-variant-numeric: tabular-nums; margin-bottom: 14px; }
+    .row .sub { font-size: 19px; color: var(--grey-1); margin: 6px 0 22px; letter-spacing: -0.012em; }
+    .row p.body { color: var(--grey-1); font-size: 16px; }
+    .row p.body + p.body { margin-top: 12px; }
+    .row .avail { margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 14px; color: var(--black); }
+    details.more { margin-top: 12px; }
+    details.more summary { cursor: pointer; list-style: none; font-size: 15px; color: var(--black); display: inline-flex; align-items: center; gap: 6px; }
+    details.more summary::-webkit-details-marker { display: none; }
+    details.more summary::after { content: "+"; font-size: 18px; line-height: 1; transition: transform 0.3s; }
+    details.more[open] summary::after { transform: rotate(45deg); }
+    details.more[open] summary { margin-bottom: 12px; }
+
+    /* Cable configuration switcher */
+    .configs { display: flex; flex-direction: column; align-items: center; gap: 24px; width: 100%; }
+    .config-stage { position: relative; width: 100%; aspect-ratio: 1 / 1; max-width: 440px; }
+    .config-stage img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: opacity 0.5s; }
+    .config-stage img.on { opacity: 1; }
+    .dots { display: flex; gap: 14px; }
+    .dots button { position: relative; width: 9px; height: 9px; border-radius: 50%; border: 1px solid var(--black); background: transparent; cursor: pointer; padding: 0; }
+    .dots button::before { content: ""; position: absolute; inset: -10px; }
+    .dots button[aria-pressed="true"] { background: var(--black); }
+
+    /* Exploded gallery */
+    .gallery { display: flex; gap: 24px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 0 22px 8px; margin: 72px auto 0; max-width: calc(var(--wrap) + 44px); scrollbar-width: none; }
+    .gallery::-webkit-scrollbar { display: none; }
+    .gallery figure { flex: 0 0 min(82vw, 760px); scroll-snap-align: center; }
+    .gallery .frame { aspect-ratio: 16 / 9; display: flex; align-items: center; justify-content: center; border: 1px solid var(--line-dark); border-radius: 28px; padding: 6%; }
+    .gallery img { max-height: 100%; width: auto; object-fit: contain; }
+    .gallery figcaption { margin-top: 14px; font-size: 14px; color: var(--grey-2); }
+    .gallery-nav { display: flex; justify-content: flex-end; gap: 12px; max-width: var(--wrap); margin: 20px auto 0; padding: 0 22px; }
+    .gallery-nav button { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line-dark); background: transparent; color: var(--white); cursor: pointer; font-size: 18px; transition: background 0.2s, color 0.2s; }
+    .gallery-nav button:hover { background: var(--white); color: var(--black); }
+
+    /* Downloads */
+    .downloads { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 72px; border-top: 1px solid var(--line); }
+    .dl { padding: 32px 28px 0 0; }
+    .dl + .dl { padding-left: 28px; border-left: 1px solid var(--line); }
+    .dl h3 { font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 18px; }
+    .dl a { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 15px; }
+    .dl a::after { content: "↓"; transition: transform 0.25s; }
+    .dl a:hover::after { transform: translateY(3px); }
+
+    /* Contact form */
+    .contact { display: grid; grid-template-columns: 1fr 1.4fr; gap: 72px; }
+    .form { display: grid; grid-template-columns: 1fr 1fr; gap: 28px 24px; }
+    .field { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+    .field.full { grid-column: 1 / -1; }
+    .field label, .field legend { font-size: 13px; color: var(--grey-2); }
+    .field input, .field textarea {
+      background: transparent; border: 0; border-bottom: 1px solid var(--line-dark); padding: 8px 0 10px;
+      font-size: 17px; color: var(--white); border-radius: 0; outline: none; transition: border-color 0.2s;
+    }
+    .field textarea { min-height: 120px; resize: vertical; }
+    .field input:focus, .field textarea:focus { border-color: var(--white); }
+    fieldset.field { border: 0; }
+    .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+    .chips label { cursor: pointer; position: relative; }
+    .chips input { position: absolute; opacity: 0; pointer-events: none; }
+    .chips span { display: inline-block; padding: 9px 16px; border: 1px solid var(--line-dark); border-radius: 980px; font-size: 14px; color: var(--white); transition: background 0.2s, color 0.2s, border-color 0.2s; }
+    .chips input:checked + span { background: var(--white); color: var(--black); border-color: var(--white); }
+    .chips input:focus-visible + span { outline: 2px solid var(--white); outline-offset: 2px; }
+    .form-note { grid-column: 1 / -1; font-size: 13px; color: var(--grey-2); min-height: 1em; }
+
+    footer { background: var(--black); color: var(--grey-2); font-size: 12px; padding: 0 0 calc(40px + env(safe-area-inset-bottom)); }
+    footer .wrap > div { display: flex; justify-content: space-between; gap: 16px 24px; flex-wrap: wrap; padding: 18px 0; border-top: 1px solid var(--line-dark); }
+    footer nav { display: flex; gap: 22px; flex-wrap: wrap; }
+    footer a:hover { color: var(--white); }
+
+    /* Reveal on scroll */
+    .reveal { opacity: 0; transform: translateY(40px); transition: opacity 1s cubic-bezier(.2,.7,.2,1), transform 1s cubic-bezier(.2,.7,.2,1); }
+    .reveal.in { opacity: 1; transform: none; }
+    .d1 { transition-delay: 0.08s; } .d2 { transition-delay: 0.16s; } .d3 { transition-delay: 0.24s; }
+
+    /* ---------------- Responsive ---------------- */
+    @media (max-width: 960px) {
+      .pillars { grid-template-columns: 1fr 1fr; }
+      .pillar:nth-child(3) { padding-left: 0; border-left: 0; }
+      .pillar:nth-child(n+3) { border-top: 1px solid var(--line-dark); margin-top: 32px; }
+      .row { gap: 40px; }
+      .contact { grid-template-columns: 1fr; gap: 48px; }
+    }
+    @media (max-width: 734px) {
+      body { font-size: 16px; }
+      section.block { padding: 96px 0; }
+      .nav-links {
+        /* The nav's backdrop-filter makes it the containing block, so size explicitly */
+        position: fixed; top: calc(48px + env(safe-area-inset-top)); left: 0; right: 0;
+        height: 100vh; height: 100dvh;
+        flex-direction: column; gap: 0; padding: 16px 32px 24px;
+        background: var(--white); color: var(--black);
+        font-size: 24px; font-weight: 600;
+        opacity: 0; visibility: hidden; transform: translateY(-8px);
+        transition: opacity 0.3s, transform 0.3s, visibility 0.3s;
+      }
+      .nav.dark .nav-links { background: var(--black); color: var(--white); }
+      .nav-links a { padding: 10px 0; opacity: 1; }
+      .nav.open .nav-links { opacity: 1; visibility: visible; transform: none; }
+      .nav-toggle { display: block; }
+      .hero-track { height: 440vh; }
+      .hero-copy { padding-top: calc(11vh + 48px); }
+      .caption { bottom: 13vh; }
+      .pillars { grid-template-columns: 1fr; margin-top: 64px; }
+      .pillar, .pillar + .pillar { padding: 28px 0 0; border-left: 0; }
+      .pillar + .pillar { border-top: 1px solid var(--line-dark); margin-top: 28px; }
+      .pillar .num { margin-bottom: 16px; }
+      .rows { margin-top: 72px; }
+      .row { grid-template-columns: 1fr; gap: 28px; padding: 56px 0; }
+      .row:nth-child(even) .row-media { order: 0; }
+      .row-media { min-height: 0; }
+      .row-media > img { max-height: 240px; }
+      .downloads { grid-template-columns: 1fr; }
+      .dl, .dl + .dl { padding: 28px 0 0; border-left: 0; }
+      .form { grid-template-columns: 1fr; }
+      .gallery-nav { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .reveal { opacity: 1; transform: none; transition: none; }
+      .hero-track { height: auto; }
+      .hero-stage { position: relative; height: auto; min-height: 100vh; padding: 120px 0 60px; flex-direction: column; }
+      .hero-copy { position: static; padding-top: 0; margin-bottom: 24px; }
+      .caption, .scroll-cue { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="nav" id="nav">
+    <div class="wrap">
+      <a href="#top" class="logo" aria-label="KMMK — Home">KMMK</a>
+      <nav class="nav-links" id="nav-links">
+        <a href="#connectors">SP Connectors</a>
+        <a href="#cables">SP Cables</a>
+        <a href="#about">About us</a>
+        <a href="#downloads">Downloads</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <button class="nav-toggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav-links"><span></span><span></span></button>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <!-- Hero: scroll-scrubbed exploded view (the "without spin" cut) -->
+    <section class="hero" aria-label="SP connector exploded view">
+      <div class="hero-track">
+        <div class="hero-stage">
+          <div class="hero-copy">
+            <h1 class="display">KMMK Solutions</h1>
+            <p class="lead">Innovative Designs For The MI And Pro Audio Industries</p>
+          </div>
+          <canvas class="hero-canvas" width="1400" height="1400" role="img"
+                  aria-label="An SP connector separating into its parts and reassembling"></canvas>
+          <div class="caption" data-from="0.28" data-to="0.56">
+            <p class="eyebrow">SP Connectors</p>
+            <h2 class="h2">The Standard In Ultra-Compact Interconnects</h2>
+          </div>
+          <div class="caption" data-from="0.62" data-to="0.88">
+            <p class="eyebrow">SP Cables</p>
+            <h2 class="h2">The Next Evolution In Audio Connectivity</h2>
+          </div>
+          <div class="caption" data-from="0.93" data-to="1.01">
+            <h2 class="h2">A true “fit–anywhere” solution</h2>
+          </div>
+          <div class="scroll-cue">Scroll</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Us -->
+    <section class="block black" id="about">
+      <div class="wrap">
+        <p class="eyebrow reveal">About Us</p>
+        <p class="about-text reveal d1">KMMK delivers a differentiated line of compact, and performance–optimized connectors paired with proprietary cables, built to provide a true “fit–anywhere” solution <span class="dim">that offers uncompromized signal integrity, exceptional reliability, and seamless functionality.</span></p>
+        <p class="lead reveal d2" style="margin-top:40px">This approach is reflected across four core pillars:</p>
+        <div class="pillars">
+          <div class="pillar reveal">
+            <p class="num">01</p>
+            <h3>Designed for space–constrained applications</h3>
+            <p>Compact, purpose–built patented solutions designed for tight–envelope environments, while delivering reliable performance across a wide range of demanding applications.</p>
+          </div>
+          <div class="pillar reveal d1">
+            <p class="num">02</p>
+            <h3>Built for demanding environments</h3>
+            <p>Robust, reliability–focused designs, engineered to outperform standard off–the–shelf components in challenging conditions.</p>
+          </div>
+          <div class="pillar reveal d2">
+            <p class="num">03</p>
+            <h3>Premium performance, commercially competitive</h3>
+            <p>High–end specifications, materials, and build quality delivered at accessible, market–aligned price points.</p>
+          </div>
+          <div class="pillar reveal d3">
+            <p class="num">04</p>
+            <h3>Vertically integrated OEM capabilities</h3>
+            <p>In–house engineering and manufacturing of connectors and cables ensures stringent quality control, reduced lead times, and flexible custom and private–label solutions.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SP Connectors -->
+    <section class="block" id="connectors">
+      <div class="wrap">
+        <div class="intro">
+          <p class="eyebrow reveal">SP Connectors</p>
+          <h2 class="h1 reveal d1">The Standard In Ultra-Compact Interconnects</h2>
+          <p class="lead reveal d2">SquarePlug (SP) offers the industry’s most comprehensive selection of ultra-compact, performance-optimized audio connectors.</p>
+          <p class="lead reveal d2">They provide a true "fit-anywhere" solution for virtually any application, supporting both high-density and standard-clearance cabling.</p>
+        </div>
+        <div class="film reveal">
+          <video autoplay muted loop playsinline preload="metadata" poster="img/sp-poster.jpg">
+            <source src="img/sp-hero.mp4" type="video/mp4">
+          </video>
+        </div>
+
+        <div class="rows">
+          <article class="row">
+            <div class="row-media reveal"><img src="img/r/spxa.webp" alt="SPXA Series connector" loading="lazy"></div>
+            <div class="reveal d1">
+              <p class="num">01</p>
+              <h3 class="h3">SPXA Series</h3>
+              <p class="sub">Compact angled XLR connectors</p>
+              <p class="body">The SPXA right-angled XLR series features a distinctive, compact, and ruggedized design engineered for maximum space efficiency and uncompromising reliability.</p>
+              <p class="body">With no industry equivalent, this series represents the definitive choice for both space-constrained and standard-clearance applications, delivering unrivaled performance across stage, studio, broadcast, field recording, and system integration.</p>
+              <p class="body">These connectors feature a patented cable clamping mechanism for optimal strain relief, eight adjustable radial exit angles for precise routing in tight spaces, and a reinforced, ergonomic construction that ensures long-term durability and reliable field handling.</p>
+            </div>
+          </article>
+          <article class="row">
+            <div class="row-media reveal"><img src="img/r/spx.webp" alt="SPX Series connector" loading="lazy"></div>
+            <div class="reveal d1">
+              <p class="num">02</p>
+              <h3 class="h3">SPX Series</h3>
+              <p class="sub">Compact straight XLR connectors</p>
+              <p class="body">The SPX straight XLR series is engineered to optimize footprint efficiency (up to 30% shorter than conventional designs) while maintaining robust mechanical integrity and dependable field performance.</p>
+              <p class="body">A precision chuck-style clamping mechanism ensures secure cable retention and effective strain relief, while discreet, side-mounted interchangeable fasteners allow for up to 55 distinct color-coding configurations for clear visual identification.</p>
+              <p class="body">The series utilizes the same heavy-duty, ergonomically optimized construction platform as the SPXA range.</p>
+            </div>
+          </article>
+          <article class="row">
+            <div class="row-media reveal"><img src="img/r/sp.webp" alt="SP Series connector" loading="lazy"></div>
+            <div class="reveal d1">
+              <p class="num">03</p>
+              <h3 class="h3">SP Series</h3>
+              <p class="sub">Compact angled 6.35 mm connectors</p>
+              <p class="body">Introduced in 2016 with the SP400, our SP Series ultra-low profile "flat" angled connectors set a new benchmark in right angle 1/4" connector design. Rapidly adopted by professional rig builders worldwide, the SP400 directly addressed two critical limitations of existing connectors at the time: bulky form factors, problematic for dense pedalboards and rack integrations, and inadequate cable retention systems that compromised strain relief and long-term reliability.</p>
+              <details class="more">
+                <summary>Read more</summary>
+                <p class="body">The range has since expanded to include the SP500, SP550-S, SP600, and SP650-S, accommodating a wide range of cable diameters while preserving the same ultra-compact footprint and proven cable retention design.</p>
+                <p class="body">The new SP700 extends the platform to instrument cables, combining a compact footprint with an ergonomic design optimized for repeated mating cycles and reliable performance in live, studio, and touring environments. Today, the SP Series is widely recognized as the industry standard for pedalboard and rack integration, trusted by professionals worldwide.</p>
+              </details>
+            </div>
+          </article>
+          <article class="row">
+            <div class="row-media reveal"><img src="img/r/sps.webp" alt="SPS Series connector" loading="lazy"></div>
+            <div class="reveal d1">
+              <p class="num">04</p>
+              <h3 class="h3">SPS Series</h3>
+              <p class="sub">Compact straight 6.35 mm connectors</p>
+              <p class="body">The SPS Series comprises the shortest solderable straight 1/4" connectors in the industry, engineered for high-density environments such as patch bays, switching systems, and compact signal routing setups. A side screw–based clamping mechanism ensures secure cable retention while enabling intuitive color coding for fast identification and organized signal management. Available in TS and TRS configurations, the series supports both unbalanced and balanced applications.</p>
+              <details class="more">
+                <summary>Read more</summary>
+                <p class="body">The new SPS7M extends the platform to instrument cables with a compact, ergonomically optimized design for intensive handling and repeated mating cycles in live, studio, and touring environments. A chuck-style strain relief system provides firm cable retention while isolating solder joints from mechanical stress, and the open terminal layout enables efficient assembly and straightforward servicing.</p>
+              </details>
+            </div>
+          </article>
+          <article class="row">
+            <div class="row-media reveal"><img src="img/r/spdc.webp" alt="SPDC Series connector" loading="lazy"></div>
+            <div class="reveal d1">
+              <p class="num">05</p>
+              <h3 class="h3">SPDC Series</h3>
+              <p class="sub">Compact angled and straight DC connectors</p>
+              <p class="body">Our DC Power Connector Series is engineered to overcome the mechanical and electrical limitations of conventional designs. Typical solutions rely on lightweight plastic housings with minimal structural reinforcement, limited solderability, and inadequate or absent strain relief, resulting in poor handling characteristics and reduced durability under repeated use.</p>
+              <p class="body">This series addresses these constraints through a robust all-metal construction, an integrated adaptive strain relief system for secure cable retention, and properly engineered insulation between conductive components.</p>
+              <p class="body">The result is a professional-grade connector offering enhanced mechanical integrity, improved electrical safety, and consistent long-term reliability in demanding applications.</p>
+            </div>
+          </article>
+          <article class="row">
+            <div class="row-media reveal"><img src="img/r/sp35.webp" alt="SP3.5 Series connector" loading="lazy"></div>
+            <div class="reveal d1">
+              <p class="num">06</p>
+              <h3 class="h3">SP3.5 Series</h3>
+              <p class="sub">Compact angled and straight 3.5 mm connectors</p>
+              <p class="body">Built on the same compact, high-performance platform as our DC Power Connector Series, the 3.5 mm connectors are engineered for high-density integration without compromising functionality or durability.</p>
+              <p class="body">They incorporate our patented adaptive cable clamping system to provide controlled strain relief and secure cable retention, along with a reinforced, ergonomically optimized construction for long-term mechanical integrity and reliable field handling.</p>
+            </div>
+          </article>
+          <article class="row">
+            <div class="row-media reveal"><img src="img/r/spd.webp" alt="SPD Series connector" loading="lazy"></div>
+            <div class="reveal d1">
+              <p class="num">07</p>
+              <h3 class="h3">SPD Series</h3>
+              <p class="sub">Compact angled DIN connectors</p>
+              <p class="body">Built on the same compact, high-performance architecture as our SPXA series, our SPXD DIN connectors deliver unmatched space efficiency without compromising functionality or durability.</p>
+              <p class="body">As the only angled DIN connectors on the market offering such a small footprint, they incorporate a patented cable clamping system for optimal strain relief and feature eight adjustable radial exit angles for precise routing in tight environments.</p>
+              <p class="body">A reinforced, ergonomic construction ensures long-term durability and reliable field handling, providing a robust, high-performance solution for both standard and high-density applications.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Exploded views -->
+    <section class="block black" aria-label="Exploded views">
+      <div class="wrap">
+        <p class="h2 reveal" style="max-width:900px">Designed with a robust mechanical architecture and high-integrity signal transmission, <span style="color:var(--grey-2)">these connectors ensure the long-term operational consistency, dependable performance, and durability essential for the most demanding pro-audio environments.</span></p>
+      </div>
+      <div class="gallery" id="gallery">
+        <figure><div class="frame"><img src="img/r/exp-spxa-m.webp" alt="SPXA exploded view" loading="lazy"></div><figcaption>SPXA Series</figcaption></figure>
+        <figure><div class="frame"><img src="img/r/exp-spx-f.webp" alt="SPX exploded view" loading="lazy"></div><figcaption>SPX Series</figcaption></figure>
+        <figure><div class="frame"><img src="img/r/exp-spd5.webp" alt="SPD exploded view" loading="lazy"></div><figcaption>SPD Series</figcaption></figure>
+        <figure><div class="frame"><img src="img/r/exp-sps7-m.webp" alt="SPS7M exploded view" loading="lazy"></div><figcaption>SPS7M</figcaption></figure>
+        <figure><div class="frame"><img src="img/r/exp-sps4.webp" alt="SPS4 exploded view" loading="lazy"></div><figcaption>SPS4</figcaption></figure>
+        <figure><div class="frame"><img src="img/r/exp-sp21dc.webp" alt="SPDC exploded view" loading="lazy"></div><figcaption>SPDC Series</figcaption></figure>
+        <figure><div class="frame"><img src="img/r/exp-sp35-trs.webp" alt="SP3.5 exploded view" loading="lazy"></div><figcaption>SP3.5 Series</figcaption></figure>
+      </div>
+      <div class="gallery-nav">
+        <button type="button" data-dir="-1" aria-label="Previous">‹</button>
+        <button type="button" data-dir="1" aria-label="Next">›</button>
+      </div>
+    </section>
+
+    <!-- SP Cables -->
+    <section class="block" id="cables">
+      <div class="wrap">
+        <div class="intro">
+          <p class="eyebrow reveal">SP Cables</p>
+          <h2 class="h1 reveal d1">The Next Evolution In Audio Connectivity</h2>
+          <p class="lead reveal d2">SP Cables delivers a streamlined range of microphone, balanced patch, instrument, and pedalboard cables, all engineered with the same precision standards.</p>
+          <p class="lead reveal d2">Each cable is designed for low capacitance, robust shielding, and consistent signal transfer, ensuring clarity and reliability in any application.</p>
+        </div>
+
+        <div class="rows">
+          <article class="row">
+            <div class="row-media reveal">
+              <div class="configs">
+                <div class="config-stage">
+                  <img class="on" src="img/r/c01-A.webp" alt="01 Series, configuration 1" loading="lazy">
+                  <img src="img/r/c01-B.webp" alt="01 Series, configuration 2" loading="lazy">
+                  <img src="img/r/c01-C.webp" alt="01 Series, configuration 3" loading="lazy">
+                  <img src="img/r/c01-D.webp" alt="01 Series, configuration 4" loading="lazy">
+                </div>
+                <div class="dots" aria-label="Connector configurations"></div>
+              </div>
+            </div>
+            <div class="reveal d1">
+              <p class="num">01 Series</p>
+              <h3 class="h3">Quad core balanced microphone cables</h3>
+              <p class="body" style="margin-top:22px">Our microphone cables are precision–engineered for professional audio applications, delivering exceptional signal integrity, durability, and mechanical resilience.</p>
+              <details class="more">
+                <summary>Read more</summary>
+                <p class="body">Built around a quad–core balanced design, they provide superior common–mode noise rejection while also improving electromagnetic interference immunity, phase stability, and overall signal clarity over long cable runs. This architecture enhances performance in electrically noisy environments and helps maintain consistent audio fidelity under demanding conditions.</p>
+                <p class="body">Each cable is terminated with our patented compact SPX and SPXA series connectors, ensuring reliable, space–efficient integration.</p>
+                <p class="body">As a result, these cables are suited for a broad range of demanding professional audio environments, including live sound reinforcement, broadcast and OB production, studio recording, post-production facilities, theatrical sound systems, touring rigs, and permanent installed audio infrastructures.</p>
+              </details>
+              <p class="avail">Available in four connector configurations, with six standard lengths offered for each: 3, 6, 10, 15, 25, and 50 ft</p>
+            </div>
+          </article>
+          <article class="row">
+            <div class="row-media reveal">
+              <div class="configs">
+                <div class="config-stage">
+                  <img class="on" src="img/r/c02-A.webp" alt="02 Series, configuration 1" loading="lazy">
+                  <img src="img/r/c02-B.webp" alt="02 Series, configuration 2" loading="lazy">
+                  <img src="img/r/c02-C.webp" alt="02 Series, configuration 3" loading="lazy">
+                  <img src="img/r/c02-D.webp" alt="02 Series, configuration 4" loading="lazy">
+                </div>
+                <div class="dots" aria-label="Connector configurations"></div>
+              </div>
+            </div>
+            <div class="reveal d1">
+              <p class="num">02 Series</p>
+              <h3 class="h3">Quad core balanced patch cables</h3>
+              <p class="body" style="margin-top:22px">Our balanced patch cables are built using the same high–performance microphone wire, delivering identical levels of signal integrity, durability, and mechanical resilience in a compact format.</p>
+              <details class="more">
+                <summary>Read more</summary>
+                <p class="body">Leveraging a quad-core balanced design, they offer excellent noise rejection, enhanced immunity to electromagnetic interference, and stable signal transmission, even in high–density or electrically challenging environments.</p>
+                <p class="body">Paired with our patented compact SPX, SPXA, and SPS–S series connectors, these patch cables provide a space-efficient solution without compromising performance. They are ideally suited for patch bays, rack systems, and interconnect applications across live sound, broadcast, studio, and installed audio environments where reliability, clarity, and efficient cable management are essential.</p>
+              </details>
+              <p class="avail">Available in four connector configurations, with four standard lengths offered for each: 3, 6, 10, and 15 ft.</p>
+            </div>
+          </article>
+          <article class="row">
+            <div class="row-media reveal">
+              <div class="configs">
+                <div class="config-stage">
+                  <img class="on" src="img/r/c03-A.webp" alt="03 Series, configuration 1" loading="lazy">
+                  <img src="img/r/c03-B.webp" alt="03 Series, configuration 2" loading="lazy">
+                  <img src="img/r/c03-D.webp" alt="03 Series, configuration 3" loading="lazy">
+                  <img src="img/r/c03-E.webp" alt="03 Series, configuration 4" loading="lazy">
+                </div>
+                <div class="dots" aria-label="Connector configurations"></div>
+              </div>
+            </div>
+            <div class="reveal d1">
+              <p class="num">03 Series</p>
+              <h3 class="h3">Ultra low capacitance unbalanced instrument cables</h3>
+              <p class="body" style="margin-top:22px">SP instrument cables are built around a proprietary low–capacitance unbalanced design rated at just 70pF/m 21pF/ft, delivering extended high–frequency response, enhanced clarity, and a tight, punchy tone. The construction incorporates dual semi–conductive shield layers combined with a 97% coverage spiral shield, minimizing microphonics while providing excellent electromagnetic interference rejection.</p>
+              <details class="more">
+                <summary>Read more</summary>
+                <p class="body">With an overall diameter of just under 6.5mm, these cables offer superior flexibility and handling, while maintaining a low–capacitance performance typically associated with larger cables in the 7.5–8.0mm OD range.</p>
+                <p class="body">Our instrument cables are available with a choice of connector configurations to suit different usage environments.</p>
+                <p class="body">For standard and everyday applications, they are fitted with the compact SPS6M and SP600 connectors, offering a low-profile solution with reliable performance in fixed installations and regular use scenarios.</p>
+                <p class="body">For touring, stage, and other high–cycle environments requiring frequent mating and unmating, they are available with SPS7M and SP700 connectors, engineered for increased durability and mechanical robustness under demanding conditions.</p>
+              </details>
+              <p class="avail">Available in four connector configurations with five standard lengths offered for each: 3, 6, 10, 15, and 20 ft.</p>
+            </div>
+          </article>
+          <article class="row">
+            <div class="row-media reveal">
+              <div class="configs">
+                <div class="config-stage">
+                  <img class="on" src="img/r/c04-A.webp" alt="04 Series, configuration 1" loading="lazy">
+                  <img src="img/r/c04-B.webp" alt="04 Series, configuration 2" loading="lazy">
+                  <img src="img/r/c04-C.webp" alt="04 Series, configuration 3" loading="lazy">
+                </div>
+                <div class="dots" aria-label="Connector configurations"></div>
+              </div>
+            </div>
+            <div class="reveal d1">
+              <p class="num">04 Series</p>
+              <h3 class="h3">Ultra low capacitance unbalanced pedalboard cables</h3>
+              <p class="body" style="margin-top:22px">SP pedalboard/patch cables are designed to deliver an optimal balance of compact form factor, flexibility, and high–fidelity audio performance for both pedalboard and rack integration.</p>
+              <details class="more">
+                <summary>Read more</summary>
+                <p class="body">With a low capacitance of 80 pF/m 24 pF/ft, they ensure accurate signal transfer and preserved high-frequency detail even in complex signal chains.</p>
+                <p class="body">The construction features a slim 4.5mm outer diameter for maximum routing flexibility, alongside a semi–conductive layer and a 97% coverage spiral shield for effective rejection of noise and microphonics.</p>
+                <p class="body">Combined with compact SP400 and SPS4 angled and straight connectors, these cables provide a reliable and space-efficient solution for high–density, performance–critical wiring applications.</p>
+              </details>
+              <p class="avail">Available in three connector configurations, with multiple standard lengths offered for each: 4, 6, 8, 10, 12, and 20 in.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Downloads -->
+    <section class="block" id="downloads" style="padding-top:0">
+      <div class="wrap">
+        <h2 class="h1 reveal">Downloads</h2>
+        <div class="downloads">
+          <div class="dl reveal">
+            <h3>Catalog</h3>
+            <a href="https://www.kmmk.solutions/kmmk%20solutions%20catalog.pdf" target="_blank" rel="noopener">KMMK Solutions catalog</a>
+          </div>
+          <div class="dl reveal d1">
+            <h3>SP Connectors</h3>
+            <a href="https://www.kmmk.solutions/sp%20connectors%20specs.pdf" target="_blank" rel="noopener">Specs</a>
+            <a href="https://www.kmmk.solutions/sp%20connectors%20range.pdf" target="_blank" rel="noopener">Range</a>
+          </div>
+          <div class="dl reveal d2">
+            <h3>SP Cables</h3>
+            <a href="https://www.kmmk.solutions/sp%20cables%20specs.pdf" target="_blank" rel="noopener">Specs</a>
+            <a href="https://www.kmmk.solutions/sp%20cables%20range.pdf" target="_blank" rel="noopener">Range</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="block black" id="contact">
+      <div class="wrap contact">
+        <div>
+          <h2 class="h1 reveal">Contact</h2>
+          <p class="lead reveal d1" style="margin-top:16px">Tell us a bit about your project</p>
+        </div>
+        <!-- Template form: connect "action" to the site's form handler -->
+        <form class="form reveal d1" action="#" method="post" novalidate>
+          <div class="field"><label for="f-first">First Name *</label><input id="f-first" name="first_name" autocomplete="given-name" required></div>
+          <div class="field"><label for="f-last">Last Name *</label><input id="f-last" name="last_name" autocomplete="family-name" required></div>
+          <div class="field"><label for="f-email">Email *</label><input id="f-email" name="email" type="email" autocomplete="email" required></div>
+          <div class="field"><label for="f-phone">Phone</label><input id="f-phone" name="phone" type="tel" autocomplete="tel"></div>
+          <div class="field"><label for="f-company">Company Name</label><input id="f-company" name="company" autocomplete="organization"></div>
+          <div class="field"><label for="f-web">Website</label><input id="f-web" name="website" type="url" autocomplete="url"></div>
+          <fieldset class="field full">
+            <legend>You are *</legend>
+            <div class="chips">
+              <label><input type="radio" name="role" value="Professional Rig Builder" required><span>Professional Rig Builder</span></label>
+              <label><input type="radio" name="role" value="System Integrator"><span>System Integrator</span></label>
+              <label><input type="radio" name="role" value="Dealer"><span>Dealer</span></label>
+              <label><input type="radio" name="role" value="Distributor"><span>Distributor</span></label>
+              <label><input type="radio" name="role" value="Other"><span>Other</span></label>
+            </div>
+          </fieldset>
+          <div class="field full"><label for="f-msg">Your message *</label><textarea id="f-msg" name="message" required></textarea></div>
+          <div class="field full" style="align-items:flex-start"><button class="btn" type="submit">Submit</button></div>
+          <p class="form-note" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div>
+        <nav>
+          <a href="#connectors">SP Connectors</a>
+          <a href="#cables">SP Cables</a>
+          <a href="#about">About us</a>
+          <a href="#downloads">Downloads</a>
+          <a href="#contact">Contact</a>
+          <a href="https://www.kmmk.solutions/faq">FAQ</a>
+        </nav>
+      </div>
+      <div>
+        <p>© 2026 KMMK Solutions</p>
+        <nav>
+          <a href="https://www.kmmk.solutions/terms">Terms and Conditions</a>
+          <a href="https://www.kmmk.solutions/privacy">Privacy Policy</a>
+          <a href="https://www.kmmk.solutions/cookies">Cookie Policy</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+  // Mobile menu
+  (function () {
+    var nav = document.getElementById('nav');
+    var btn = nav.querySelector('.nav-toggle');
+    btn.addEventListener('click', function () {
+      var open = nav.classList.toggle('open');
+      btn.setAttribute('aria-expanded', String(open));
+    });
+    nav.querySelectorAll('.nav-links a').forEach(function (a) {
+      a.addEventListener('click', function () { nav.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); });
+    });
+  })();
+
+  // Nav turns dark over black sections
+  (function () {
+    var nav = document.getElementById('nav');
+    var darks = [].slice.call(document.querySelectorAll('section.black, footer'));
+    function update() {
+      var y = nav.offsetHeight / 2;
+      var over = darks.some(function (s) { var r = s.getBoundingClientRect(); return r.top <= y && r.bottom >= y; });
+      nav.classList.toggle('dark', over);
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  })();
+
+  // Fade content in as it enters the viewport
+  (function () {
+    var els = document.querySelectorAll('.reveal');
+    if (!('IntersectionObserver' in window)) { els.forEach(function (e) { e.classList.add('in'); }); return; }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { rootMargin: '0px 0px -10% 0px' });
+    els.forEach(function (e) { io.observe(e); });
+  })();
+
+  // Cable configuration switchers: one dot per render, auto-advance while visible
+  (function () {
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    document.querySelectorAll('.configs').forEach(function (box) {
+      var imgs = box.querySelectorAll('.config-stage img');
+      var dots = box.querySelector('.dots');
+      var i = 0, timer = 0, touched = false;
+      imgs.forEach(function (img, n) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.setAttribute('aria-label', 'Configuration ' + (n + 1));
+        b.setAttribute('aria-pressed', String(n === 0));
+        b.addEventListener('click', function () { touched = true; stop(); show(n); });
+        dots.appendChild(b);
+      });
+      var btns = dots.querySelectorAll('button');
+      function show(n) {
+        imgs[i].classList.remove('on'); btns[i].setAttribute('aria-pressed', 'false');
+        i = n;
+        imgs[i].classList.add('on'); btns[i].setAttribute('aria-pressed', 'true');
+      }
+      function stop() { clearInterval(timer); timer = 0; }
+      if (reduced || !('IntersectionObserver' in window)) return;
+      new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting && !timer && !touched) timer = setInterval(function () { show((i + 1) % imgs.length); }, 2600);
+          else if (!e.isIntersecting) stop();
+        });
+      }, { threshold: 0.5 }).observe(box);
+    });
+  })();
+
+  // Exploded-view gallery arrows
+  (function () {
+    var g = document.getElementById('gallery');
+    document.querySelectorAll('.gallery-nav button').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var w = g.querySelector('figure').offsetWidth + 24;
+        g.scrollBy({ left: w * +b.dataset.dir, behavior: 'smooth' });
+      });
+    });
+  })();
+
+  // Template form: no handler connected yet
+  (function () {
+    var form = document.querySelector('.form');
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      form.querySelector('.form-note').textContent = 'Preview only — the form will be connected on the live site.';
+    });
+  })();
+
+  // Hero: scroll-scrubbed frame sequence. Uses the "without spin" range of
+  // the KMMK exploded-view render; phones load the lighter 720 px set.
+  (function () {
+    var SEQ = '../seq/kmmk-solutions/';
+    var START = 66, END = 252;            // without the opening spin
+    var N = END - START + 1;
+
+    var track = document.querySelector('.hero-track');
+    var stage = document.querySelector('.hero-stage');
+    var canvas = document.querySelector('.hero-canvas');
+    var copy = document.querySelector('.hero-copy');
+    var cue = document.querySelector('.scroll-cue');
+    var captions = [].slice.call(document.querySelectorAll('.caption'));
+    var ctx = canvas.getContext('2d');
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    var cssSize = canvas.getBoundingClientRect().width || 600;
+    var lite = cssSize * Math.min(window.devicePixelRatio || 1, 2) <= 830;
+    var base = SEQ + (lite ? 'm/' : '');
+    var px = lite ? 720 : 1400;
+    canvas.width = canvas.height = px;
+
+    var frames = new Array(N), loaded = new Array(N).fill(false);
+    var shown = -1, pos = 0, raf = 0;
+
+    function url(i) { return base + 'frame-' + String(START + i).padStart(4, '0') + '.webp'; }
+    function nearest(n) {
+      if (loaded[n]) return n;
+      for (var d = 1; d < N; d++) {
+        if (n - d >= 0 && loaded[n - d]) return n - d;
+        if (n + d < N && loaded[n + d]) return n + d;
+      }
+      return -1;
+    }
+    function draw(n) {
+      var f = nearest(n);
+      if (f < 0 || f === shown) return;
+      shown = f;
+      ctx.clearRect(0, 0, px, px);
+      ctx.drawImage(frames[f], 0, 0, px, px);
+    }
+    function progress() {
+      var r = track.getBoundingClientRect();
+      var dist = r.height - stage.offsetHeight;
+      return dist > 0 ? Math.min(1, Math.max(0, -r.top / dist)) : 0;
+    }
+    function tick() {
+      var p = progress();
+      var target = p * (N - 1);
+      pos += (target - pos) * 0.22;
+      if (Math.abs(target - pos) < 0.05) pos = target;
+      draw(Math.round(pos));
+      var h = Math.min(1, p / 0.16);
+      copy.style.opacity = String(1 - h);
+      copy.style.transform = 'translateY(' + (-40 * h) + 'px)';
+      cue.style.opacity = p > 0.02 ? '0' : '1';
+      captions.forEach(function (c) { c.classList.toggle('on', p >= +c.dataset.from && p < +c.dataset.to); });
+      raf = pos === target ? 0 : requestAnimationFrame(tick);
+    }
+    function kick() { if (!raf) raf = requestAnimationFrame(tick); }
+
+    function load(i, done) {
+      var img = new Image();
+      img.onload = function () { frames[i] = img; loaded[i] = true; shown = -1; draw(Math.round(pos)); done(); };
+      img.onerror = done;
+      img.src = url(i);
+    }
+
+    if (reduced) {
+      var still = Math.round(N * 0.45);
+      load(still, function () { pos = still; draw(still); });
+      return;
+    }
+
+    var order = [0], seen = { 0: 1 };
+    for (var step = 16; step >= 1; step >>= 1)
+      for (var k = 0; k < N; k += step) if (!seen[k]) { seen[k] = 1; order.push(k); }
+    var next = 0, inFlight = 0;
+    (function pump() {
+      while (inFlight < 6 && next < order.length) {
+        inFlight++;
+        load(order[next++], function () { inFlight--; pump(); });
+      }
+    })();
+
+    window.addEventListener('scroll', kick, { passive: true });
+    window.addEventListener('resize', kick);
+    kick();
+  })();
+  </script>
+</body>
+</html>
