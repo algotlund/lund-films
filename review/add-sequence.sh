@@ -93,7 +93,7 @@ cat > "$OUT/meta.json" <<JSON
   "bg": "$BG",
   "scroll": $SCROLL,
 $([ -n "$CUTS" ] && echo "  \"cuts\": [ { \"label\": \"Full animation\", \"start\": 0 }$CUTS ],")
-  "updated": "$(date +%Y-%m-%d)"
+  "updated": "$(date +%Y-%m-%d-%H%M)"
 }
 JSON
 
