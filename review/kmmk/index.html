@@ -122,8 +122,9 @@
     .intro .h1 { margin-bottom: 28px; }
     .intro .lead + .lead { margin-top: 14px; }
 
-    .film { max-width: 760px; margin: 72px auto 0; aspect-ratio: 1 / 1; background: #000; overflow: hidden; border-radius: 28px; }
-    .film video { width: 100%; height: 100%; object-fit: cover; }
+    .family { margin: 96px 0 0; overflow-x: auto; scrollbar-width: none; }
+    .family::-webkit-scrollbar { display: none; }
+    .family img { width: 100%; height: auto; }
 
     /* Product rows */
     .rows { margin-top: 120px; }
@@ -133,7 +134,8 @@
     }
     .row:nth-child(even) .row-media { order: 2; }
     .row-media { display: flex; align-items: center; justify-content: center; min-height: 340px; }
-    .row-media > img { max-height: 360px; width: auto; object-fit: contain; transition: transform 1.2s cubic-bezier(.2,.7,.2,1); }
+    /* All product renders share one crop window: same width = same zoom (true relative size) */
+    .row-media > img { width: 100%; height: auto; transition: transform 1.2s cubic-bezier(.2,.7,.2,1); }
     .row:hover .row-media > img { transform: scale(1.04); }
     .row .num { font-size: 14px; color: var(--grey-1); font-variant-numeric: tabular-nums; margin-bottom: 14px; }
     .row .sub { font-size: 19px; color: var(--grey-1); margin: 6px 0 22px; letter-spacing: -0.012em; }
@@ -161,8 +163,9 @@
     .gallery { display: flex; gap: 24px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 0 22px 8px; margin: 72px auto 0; max-width: calc(var(--wrap) + 44px); scrollbar-width: none; }
     .gallery::-webkit-scrollbar { display: none; }
     .gallery figure { flex: 0 0 min(82vw, 760px); scroll-snap-align: center; }
-    .gallery .frame { aspect-ratio: 16 / 9; display: flex; align-items: center; justify-content: center; border: 1px solid var(--line-dark); border-radius: 28px; padding: 6%; }
-    .gallery img { max-height: 100%; width: auto; object-fit: contain; }
+    .gallery .frame { display: flex; align-items: center; justify-content: center; border: 1px solid var(--line-dark); border-radius: 28px; padding: 4% 3%; }
+    /* Exploded renders share one crop window, so they keep true relative size */
+    .gallery img { width: 100%; height: auto; }
     .gallery figcaption { margin-top: 14px; font-size: 14px; color: var(--grey-2); }
     .gallery-nav { display: flex; justify-content: flex-end; gap: 12px; max-width: var(--wrap); margin: 20px auto 0; padding: 0 22px; }
     .gallery-nav button { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line-dark); background: transparent; color: var(--white); cursor: pointer; font-size: 18px; transition: background 0.2s, color 0.2s; }
@@ -244,7 +247,8 @@
       .row { grid-template-columns: 1fr; gap: 28px; padding: 56px 0; }
       .row:nth-child(even) .row-media { order: 0; }
       .row-media { min-height: 0; }
-      .row-media > img { max-height: 240px; }
+      .family { margin: 64px -22px 0; padding: 0 22px; }
+      .family img { width: auto; max-width: none; height: 96px; }
       .downloads { grid-template-columns: 1fr; }
       .dl, .dl + .dl { padding: 28px 0 0; border-left: 0; }
       .form { grid-template-columns: 1fr; }
@@ -345,10 +349,9 @@
           <p class="lead reveal d2">SquarePlug (SP) offers the industry’s most comprehensive selection of ultra-compact, performance-optimized audio connectors.</p>
           <p class="lead reveal d2">They provide a true "fit-anywhere" solution for virtually any application, supporting both high-density and standard-clearance cabling.</p>
         </div>
-        <div class="film reveal">
-          <video autoplay muted loop playsinline preload="metadata" poster="img/sp-poster.jpg">
-            <source src="img/sp-hero.mp4" type="video/mp4">
-          </video>
+        <!-- The range, side by side at true relative size -->
+        <div class="family reveal" role="img" aria-label="The SP connector range side by side: SPXA, SPX, SPD, SP, SPS, SP3.5 and SPDC">
+          <img src="img/r/family.webp" alt="" loading="lazy">
         </div>
 
         <div class="rows">
@@ -524,7 +527,6 @@
                   <img class="on" src="img/r/c03-A.webp" alt="03 Series, configuration 1" loading="lazy">
                   <img src="img/r/c03-B.webp" alt="03 Series, configuration 2" loading="lazy">
                   <img src="img/r/c03-D.webp" alt="03 Series, configuration 3" loading="lazy">
-                  <img src="img/r/c03-E.webp" alt="03 Series, configuration 4" loading="lazy">
                 </div>
                 <div class="dots" aria-label="Connector configurations"></div>
               </div>
