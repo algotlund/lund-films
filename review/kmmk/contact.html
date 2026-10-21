@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Contact — KMMK</title>
+  <meta name="description" content="Contact KMMK Solutions.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body class="">
+
+  <header class="nav" id="nav">
+    <div class="wrap">
+      <a href="index.html" class="logo" aria-label="KMMK — Home">KMMK</a>
+      <nav class="nav-links" id="nav-links">
+        <a href="index.html">Home</a>
+        <a href="sp-connectors.html">SP Connectors</a>
+        <a href="sp-cables.html">SP Cables</a>
+        <a href="about.html">About us</a>
+        <a href="downloads.html">Downloads</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <button class="nav-toggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav-links"><span></span><span></span></button>
+    </div>
+  </header>
+
+  <main>
+    <section class="block black" style="min-height:calc(100vh - var(--nav-h))">
+      <div class="wrap contact">
+        <div>
+          <h1 class="h1 reveal">Contact</h1>
+          <p class="lead reveal d1" style="margin-top:16px">Tell us a bit about your project</p>
+        </div>
+        <!-- Template form: connect "action" to the site's form handler -->
+        <form class="form reveal d1" action="#" method="post" novalidate>
+          <div class="field"><label for="f-first">First Name *</label><input id="f-first" name="first_name" autocomplete="given-name" required></div>
+          <div class="field"><label for="f-last">Last Name *</label><input id="f-last" name="last_name" autocomplete="family-name" required></div>
+          <div class="field"><label for="f-email">Email *</label><input id="f-email" name="email" type="email" autocomplete="email" required></div>
+          <div class="field"><label for="f-phone">Phone</label><input id="f-phone" name="phone" type="tel" autocomplete="tel"></div>
+          <div class="field"><label for="f-company">Company Name</label><input id="f-company" name="company" autocomplete="organization"></div>
+          <div class="field"><label for="f-web">Website</label><input id="f-web" name="website" type="url" autocomplete="url"></div>
+          <fieldset class="field full">
+            <legend>You are *</legend>
+            <div class="chips">
+              <label><input type="radio" name="role" value="Professional Rig Builder" required><span>Professional Rig Builder</span></label>
+              <label><input type="radio" name="role" value="System Integrator"><span>System Integrator</span></label>
+              <label><input type="radio" name="role" value="Dealer"><span>Dealer</span></label>
+              <label><input type="radio" name="role" value="Distributor"><span>Distributor</span></label>
+              <label><input type="radio" name="role" value="Other"><span>Other</span></label>
+            </div>
+          </fieldset>
+          <div class="field full"><label for="f-msg">Your message *</label><textarea id="f-msg" name="message" required></textarea></div>
+          <div class="field full" style="align-items:flex-start"><button class="btn" type="submit">Submit</button></div>
+          <p class="form-note" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div>
+        <nav>
+          <a href="sp-connectors.html">SP Connectors</a>
+          <a href="sp-cables.html">SP Cables</a>
+          <a href="about.html">About us</a>
+          <a href="downloads.html">Downloads</a>
+          <a href="contact.html">Contact</a>
+          <a href="https://www.kmmk.solutions/faq">FAQ</a>
+        </nav>
+      </div>
+      <div>
+        <p>© 2026 KMMK Solutions</p>
+        <nav>
+          <a href="https://www.kmmk.solutions/terms">Terms and Conditions</a>
+          <a href="https://www.kmmk.solutions/privacy">Privacy Policy</a>
+          <a href="https://www.kmmk.solutions/cookies">Cookie Policy</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/site.js"></script>
+</body>
+</html>
