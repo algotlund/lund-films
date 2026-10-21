@@ -85,23 +85,24 @@ section.block { padding: 140px 0; }
   padding: 6vh 22px 4vh; text-align: center; gap: 2vh;
 }
 .home-hero .lead { margin-top: 12px; }
-/* Drawn cropped to the product (data-crop), at twice its earlier size:
-   the full frame used to be 84vh wide and the product spans 93% of it. */
-.home-canvas { width: min(156vh, calc(100vw - 32px)); max-width: none; height: auto; flex: none; }
+/* Drawn cropped to the product (data-crop). 0.7 = 30% smaller than the
+   "twice as big" size (156vh, or the screen width on phones). */
+.home-canvas { width: calc(min(156vh, 100vw - 32px) * 0.7); max-width: none; height: auto; flex: none; }
 .home-links { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 0 22px 140px; max-width: calc(var(--wrap) + 44px); margin: 0 auto; }
 .home-link {
   display: flex; flex-direction: column; align-items: center; text-align: center;
   padding: 64px 40px 0; border-radius: 28px; overflow: hidden; min-height: 560px;
-  background: var(--white); box-shadow: inset 0 0 0 1px var(--line);
+  background: var(--white);
   transition: transform 0.5s cubic-bezier(.2,.7,.2,1);
 }
 .home-link.dark { background: var(--black); color: var(--white); box-shadow: none; }
 .home-link.dark .lead { color: var(--grey-2); }
 .home-link:hover { transform: scale(1.01); }
 .home-link .lead { margin: 10px 0 18px; font-size: 19px; }
-.home-link .art { margin-top: auto; width: 100%; display: flex; justify-content: center; align-items: flex-end; }
+.home-link .art { flex: 1; width: 100%; display: flex; justify-content: center; align-items: center; padding: 24px 0 56px; }
 .home-link .art img { width: 100%; height: auto; }
 .home-link .art.cable img { width: 72%; }
+.home-link .art.connector img { width: 86%; }
 
 /* ---------------- About ---------------- */
 .about-text { font-size: clamp(26px, 3.4vw, 44px); font-weight: 600; line-height: 1.18; letter-spacing: -0.028em; max-width: 980px; }
@@ -171,9 +172,8 @@ details.more[open] summary { margin-bottom: 12px; }
 .cable-controls { grid-area: controls; align-self: start; display: flex; flex-direction: column; align-items: center; gap: 14px; }
 /* Per-configuration text, synced with the pictures */
 .config-panel { grid-area: panel; align-self: start; }
-.config-panel .head { display: flex; align-items: center; gap: 18px; height: 36px; margin-bottom: 14px; }
-.config-panel .head .config-name { min-width: 2.8em; text-align: center; }
-.config-texts { display: grid; }
+.config-panel .head { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; margin-bottom: 14px; }
+.config-texts { display: grid; margin-top: 28px; }
 .config-texts > p { grid-area: 1 / 1; font-size: 15px; color: var(--black); opacity: 0; visibility: hidden; transform: translateY(6px); transition: opacity 0.4s, transform 0.4s, visibility 0.4s; }
 .config-texts > p.on { opacity: 1; visibility: visible; transform: none; }
 

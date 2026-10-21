@@ -132,7 +132,7 @@
       // Old size: the whole frame fitted in the box. Now the product is drawn
       // at twice that size, limited by the space available.
       var old = Math.min(bw, bh / r, 1100) * (c[2] - c[0]);
-      var w = Math.min(old * (+cc.dataset.scale || 1), bw, bh / cr);
+      var w = Math.min(old * (+cc.dataset.scale || 1), bw, bh / cr) * (+cc.dataset.size || 1);
       cc.style.width = w + 'px'; cc.style.height = w * cr + 'px';
     }
     fitCanvas();
@@ -211,20 +211,9 @@
   $$('.cable-row').forEach(function (row) {
     var stage = $('.config-stage', row);
     var imgs = $$('img', stage);
-    var dots = $('.dots', row);
     var names = $$('.config-name', row);
     var texts = $$('.config-texts > p', row);
     var i = 0, timer = 0, touched = false;
-
-    imgs.forEach(function (img, n) {
-      var b = document.createElement('button');
-      b.type = 'button';
-      b.setAttribute('aria-label', img.dataset.name);
-      b.setAttribute('aria-pressed', String(n === 0));
-      b.addEventListener('click', function () { user(n); });
-      dots.appendChild(b);
-    });
-    var dotBtns = $$('button', dots);
 
     function makeArrow(dir) {
       var a = document.createElement('button');
@@ -235,25 +224,37 @@
       a.addEventListener('click', function () { user((i + dir + imgs.length) % imgs.length); });
       return a;
     }
-    // Picture controls: ‹ dots ›
-    var navWrap = document.createElement('div');
-    navWrap.className = 'config-nav';
-    dots.parentNode.insertBefore(navWrap, dots);
-    navWrap.appendChild(makeArrow(-1));
-    navWrap.appendChild(dots);
-    navWrap.appendChild(makeArrow(1));
-    // Text controls on the same line: ‹ 01A ›
-    var head = $('.config-panel .head', row);
-    if (head) {
-      head.insertBefore(makeArrow(-1), head.firstChild);
-      head.appendChild(makeArrow(1));
+    // Builds ‹ dots › into a holder; used under the picture and in the text panel
+    var dotSets = [];
+    function controls(holder) {
+      var d = document.createElement('div');
+      d.className = 'dots';
+      imgs.forEach(function (img, n) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.setAttribute('aria-label', img.dataset.name);
+        b.setAttribute('aria-pressed', String(n === 0));
+        b.addEventListener('click', function () { user(n); });
+        d.appendChild(b);
+      });
+      dotSets.push($$('button', d));
+      var nav = document.createElement('div');
+      nav.className = 'config-nav';
+      nav.appendChild(makeArrow(-1));
+      nav.appendChild(d);
+      nav.appendChild(makeArrow(1));
+      holder.insertBefore(nav, holder.firstChild);
     }
+    controls($('.cable-controls', row));
+    var head = $('.config-panel .head', row);
+    if (head) controls(head);
+    var dotBtns = { setAttr: function (n, v) { dotSets.forEach(function (set) { set[n].setAttribute('aria-pressed', v); }); } };
 
     function show(n) {
-      imgs[i].classList.remove('on'); dotBtns[i].setAttribute('aria-pressed', 'false');
+      imgs[i].classList.remove('on'); dotBtns.setAttr(i, 'false');
       if (texts[i]) texts[i].classList.remove('on');
       i = n;
-      imgs[i].classList.add('on'); dotBtns[i].setAttribute('aria-pressed', 'true');
+      imgs[i].classList.add('on'); dotBtns.setAttr(i, 'true');
       if (texts[i]) texts[i].classList.add('on');
       names.forEach(function (el) { el.textContent = imgs[i].dataset.name; });
     }
