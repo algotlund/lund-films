@@ -243,11 +243,14 @@
     navWrap.appendChild(makeArrow(-1));
     navWrap.appendChild(dots);
     navWrap.appendChild(makeArrow(1));
-    // Arrows either side of the name in the text panel
+    // Arrows side by side in the text panel, with the name on the line below
     var head = $('.config-panel .head', row);
     if (head) {
-      head.insertBefore(makeArrow(-1, true), head.firstChild);
-      head.appendChild(makeArrow(1, true));
+      var pair = document.createElement('div');
+      pair.className = 'pair';
+      pair.appendChild(makeArrow(-1, true));
+      pair.appendChild(makeArrow(1, true));
+      head.insertBefore(pair, head.firstChild);
     }
 
     function show(n) {
