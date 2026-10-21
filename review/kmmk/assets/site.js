@@ -43,13 +43,20 @@
   // ---------- Frame sequences ----------
   // Loads frames START..END of a sequence made by review/add-sequence.sh.
   // Phones (or small canvases) get the lighter m/ set.
+  // data-crop="x1,y1,x2,y2" (fractions of the frame) draws only the area the
+  // product ever occupies, so the canvas carries no empty margin.
+  function cropOf(canvas) {
+    return (canvas.dataset.crop || '0,0,1,1').split(',').map(Number);
+  }
   function sequence(canvas, onLoad) {
     var seq = canvas.dataset.seq, start = +canvas.dataset.start || 0, end = +canvas.dataset.end;
     var full = +canvas.dataset.full, lite = +canvas.dataset.lite, ratio = +canvas.dataset.ratio || 1;
+    var crop = cropOf(canvas), cw = crop[2] - crop[0], ch = crop[3] - crop[1];
     var cssW = canvas.getBoundingClientRect().width || 600;
-    var useLite = lite && cssW * Math.min(window.devicePixelRatio || 1, 2) <= lite * 1.15;
-    var w = useLite ? lite : full;
-    canvas.width = w; canvas.height = Math.round(w * ratio);
+    var useLite = lite && cssW * Math.min(window.devicePixelRatio || 1, 2) / cw <= lite * 1.15;
+    var w = useLite ? lite : full, h = Math.round(w * ratio);
+    var sx = crop[0] * w, sy = crop[1] * h, sw = cw * w, sh = ch * h;
+    canvas.width = Math.round(sw); canvas.height = Math.round(sh);
     var base = seq + (useLite ? 'm/' : '');
     var n = end - start + 1, frames = new Array(n), loaded = new Array(n).fill(false), count = 0;
     var order = [0], seen = { 0: 1 };
@@ -82,7 +89,7 @@
         if (f < 0 || (f === shown && !force)) return;
         shown = f;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(frames[f], 0, 0, canvas.width, canvas.height);
+        ctx.drawImage(frames[f], sx, sy, sw, sh, 0, 0, canvas.width, canvas.height);
       }
     };
   }
@@ -121,8 +128,12 @@
     // Fit the canvas into the space left under the text
     function fitCanvas() {
       var r = +cc.dataset.ratio || 1, bw = box.clientWidth, bh = box.clientHeight;
-      var w = Math.min(bw, bh / r, 1100);
-      cc.style.width = w + 'px'; cc.style.height = w * r + 'px';
+      var c = cropOf(cc), cr = (c[3] - c[1]) * r / (c[2] - c[0]);
+      // Old size: the whole frame fitted in the box. Now the product is drawn
+      // at twice that size, limited by the space available.
+      var old = Math.min(bw, bh / r, 1100) * (c[2] - c[0]);
+      var w = Math.min(old * (+cc.dataset.scale || 1), bw, bh / cr);
+      cc.style.width = w + 'px'; cc.style.height = w * cr + 'px';
     }
     fitCanvas();
     // Split typed text into per-character spans
