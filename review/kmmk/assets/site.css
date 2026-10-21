@@ -156,10 +156,23 @@ details.more[open] summary { margin-bottom: 12px; }
 .dots button[aria-pressed="true"] { background: var(--black); }
 .config-name { font-size: 15px; font-weight: 600; letter-spacing: 0.02em; font-variant-numeric: tabular-nums; min-height: 1.4em; }
 
+/* Cable rows: picture | text on top, picture controls | text controls below,
+   so both sets of controls always share one line */
+.cable-row {
+  display: grid; grid-template-columns: 1fr 1fr; column-gap: 72px; row-gap: 24px; padding: 72px 0;
+  grid-template-areas: "media text" "controls panel"; align-items: center;
+}
+.cable-row:nth-child(even) { grid-template-areas: "text media" "panel controls"; }
+.cable-media { grid-area: media; display: flex; justify-content: center; }
+.cable-text { grid-area: text; }
+.cable-text .num { font-size: 14px; color: var(--grey-1); margin-bottom: 14px; }
+.cable-text p.body { color: var(--grey-1); font-size: 16px; margin-top: 22px; }
+.cable-text details p.body { margin-top: 12px; }
+.cable-controls { grid-area: controls; align-self: start; display: flex; flex-direction: column; align-items: center; gap: 14px; }
 /* Per-configuration text, synced with the pictures */
-.config-panel { margin-top: 28px; }
-.config-panel .head { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; margin-bottom: 8px; }
-.config-panel .head .pair { display: flex; gap: 10px; }
+.config-panel { grid-area: panel; align-self: start; }
+.config-panel .head { display: flex; align-items: center; gap: 18px; height: 36px; margin-bottom: 14px; }
+.config-panel .head .config-name { min-width: 2.8em; text-align: center; }
 .config-texts { display: grid; }
 .config-texts > p { grid-area: 1 / 1; font-size: 15px; color: var(--black); opacity: 0; visibility: hidden; transform: translateY(6px); transition: opacity 0.4s, transform 0.4s, visibility 0.4s; }
 .config-texts > p.on { opacity: 1; visibility: visible; transform: none; }
@@ -289,6 +302,7 @@ footer a:hover { color: var(--white); }
   .rows { margin-top: 72px; }
   .row { grid-template-columns: 1fr; gap: 28px; padding: 48px 0; }
   .row:nth-child(even) .row-media { order: 0; }
+  .cable-row, .cable-row:nth-child(even) { grid-template-columns: 1fr; grid-template-areas: "media" "controls" "text" "panel"; padding: 48px 0; }
   .row-media { min-height: 0; }
   .family { margin: 64px -22px 0; padding: 0 22px; }
   .family img { width: auto; max-width: none; height: 96px; }

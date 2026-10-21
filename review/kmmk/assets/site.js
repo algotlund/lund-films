@@ -208,11 +208,10 @@
     return '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="' + path + '"/></svg>';
   };
   var PREV = 'M10 3 5 8l5 5', NEXT = 'M6 3l5 5-5 5';
-  $$('.row').forEach(function (row) {
-    var box = $('.configs', row);
-    if (!box) return;
-    var imgs = $$('.config-stage img', box);
-    var dots = $('.dots', box);
+  $$('.cable-row').forEach(function (row) {
+    var stage = $('.config-stage', row);
+    var imgs = $$('img', stage);
+    var dots = $('.dots', row);
     var names = $$('.config-name', row);
     var texts = $$('.config-texts > p', row);
     var i = 0, timer = 0, touched = false;
@@ -227,30 +226,27 @@
     });
     var dotBtns = $$('button', dots);
 
-    function makeArrow(dir, small) {
+    function makeArrow(dir) {
       var a = document.createElement('button');
       a.type = 'button';
-      a.className = 'arrow' + (small ? ' small' : '');
+      a.className = 'arrow';
       a.setAttribute('aria-label', dir < 0 ? 'Previous configuration' : 'Next configuration');
       a.innerHTML = arrowSvg(dir < 0 ? PREV : NEXT);
       a.addEventListener('click', function () { user((i + dir + imgs.length) % imgs.length); });
       return a;
     }
-    // Arrows either side of the dots under the picture
+    // Picture controls: ‹ dots ›
     var navWrap = document.createElement('div');
     navWrap.className = 'config-nav';
     dots.parentNode.insertBefore(navWrap, dots);
     navWrap.appendChild(makeArrow(-1));
     navWrap.appendChild(dots);
     navWrap.appendChild(makeArrow(1));
-    // Arrows side by side in the text panel, with the name on the line below
+    // Text controls on the same line: ‹ 01A ›
     var head = $('.config-panel .head', row);
     if (head) {
-      var pair = document.createElement('div');
-      pair.className = 'pair';
-      pair.appendChild(makeArrow(-1, true));
-      pair.appendChild(makeArrow(1, true));
-      head.insertBefore(pair, head.firstChild);
+      head.insertBefore(makeArrow(-1), head.firstChild);
+      head.appendChild(makeArrow(1));
     }
 
     function show(n) {
@@ -269,7 +265,7 @@
         if (e.isIntersecting && !timer && !touched) timer = setInterval(function () { show((i + 1) % imgs.length); }, 3200);
         else if (!e.isIntersecting) { clearInterval(timer); timer = 0; }
       });
-    }, { threshold: 0.5 }).observe(box);
+    }, { threshold: 0.5 }).observe(stage);
   });
 
   // ---------- Exploded-view gallery arrows ----------
