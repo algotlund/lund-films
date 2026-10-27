@@ -7,7 +7,6 @@
   --white: #fff;
   --grey-1: #6e6e73;   /* secondary text on white */
   --grey-2: #86868b;   /* secondary text on black */
-  --grey-3: #c7c7cc;   /* untyped text */
   --line: #d2d2d7;
   --line-dark: #333336;
   --field-dark: #141416;
@@ -185,19 +184,21 @@ details.more[open] summary { margin-bottom: 12px; }
 }
 .corner-label.on-dark { color: var(--white); }
 
-.cable-hero-track { height: 420vh; }
+.cable-hero-track { height: 700vh; }
 .cable-hero-stage {
   position: sticky; top: var(--nav-h); height: calc(100vh - var(--nav-h)); height: calc(100svh - var(--nav-h));
-  display: flex; flex-direction: column; align-items: center; overflow: hidden;
-  padding: 7vh 22px 3vh;
+  overflow: hidden;
 }
-.typed { max-width: 900px; text-align: center; }
-.typed .h1 { margin-bottom: 24px; }
-.typed .lead + .lead { margin-top: 12px; }
-.typed .ch { color: var(--grey-3); transition: color 0.12s linear; }
-.typed .ch.on { color: var(--black); }
-.cable-canvas-box { flex: 1; min-height: 0; width: 100%; display: flex; align-items: center; justify-content: center; }
-.cable-canvas { max-width: 100%; max-height: 100%; }
+/* Fills the screen edge to edge (sized by site.js) */
+.cable-canvas { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); max-width: none; }
+/* Phrases sit in the band above the cables, never on top of them */
+.phrases { position: absolute; left: 0; right: 0; top: 0; height: 30%; display: grid; place-items: center; pointer-events: none; }
+.phrase {
+  grid-area: 1 / 1; max-width: 760px; padding: 0 22px; text-align: center;
+  font-size: clamp(20px, 2.4vw, 32px); font-weight: 600; line-height: 1.15; letter-spacing: -0.022em;
+  opacity: 0; will-change: opacity, transform, filter;
+}
+.phrase.big { font-size: clamp(28px, 3.8vw, 52px); line-height: 1.06; letter-spacing: -0.035em; }
 
 /* Vertical series dots */
 .series-dots {
@@ -310,10 +311,7 @@ footer a:hover { color: var(--white); }
   .dl, .dl + .dl { padding: 28px 0 0; border-left: 0; }
   .form { grid-template-columns: 1fr; }
   .gallery-nav { display: none; }
-  .cable-hero-track { height: 360vh; }
-  .cable-hero-stage { padding-top: 7vh; }
-  .typed .h1 { margin-bottom: 14px; }
-  .typed .lead { font-size: 16px; }
+  .cable-hero-track { height: 600vh; }
   .corner-label { font-size: 13px; top: calc(var(--nav-h) + env(safe-area-inset-top) + 12px); }
   /* Dots only on phones; labels would cover the content */
   .series-dots { left: 6px; gap: 14px; }
@@ -326,5 +324,6 @@ footer a:hover { color: var(--white); }
   .reveal { opacity: 1; transform: none; transition: none; }
   .cable-hero-track { height: auto; }
   .cable-hero-stage { position: relative; height: auto; min-height: 80vh; }
-  .typed .ch { color: inherit; }
+  .phrases { position: relative; height: auto; display: flex; flex-direction: column; gap: 24px; padding: 48px 0; }
+  .phrase { opacity: 1; }
 }

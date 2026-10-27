@@ -121,59 +121,83 @@
     }
   }
 
-  // ---------- SP Cables: scroll animation + typewriter text ----------
+  // ---------- SP Cables: full-screen scroll story ----------
+  // Phrases and animation take turns: while a phrase is on screen (above
+  // the cables) the animation holds still; then the phrase leaves and the
+  // next part of the animation plays. The cables stay visible throughout.
   var cableTrack = $('.cable-hero-track');
   if (cableTrack) {
-    var cc = $('.cable-canvas'), box = $('.cable-canvas-box'), stage = $('.cable-hero-stage');
-    // Fit the canvas into the space left under the text
+    var cc = $('.cable-canvas'), stage = $('.cable-hero-stage');
+    var phrases = $$('.phrase', stage);
+    var story = cc.dataset.story.split(',').map(function (part) {
+      var kv = part.trim().split(':'), w = +kv[1];
+      if (kv[0][0] === 'p') return { phrase: +kv[0].slice(1), w: w };
+      var r = kv[0].split('-');
+      return { from: +r[0], to: +r[1], w: w };
+    });
+    var total = story.reduce(function (a, s) { return a + s.w; }, 0);
+    // Before any animation segment has played, hold on the first segment's start
+    var firstFrame = story.filter(function (s) { return s.phrase == null; })[0].from;
+
+    // Fill the screen without cropping: the frame is transparent on a white
+    // page, so fitting it edge to edge looks full-bleed and never cuts the
+    // exploded parts off.
     function fitCanvas() {
-      var r = +cc.dataset.ratio || 1, bw = box.clientWidth, bh = box.clientHeight;
-      var c = cropOf(cc), cr = (c[3] - c[1]) * r / (c[2] - c[0]);
-      // Old size: the whole frame fitted in the box. Now the product is drawn
-      // at twice that size, limited by the space available.
-      var old = Math.min(bw, bh / r, 1100) * (c[2] - c[0]);
-      var w = Math.min(old * (+cc.dataset.scale || 1), bw, bh / cr) * (+cc.dataset.size || 1);
-      cc.style.width = w + 'px'; cc.style.height = w * cr + 'px';
+      var r = +cc.dataset.ratio || 1, W = stage.clientWidth, H = stage.clientHeight;
+      var w = Math.min(W, H / r);
+      cc.style.width = w + 'px'; cc.style.height = w * r + 'px';
     }
     fitCanvas();
-    // Split typed text into per-character spans
-    var chars = [];
-    $$('.typed [data-type]').forEach(function (el) {
-      var text = el.textContent; el.textContent = '';
-      el.setAttribute('aria-label', text);
-      text.split(/(\s+)/).forEach(function (word) {
-        if (!word) return;
-        if (/^\s+$/.test(word)) { el.appendChild(document.createTextNode(word)); return; }
-        var w = document.createElement('span');
-        w.style.whiteSpace = 'nowrap';
-        w.setAttribute('aria-hidden', 'true');
-        for (var c = 0; c < word.length; c++) {
-          var s = document.createElement('span'); s.className = 'ch'; s.textContent = word[c];
-          w.appendChild(s); chars.push(s);
+
+    var ease = function (t) { return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; };
+    function storyAt(p) {
+      // Frame shown, and which phrase is up (and how far through)
+      var x = p * total, frame = firstFrame, out = { frame: firstFrame, phrase: -1, t: 0 };
+      for (var k = 0; k < story.length; k++) {
+        var s = story[k];
+        if (s.phrase == null) frame = s.from;
+        if (x <= s.w || k === story.length - 1) {
+          var t = Math.min(1, Math.max(0, x / s.w));
+          if (s.phrase != null) {
+            out.phrase = s.phrase; out.t = t;
+          } else frame = s.from + (s.to - s.from) * t;
+          out.frame = frame;
+          return out;
         }
-        el.appendChild(w);
-      });
-    });
-    var typedCount = 0;
-    function typeTo(n) {
-      if (n > typedCount) for (var i = typedCount; i < n; i++) chars[i].classList.add('on');
-      else for (var j = n; j < typedCount; j++) chars[j].classList.remove('on');
-      typedCount = n;
+        if (s.phrase == null) frame = s.to;
+        x -= s.w;
+      }
+      return out;
     }
-    var cablePos = 0, cableRaf = 0;
+    function showPhrases(st) {
+      phrases.forEach(function (el, i) {
+        if (i !== st.phrase) { el.style.opacity = 0; return; }
+        // in: 0–0.3, hold, out: 0.7–1 — rise in, drift up and blur out
+        var t = st.t, o, y, b;
+        if (t < 0.3) { var a = ease(t / 0.3); o = a; y = 40 * (1 - a); b = 8 * (1 - a); }
+        else if (t > 0.7) { var c = ease((t - 0.7) / 0.3); o = 1 - c; y = -40 * c; b = 8 * c; }
+        else { o = 1; y = 0; b = 0; }
+        el.style.opacity = o;
+        el.style.transform = 'translateY(' + y + 'px)';
+        el.style.filter = b ? 'blur(' + b + 'px)' : 'none';
+      });
+    }
+
+    var cablePos = firstFrame, cableRaf = 0;
     var cable = sequence(cc, function () { cable.draw(Math.round(cablePos)); });
     function tick() {
       cableRaf = 0;
       var p = Math.min(1, Math.max(0, -cableTrack.getBoundingClientRect().top / (cableTrack.offsetHeight - stage.offsetHeight)));
-      typeTo(Math.round(chars.length * Math.min(1, p / 0.7)));
-      var target = p * (cable.n - 1);
+      var st = storyAt(p);
+      showPhrases(st);
+      var target = st.frame;
       cablePos += (target - cablePos) * 0.22;
       if (Math.abs(target - cablePos) < 0.05) cablePos = target;
       cable.draw(Math.round(cablePos));
       if (cablePos !== target) cableRaf = requestAnimationFrame(tick);
     }
     function kick() { if (!cableRaf) cableRaf = requestAnimationFrame(tick); }
-    if (reduced) typeTo(chars.length);
+    if (reduced) { cablePos = cable.n - 1; cable.draw(cablePos); }
     else { window.addEventListener('scroll', kick, { passive: true }); kick(); }
     window.addEventListener('resize', function () { fitCanvas(); cable.draw(Math.round(cablePos), true); kick(); });
   }
