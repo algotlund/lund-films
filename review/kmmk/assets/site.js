@@ -90,6 +90,7 @@
         shown = f;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(frames[f], sx, sy, sw, sh, 0, 0, canvas.width, canvas.height);
+        if (canvas.onFrame) canvas.onFrame(start + f, end);
       }
     };
   }
@@ -184,6 +185,13 @@
     }
 
     var cablePos = firstFrame, cableRaf = 0;
+    // Review aid: frame number (matches the render's file numbers) in the corner
+    var counter = document.createElement('div');
+    counter.className = 'frame-counter';
+    counter.setAttribute('aria-hidden', 'true');
+    stage.appendChild(counter);
+    var pad = function (x) { return ('000' + x).slice(-4); };
+    cc.onFrame = function (f, last) { counter.textContent = 'Frame ' + pad(f) + ' / ' + pad(last); };
     var cable = sequence(cc, function () { cable.draw(Math.round(cablePos)); });
     function tick() {
       cableRaf = 0;

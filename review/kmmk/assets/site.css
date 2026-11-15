@@ -191,6 +191,13 @@ details.more[open] summary { margin-bottom: 12px; }
 }
 /* Fills the screen edge to edge (sized by site.js) */
 .cable-canvas { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); max-width: none; }
+/* Review aid: current frame number */
+.frame-counter {
+  position: absolute; right: 16px; bottom: 16px; z-index: 5; pointer-events: none;
+  font: 600 13px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .02em;
+  color: #fff; background: rgba(0,0,0,.6); padding: 7px 10px; border-radius: 6px;
+  font-variant-numeric: tabular-nums;
+}
 /* Phrases sit in the band above the cables, never on top of them */
 .phrases { position: absolute; left: 0; right: 0; top: 0; height: 30%; display: grid; place-items: center; pointer-events: none; }
 .phrase {
