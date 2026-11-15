@@ -1,0 +1,12 @@
+{
+  "title": "15.11.26 scroll 01 pins fixed",
+  "frames": 71,
+  "width": 1980,
+  "height": 1080,
+  "mobile": { "width": 1080, "height": 590 },
+  "ext": "webp",
+  "bg": "#ffffff",
+  "scroll": 300,
+
+  "updated": "2026-11-15-1431"
+}
