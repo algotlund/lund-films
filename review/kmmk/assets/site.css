@@ -191,6 +191,9 @@ details.more[open] summary { margin-bottom: 12px; }
 }
 /* Fills the screen edge to edge (sized by site.js) */
 .cable-canvas { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); max-width: none; }
+/* Stills Testing page */
+.stills-test { padding-top: var(--nav-h); background: #fff; }
+.stills-test img { display: block; width: 100%; height: auto; }
 /* Review aid: current frame number */
 .frame-counter {
   position: absolute; right: 16px; bottom: 16px; z-index: 5; pointer-events: none;
