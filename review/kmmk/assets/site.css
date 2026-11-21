@@ -61,8 +61,8 @@ main { padding-top: var(--nav-h); }
 .nav.dark { background: rgba(0, 0, 0, 0.72); color: var(--white); }
 .nav .wrap { height: var(--nav-h); display: flex; align-items: center; justify-content: space-between; }
 .logo { font-weight: 700; font-size: 20px; letter-spacing: 0.1em; }
-.nav-links { display: flex; gap: 32px; font-size: 13px; letter-spacing: -0.01em; }
-.nav-links a { opacity: 0.72; transition: opacity 0.2s; }
+.nav-links { display: flex; gap: 24px; font-size: 13px; letter-spacing: -0.01em; }
+.nav-links a { opacity: 0.72; transition: opacity 0.2s; white-space: nowrap; }
 .nav-links a:hover, .nav-links a[aria-current="page"] { opacity: 1; }
 .nav-links a[aria-current="page"] { font-weight: 600; }
 .nav-toggle { display: none; background: none; border: 0; width: 40px; height: 40px; margin-right: -10px; cursor: pointer; }
@@ -280,17 +280,8 @@ footer a:hover { color: var(--white); }
 .d1 { transition-delay: 0.08s; } .d2 { transition-delay: 0.16s; } .d3 { transition-delay: 0.24s; }
 
 /* ---------------- Responsive ---------------- */
-@media (max-width: 960px) {
-  .pillars { grid-template-columns: 1fr 1fr; row-gap: 48px; }
-  .pillar:nth-child(3) { padding-left: 0; border-left: 0; }
-  .row { gap: 40px; }
-  .contact { grid-template-columns: 1fr; gap: 48px; }
-  .home-link { min-height: 480px; padding: 48px 28px 0; }
-}
-@media (max-width: 734px) {
-  body { font-size: 16px; }
-  section.block { padding: 96px 0; }
-  .page-head { padding-top: 80px; }
+/* The menu has many tabs, so it folds into the menu button below 1140px */
+@media (max-width: 1140px) {
   .nav-links {
     /* The nav's backdrop-filter makes it the containing block, so size explicitly */
     position: fixed; top: calc(var(--nav-h) + env(safe-area-inset-top)); left: 0; right: 0;
@@ -305,6 +296,18 @@ footer a:hover { color: var(--white); }
   .nav-links a { padding: 10px 0; opacity: 1; }
   .nav.open .nav-links { opacity: 1; visibility: visible; transform: none; }
   .nav-toggle { display: block; }
+}
+@media (max-width: 960px) {
+  .pillars { grid-template-columns: 1fr 1fr; row-gap: 48px; }
+  .pillar:nth-child(3) { padding-left: 0; border-left: 0; }
+  .row { gap: 40px; }
+  .contact { grid-template-columns: 1fr; gap: 48px; }
+  .home-link { min-height: 480px; padding: 48px 28px 0; }
+}
+@media (max-width: 734px) {
+  body { font-size: 16px; }
+  section.block { padding: 96px 0; }
+  .page-head { padding-top: 80px; }
   .home-links { grid-template-columns: 1fr; padding-bottom: 96px; }
   .home-link { min-height: 420px; }
   .pillars { grid-template-columns: 1fr; margin-top: 64px; row-gap: 40px; }
