@@ -59,7 +59,7 @@ main { padding-top: var(--nav-h); }
   transition: background 0.3s, color 0.3s;
 }
 .nav.dark { background: rgba(0, 0, 0, 0.72); color: var(--white); }
-.nav .wrap { height: var(--nav-h); display: flex; align-items: center; justify-content: space-between; }
+.nav .wrap { max-width: 1260px; height: var(--nav-h); display: flex; align-items: center; justify-content: space-between; }
 .logo { font-weight: 700; font-size: 20px; letter-spacing: 0.1em; }
 .nav-links { display: flex; gap: 24px; font-size: 13px; letter-spacing: -0.01em; }
 .nav-links a { opacity: 0.72; transition: opacity 0.2s; white-space: nowrap; }
@@ -280,8 +280,8 @@ footer a:hover { color: var(--white); }
 .d1 { transition-delay: 0.08s; } .d2 { transition-delay: 0.16s; } .d3 { transition-delay: 0.24s; }
 
 /* ---------------- Responsive ---------------- */
-/* The menu has many tabs, so it folds into the menu button below 1140px */
-@media (max-width: 1140px) {
+/* The menu has many tabs, so it folds into the menu button below 1280px */
+@media (max-width: 1280px) {
   .nav-links {
     /* The nav's backdrop-filter makes it the containing block, so size explicitly */
     position: fixed; top: calc(var(--nav-h) + env(safe-area-inset-top)); left: 0; right: 0;
